@@ -1,0 +1,5 @@
+description: >
+  'Installs the latest version of the @salesforce/change-case-management CLI'
+executor: sfchangecase/default
+steps:
+  - sfchangecase/install

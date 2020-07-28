@@ -11,7 +11,7 @@ We welcome [issues](https://github.com/forcedotcom/npm-release-management-orb/is
 
 To publish a new production version:
 * Create a PR to the `develop` branch with your changes. This will act as a "staging" branch.
-* When ready to publish a new production version, create a PR from `develop` to `master`. The Git Subject should include `[semver:major|minor|patch|release|skip]` to indicate the type of release.
+* When ready to publish a new production version, create a PR from `develop` to `master`. The merge commit should include `[semver:major|minor|patch|release|skip]` to indicate the type of release.
 * On merge, the release will be published to the orb registry automatically.
 
 For further questions/comments about this or other orbs, visit the Orb Category of [CircleCI Discuss](https://discuss.circleci.com/c/orbs).

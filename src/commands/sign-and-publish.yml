@@ -1,0 +1,58 @@
+# Copyright (c) 2018, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+# How to author commands: https://circleci.com/docs/2.0/reusing-config/#authoring-reusable-commands
+description: >
+  Signs the provided npm package using @salesforce/sfdx-trust
+
+parameters:
+  salesforce_key:
+    description: salesforce key
+    type: string
+  npm_token:
+    description: npm auth token
+    type: string
+  key_path:
+    description: path to salesforce key
+    default: /root/salesforce-cli.key
+    type: string
+  tag:
+    description: tag used to publish to npm
+    default: latest
+    type: string
+  fingerprint:
+    description: developer trusted fingerprint for signing packages
+    default: '22:F4:87:2C:B2:22:04:1E:F5:D2:AB:AE:E7:69:81:10:1E:C1:F7:0B'
+    type: string
+
+steps:
+  - jq/install
+  - run:
+      name: Set credentials
+      command: |
+        echo //registry.npmjs.org/:_authToken=<<parameters.npm_token>> > /root/.npmrc
+        echo unsafe-perm = true >> /root/.npmrc
+        echo <<parameters.salesforce_key>> | base64 --decode > <<parameters.key_path>>
+  - run:
+      name: Sign and publish npm package
+      command: |
+        export SFDX_DEVELOPER_TRUSTED_FINGERPRINT=<<parameters.fingerprint>>
+        export RESULT=$(sfdx-trust plugins:trust:sign \
+          --signatureurl https://developer.salesforce.com/media/salesforce-cli/signatures \
+          --publickeyurl https://developer.salesforce.com/media/salesforce-cli/sfdx-cli-03032020.crt \
+          --privatekeypath <<parameters.key_path>> \
+          --json)
+        echo $RESULT | jq .
+
+        export FILE_NAME=$(echo $RESULT | jq -r '.result.filename')
+        export TARPATH=$(echo $RESULT | jq -r '.result.tarPath')
+        export PKG_NAME=$(echo $RESULT | jq -r '.result.name')
+        export PKG_VERSION=$(echo $RESULT | jq -r '.result.version')
+
+        aws s3 cp $FILE_NAME s3://dfc-data-production/media/salesforce-cli/signatures/
+
+        npm publish $TARPATH --tag <<parameters.tag>>
+
+        sfdx-trust plugins:trust:verify --npm $PKG_NAME@$PKG_VERSION --json

@@ -1,0 +1,27 @@
+# Copyright (c) 2018, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+# How to author commands: https://circleci.com/docs/2.0/reusing-config/#authoring-reusable-commands
+description: >
+  Publish npm package
+
+parameters:
+  npm_token:
+    description: npm auth token
+    type: string
+  tag:
+    description: tag used to publish to npm
+    default: latest
+    type: string
+
+steps:
+  - run:
+      name: Set credentials
+      command: |
+        echo //registry.npmjs.org/:_authToken=<<parameters.npm_token>> > /root/.npmrc
+        echo unsafe-perm = true >> /root/.npmrc
+  - run:
+      name: Publish npm package
+      command: npm publish --tag <<parameters.tag>>

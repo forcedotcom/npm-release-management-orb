@@ -4,15 +4,30 @@
 # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 
 description: >
-  Publishes npm package
+  Signs and publishes npm package
+  The following environment variables are required:
+  - AWS_ACCESS_KEY_ID
+  - AWS_DEFAULT_REGION
+  - AWS_SECRET_ACCESS_KEY
 
 parameters:
+  salesforce_key:
+    description: salesforce key
+    type: string
   npm_token:
     description: npm auth token
+    type: string
+  key_path:
+    description: path to salesforce key
+    default: /root/salesforce-cli.key
     type: string
   tag:
     description: tag used to publish to npm
     default: latest
+    type: string
+  fingerprint:
+    description: developer trusted fingerprint for signing packages
+    default: '22:F4:87:2C:B2:22:04:1E:F5:D2:AB:AE:E7:69:81:10:1E:C1:F7:0B'
     type: string
 
 executor: default
@@ -32,6 +47,11 @@ steps:
         - ~/node_modules
         - /usr/local/share/.cache/yarn
         - /usr/local/share/.config/yarn
-  - publish:
+  - setup-aws
+  - install-sfdx-trust
+  - sign-and-publish:
+      salesforce_key: << parameters.salesforce_key >>
       npm_token: << parameters.npm_token >>
+      key_path: << parameters.key_path >>
+      fingerprint: << parameters.fingerprint >>
       tag: << parameters.tag >>

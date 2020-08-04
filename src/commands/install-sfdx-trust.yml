@@ -1,0 +1,21 @@
+# Copyright (c) 2018, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+# How to author commands: https://circleci.com/docs/2.0/reusing-config/#authoring-reusable-commands
+description: >
+  Installs the latest version of the @salesforce/sfdx-trust
+parameters:
+  version:
+    description: By default, the latest version of the standalone CLI will be installed
+    default: latest
+    type: string
+
+steps:
+  - run:
+      name: Install @salesforce/sfdx-trust
+      command: yarn global add @salesforce/sfdx-trust@<<parameters.version>>
+  - run:
+      name: Verify @salesforce/sfdx-trust installation
+      command: sfdx-trust plugins:trust --help

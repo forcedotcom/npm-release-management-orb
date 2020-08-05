@@ -22,6 +22,10 @@ parameters:
     description: tag used to publish to npm
     default: latest
     type: string
+  access:
+    description: tells the registry whether this package should be published as public or restricted
+    default: public
+    type: string
   fingerprint:
     description: developer trusted fingerprint for signing packages
     default: '22:F4:87:2C:B2:22:04:1E:F5:D2:AB:AE:E7:69:81:10:1E:C1:F7:0B'
@@ -53,6 +57,6 @@ steps:
 
         aws s3 cp $FILE_NAME s3://dfc-data-production/media/salesforce-cli/signatures/
 
-        npm publish $TARPATH --tag <<parameters.tag>>
+        npm publish $TARPATH --tag <<parameters.tag>> --access <<parameters.access>>
 
         sfdx-trust plugins:trust:verify --npm $PKG_NAME@$PKG_VERSION --json

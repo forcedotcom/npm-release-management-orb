@@ -15,6 +15,10 @@ parameters:
     description: tag used to publish to npm
     default: latest
     type: string
+  access:
+    description: tells the registry whether this package should be published as public or restricted
+    default: public
+    type: string
 
 steps:
   - run:
@@ -24,4 +28,4 @@ steps:
         echo unsafe-perm = true >> /root/.npmrc
   - run:
       name: Publish npm package
-      command: npm publish --tag <<parameters.tag>>
+      command: npm publish --tag <<parameters.tag>> --access <<parameters.access>>

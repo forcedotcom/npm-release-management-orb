@@ -1,0 +1,52 @@
+# Copyright (c) 2018, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+# How to author commands: https://circleci.com/docs/2.0/reusing-config/#authoring-reusable-commands
+description: >
+  Create new git tag based on the version in the package.json
+
+parameters:
+  bypass:
+    description: Does not create new tag if set to true
+    default: false
+    type: boolean
+  username:
+    description: github user name
+    default: Release Orb
+    type: string
+  email:
+    description: github user email
+    default: alm-cli@salesforce.com
+    type: string
+
+steps:
+  - when:
+      condition: <<parameters.bypass>>
+      steps:
+        - run:
+            name: Bypass git tag creation
+            command: |
+              echo "bypass parameter set to true. Bypassing git tag creation..."
+              exit 0
+  - when:
+      condition:
+        not: <<parameters.bypass>>
+      steps:
+        - run:
+            name: Setup git
+            command: |
+              GIT_NAME=${GITHUB_USERNAME:=<<parameters.username>>}
+              GIT_EMAIL=${GITHUB_EMAIL:=<<parameters.email>>}
+              git config user.email $GIT_EMAIL
+              git config user.name $GIT_NAME
+        - run:
+            name: Current git tags
+            command: git tag
+        - run:
+            name: Create new git tag
+            command: |
+              PKG_TAG="v$(cat package.json | jq -r .version)"
+              git tag -a $PKG_TAG -m "Releasing ${PKG_TAG}"
+              git push origin $PKG_TAG

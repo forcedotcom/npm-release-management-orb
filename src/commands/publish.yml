@@ -8,9 +8,6 @@ description: >
   Publish npm package
 
 parameters:
-  npm_token:
-    description: npm auth token
-    type: string
   tag:
     description: tag used to publish to npm
     default: latest
@@ -24,7 +21,7 @@ steps:
   - run:
       name: Set credentials
       command: |
-        echo //registry.npmjs.org/:_authToken=<<parameters.npm_token>> > /root/.npmrc
+        echo //registry.npmjs.org/:_authToken=$NPM_TOKEN > /root/.npmrc
         echo unsafe-perm = true >> /root/.npmrc
   - run:
       name: Publish npm package

@@ -5,20 +5,24 @@
 
 description: >
   Publishes npm package
+  The following environment variables are required:
+  - NPM_TOKEN
 
 parameters:
-  npm_token:
-    description: npm auth token
-    type: string
   tag:
     description: tag used to publish to npm
     default: latest
     type: string
+  skip_git_tag:
+    description: Skips the git tag step after the package has successfully been published
+    default: false
+    type: boolean
 
 executor: default
 
 steps:
   - checkout
+  - validate-release-version
   - restore_cache:
       keys:
         - v1-npm-{{checksum ".circleci/config.yml"}}-{{checksum "yarn.lock"}}
@@ -33,5 +37,6 @@ steps:
         - /usr/local/share/.cache/yarn
         - /usr/local/share/.config/yarn
   - publish:
-      npm_token: << parameters.npm_token >>
       tag: << parameters.tag >>
+  - create-git-tag:
+      bypass: << parameters.skip_git_tag >>

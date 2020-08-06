@@ -7,20 +7,11 @@ description: >
   Signs and publishes npm package
   The following environment variables are required:
   - AWS_ACCESS_KEY_ID
-  - AWS_DEFAULT_REGION
   - AWS_SECRET_ACCESS_KEY
+  - SALESFORCE_KEY
+  - NPM_TOKEN
 
 parameters:
-  salesforce_key:
-    description: salesforce key
-    type: string
-  npm_token:
-    description: npm auth token
-    type: string
-  key_path:
-    description: path to salesforce key
-    default: /root/salesforce-cli.key
-    type: string
   tag:
     description: tag used to publish to npm
     default: latest
@@ -29,11 +20,16 @@ parameters:
     description: developer trusted fingerprint for signing packages
     default: '22:F4:87:2C:B2:22:04:1E:F5:D2:AB:AE:E7:69:81:10:1E:C1:F7:0B'
     type: string
+  skip_git_tag:
+    description: Skips the git tag step after the package has successfully been published
+    default: false
+    type: boolean
 
 executor: default
 
 steps:
   - checkout
+  - validate-release-version
   - restore_cache:
       keys:
         - v1-npm-{{checksum ".circleci/config.yml"}}-{{checksum "yarn.lock"}}
@@ -50,8 +46,7 @@ steps:
   - setup-aws
   - install-sfdx-trust
   - sign-and-publish:
-      salesforce_key: << parameters.salesforce_key >>
-      npm_token: << parameters.npm_token >>
-      key_path: << parameters.key_path >>
       fingerprint: << parameters.fingerprint >>
       tag: << parameters.tag >>
+  - create-git-tag:
+      bypass: << parameters.skip_git_tag >>

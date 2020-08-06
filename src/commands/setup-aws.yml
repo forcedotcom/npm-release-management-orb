@@ -7,8 +7,8 @@ description: >
   Install and setup the aws cli utility.
   The following environment variables are required:
   - AWS_ACCESS_KEY_ID
-  - AWS_DEFAULT_REGION
   - AWS_SECRET_ACCESS_KEY
 
 steps:
-  - aws-cli/setup
+  - aws-cli/setup:
+      configure-default-region: false

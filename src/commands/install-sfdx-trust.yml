@@ -8,14 +8,22 @@ description: >
   Installs the latest version of the @salesforce/sfdx-trust
 parameters:
   version:
-    description: By default, the latest version of the standalone CLI will be installed
+    description: By default, the latest version of sfdx-trust will be installed
     default: latest
     type: string
 
 steps:
   - run:
       name: Install @salesforce/sfdx-trust
-      command: yarn global add @salesforce/sfdx-trust@<<parameters.version>>
+      command: |
+        # check if sfdx-trust needs to be installed
+        if command -v sfdx-trust >> /dev/null 2>&1; then
+          echo "sfdx-trust is already installed..."
+          echo "ignoring install request."
+          exit 0
+        else
+          yarn global add @salesforce/sfdx-trust@<<parameters.version>>
+        fi
   - run:
       name: Verify @salesforce/sfdx-trust installation
       command: sfdx-trust plugins:trust --help

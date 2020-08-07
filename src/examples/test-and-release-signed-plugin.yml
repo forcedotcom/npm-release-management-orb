@@ -1,0 +1,28 @@
+# Copyright (c) 2018, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+description: >
+  Test npm package agaisnt node@12 and node@latest then sign and publish the plugin to npm
+usage:
+  version: 2.1
+  orbs:
+    release-management: salesforce/npm-release-management@x.y.z
+
+  workflows:
+    version: 2
+    test-and-release:
+      jobs:
+        - release-management/test-package:
+            name: node-latest
+            node_version: latest
+        - release-management/test-package:
+            name: node-12
+        - release-management/release-package:
+            sign: true
+            requires:
+              - node-latest
+            filters:
+              branches:
+                only: master

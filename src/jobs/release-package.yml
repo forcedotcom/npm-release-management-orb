@@ -5,8 +5,13 @@
 
 description: >
   Publishes npm package
-  The following environment variables are required:
-  - NPM_TOKEN
+  The following environment variables are required if NOT signing:
+    - NPM_TOKEN
+  The following environment variables are required if signing:
+    - AWS_ACCESS_KEY_ID
+    - AWS_SECRET_ACCESS_KEY
+    - SALESFORCE_KEY
+    - NPM_TOKEN
 
 parameters:
   tag:
@@ -14,9 +19,17 @@ parameters:
     default: latest
     type: string
   skip_git_tag:
-    description: Skips the git tag step after the package has successfully been published
+    description: if true, bypasses the git tag creation after a successful publish
     default: false
     type: boolean
+  sign:
+    description: signs the package using sfdx-trust if set to true
+    default: false
+    type: boolean
+  fingerprint:
+    description: developer trusted fingerprint for signing packages
+    default: '22:F4:87:2C:B2:22:04:1E:F5:D2:AB:AE:E7:69:81:10:1E:C1:F7:0B'
+    type: string
 
 executor: default
 
@@ -36,7 +49,20 @@ steps:
         - ~/node_modules
         - /usr/local/share/.cache/yarn
         - /usr/local/share/.config/yarn
-  - publish:
-      tag: << parameters.tag >>
+  - when:
+      condition: <<parameters.sign>>
+      steps:
+        - sign:
+            fingerprint: <<parameters.fingerprint>>
+        - publish:
+            tag: <<parameters.tag>>
+            use_tarfile: true
+        - verify-signed-package
+  - when:
+      condition:
+        not: <<parameters.sign>>
+      steps:
+        - publish:
+            tag: <<parameters.tag>>
   - create-git-tag:
-      bypass: << parameters.skip_git_tag >>
+      bypass: <<parameters.skip_git_tag>>

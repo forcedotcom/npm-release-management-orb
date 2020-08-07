@@ -15,14 +15,51 @@ parameters:
   access:
     description: tells the registry whether this package should be published as public or restricted
     default: public
-    type: string
+    type: enum
+    enum: [public, restricted]
+  use_tarfile:
+    description: publishes the tar file in directory if set to true
+    default: false
+    type: boolean
 
 steps:
+  - jq/install
   - run:
-      name: Set credentials
+      name: Set npm credentials
       command: |
         echo //registry.npmjs.org/:_authToken=$NPM_TOKEN > /root/.npmrc
         echo unsafe-perm = true >> /root/.npmrc
+  - when:
+      condition:
+        not: <<parameters.use_tarfile>>
+      steps:
+        - run:
+            name: Publish npm package
+            command: npm publish --tag <<parameters.tag>> --access <<parameters.access>>
+  - when:
+      condition: <<parameters.use_tarfile>>
+      steps:
+        - run:
+            name: Publish npm package
+            command: |
+              PKG_VERSION=$(cat package.json | jq -r .version)
+              TARFILE=$(ls | grep $PKG_VERSION.tgz)
+              npm publish $TARFILE --tag <<parameters.tag>> --access <<parameters.access>>
   - run:
-      name: Publish npm package
-      command: npm publish --tag <<parameters.tag>> --access <<parameters.access>>
+      name: Wait for version to become available on npm
+      command: |
+        PKG_VERSION=$(cat package.json | jq -r .version)
+        PKG_NAME=$(cat package.json | jq -r .name)
+
+        MAX_TRIES=30
+        TRIES=0
+        until (($(npm view $PKG_NAME versions --json | jq "map(select(. == \"$PKG_VERSION\")) | length") > 0)) || (($TRIES >= $MAX_TRIES )); do
+            printf '.'
+            sleep 1
+            TRIES=$((TRIES+1))
+        done
+
+        if (($TRIES >= $MAX_TRIES)); then
+            echo "Timeout waiting for tag. Exiting job"
+            exit 1
+        fi

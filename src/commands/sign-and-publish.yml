@@ -49,7 +49,7 @@ steps:
 
         npm publish $TARPATH --tag <<parameters.tag>> --access <<parameters.access>>
 
-        # Wait for the version to become available on NPM 
+        # Wait for the version to become available on NPM
         until (($(npm view $PKG_NAME versions --json | jq "map(select(. == \"$PKG_VERSION\")) | length") > 0)); do
             printf '.'
             sleep 1

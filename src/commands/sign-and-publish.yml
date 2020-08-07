@@ -18,7 +18,7 @@ parameters:
     type: string
   fingerprint:
     description: developer trusted fingerprint for signing packages
-    default: '22:F4:87:2C:B2:22:04:1E:F5:D2:AB:AE:E7:69:81:10:1E:C1:F7:0B'
+    default: "22:F4:87:2C:B2:22:04:1E:F5:D2:AB:AE:E7:69:81:10:1E:C1:F7:0B"
     type: string
 
 steps:
@@ -48,5 +48,11 @@ steps:
         aws s3 cp $FILE_NAME s3://dfc-data-production/media/salesforce-cli/signatures/
 
         npm publish $TARPATH --tag <<parameters.tag>> --access <<parameters.access>>
+
+        # Wait for the version to become available on NPM 
+        until (($(npm view $PKG_NAME versions --json | jq "map(select(. == \"$PKG_VERSION\")) | length") > 0)); do
+            printf '.'
+            sleep 1
+        done
 
         sfdx-trust plugins:trust:verify --npm $PKG_NAME@$PKG_VERSION --json

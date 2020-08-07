@@ -29,7 +29,7 @@ This orb is designed to make releasing npm packages straightforward and with as 
 
     As part of the release job we create a new git tag based on the version in the package.json. This requires that you add a user key that has the permissions to push to github. To do this, simply go to the `SSH Keys` tab in the project settings and follow the directions for adding user keys.
 
-4. Follow the [examples] (https://circleci.com/orbs/registry/orb/salesforce/npm-release-management#usage-examples) for how to setup your config.yml
+4. Follow the [examples](https://circleci.com/orbs/registry/orb/salesforce/npm-release-management#usage-examples) for how to setup your config.yml
 
 ## Environment Variable Reference
 

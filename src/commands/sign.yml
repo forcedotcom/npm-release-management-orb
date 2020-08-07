@@ -5,17 +5,9 @@
 
 # How to author commands: https://circleci.com/docs/2.0/reusing-config/#authoring-reusable-commands
 description: >
-  Signs and publishes npm package using @salesforce/sfdx-trust
+  Signs npm package using @salesforce/sfdx-trust
 
 parameters:
-  tag:
-    description: tag used to publish to npm
-    default: latest
-    type: string
-  access:
-    description: tells the registry whether this package should be published as public or restricted
-    default: public
-    type: string
   fingerprint:
     description: developer trusted fingerprint for signing packages
     default: '22:F4:87:2C:B2:22:04:1E:F5:D2:AB:AE:E7:69:81:10:1E:C1:F7:0B'
@@ -23,14 +15,14 @@ parameters:
 
 steps:
   - jq/install
+  - setup-aws
+  - install-sfdx-trust
   - run:
-      name: Set credentials
+      name: Set salesforce credentials
       command: |
-        echo //registry.npmjs.org/:_authToken=$NPM_TOKEN > /root/.npmrc
-        echo unsafe-perm = true >> /root/.npmrc
         echo $SALESFORCE_KEY | base64 --decode > /root/salesforce-cli.key
   - run:
-      name: Sign and publish npm package
+      name: Sign npm package
       command: |
         export SFDX_DEVELOPER_TRUSTED_FINGERPRINT=<<parameters.fingerprint>>
         RESULT=$(sfdx-trust plugins:trust:sign \
@@ -41,12 +33,5 @@ steps:
         echo $RESULT | jq .
 
         FILE_NAME=$(echo $RESULT | jq -r '.result.filename')
-        TARPATH=$(echo $RESULT | jq -r '.result.tarPath')
-        PKG_NAME=$(echo $RESULT | jq -r '.result.name')
-        PKG_VERSION=$(echo $RESULT | jq -r '.result.version')
-
         aws s3 cp $FILE_NAME s3://dfc-data-production/media/salesforce-cli/signatures/
 
-        npm publish $TARPATH --tag <<parameters.tag>> --access <<parameters.access>>
-
-        sfdx-trust plugins:trust:verify --npm $PKG_NAME@$PKG_VERSION --json

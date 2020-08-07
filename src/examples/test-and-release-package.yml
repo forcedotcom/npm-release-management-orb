@@ -19,11 +19,9 @@ usage:
             node_version: latest
         - release-management/test-package:
             name: node-12
-        - release-management/release-signed-package:
+        - release-management/release-package:
             requires:
               - node-latest
             filters:
-              tags:
-                only: /^v.*/
               branches:
-                ignore: /.*/
+                only: master

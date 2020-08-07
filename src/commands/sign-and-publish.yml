@@ -18,7 +18,7 @@ parameters:
     type: string
   fingerprint:
     description: developer trusted fingerprint for signing packages
-    default: "22:F4:87:2C:B2:22:04:1E:F5:D2:AB:AE:E7:69:81:10:1E:C1:F7:0B"
+    default: '22:F4:87:2C:B2:22:04:1E:F5:D2:AB:AE:E7:69:81:10:1E:C1:F7:0B'
     type: string
 
 steps:

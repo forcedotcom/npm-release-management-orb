@@ -1,0 +1,23 @@
+# Copyright (c) 2018, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+# How to author commands: https://circleci.com/docs/2.0/reusing-config/#authoring-reusable-commands
+description: >
+  Checks if the hardcoded fingerprints used as command parameters are still valid
+
+steps:
+  - run:
+      name: Verify harcoded fingerprint is still valid
+      command: |
+        ACTUAL_FINGERPRINT=$(sfdx-trust plugins:trust:fingerprint -p https://developer.salesforce.com/media/salesforce-cli/sfdx-cli-03032020.crt)
+        HARDCODED_FINGERPRINT=22:F4:87:2C:B2:22:04:1E:F5:D2:AB:AE:E7:69:81:10:1E:C1:F7:0B
+        if [ "$HARDCODED_FINGERPRINT" == "$ACTUAL_FINGERPRINT" ]; then
+          echo Fingerprints match!
+          exit 0
+        else
+          echo Fingerprints do not match!
+          echo You need to replace all hardcoded fingerprints from $HARDCODED_FINGERPRINT to $ACTUAL_FINGERPRINT
+          exit 1
+        fi

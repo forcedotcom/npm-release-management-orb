@@ -18,10 +18,6 @@ parameters:
     description: tag used to publish to npm
     default: latest
     type: string
-  skip_git_tag:
-    description: if true, bypasses the git tag creation after a successful publish
-    default: false
-    type: boolean
   sign:
     description: signs the package using sfdx-trust if set to true
     default: false
@@ -52,6 +48,7 @@ steps:
   - when:
       condition: <<parameters.sign>>
       steps:
+        - prepare-release
         - sign:
             fingerprint: <<parameters.fingerprint>>
         - publish:
@@ -62,7 +59,6 @@ steps:
       condition:
         not: <<parameters.sign>>
       steps:
+        - prepare-release
         - publish:
             tag: <<parameters.tag>>
-  - create-git-tag:
-      bypass: <<parameters.skip_git_tag>>

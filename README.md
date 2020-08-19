@@ -3,6 +3,8 @@
 
 - [npm-release-management-orb](#npm-release-management-orb)
   - [Usage](#usage)
+  - [Note on Version Bumps and Changelogs](#note-on-version-bumps-and-changelogs)
+    - [Overriding Version Bump](#overriding-version-bump)
   - [Environment Variable Reference](#environment-variable-reference)
   - [How To Contribute](#how-to-contribute)
 
@@ -30,6 +32,32 @@ This orb is designed to make releasing npm packages straightforward and with as 
     As part of the release job we create a new git tag based on the version in the package.json. This requires that you add a user key that has the permissions to push to github. To do this, simply go to the `SSH Keys` tab in the project settings and follow the directions for adding user keys.
 
 4. Follow the [examples](https://circleci.com/orbs/registry/orb/salesforce/npm-release-management#usage-examples) for how to setup your config.yml
+
+## Note on Version Bumps and Changelogs
+
+Version bumps and changelogs are generated based on [conventional commit messages](https://www.conventionalcommits.org/en/v1.0.0/) (We use the [standard-version](https://github.com/conventional-changelog/standard-version) library to do this).
+
+Your plugin will enforce this style of commit messages if you created your plugin using the [plugin-template](https://github.com/salesforcecli/plugin-template/). If you did not using plugin-template, you will need to add the following to your `package.json`
+
+```json
+"devDependencies": {
+ "@salesforce/dev-scripts": "^0.6.1",
+}
+"husky": {
+ "hooks": {
+   "commit-msg": "yarn sf-husky-commit-msg"
+ }
+}
+```
+
+And add a `commitlint.config.js` with the following:
+```javascript
+module.exports = { extends: ['@commitlint/config-conventional'] };
+```
+
+### Overriding Version Bump
+
+The default behavior of the orb is to use `standard-version` to determine the next version number. However, you can specifiy the version you want published by updating the version field in the `package.json` yourself. If that version does not exist, the orb will publish it. Otherwise, it will fall back to using `standard-version`
 
 ## Environment Variable Reference
 

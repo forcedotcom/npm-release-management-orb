@@ -1,0 +1,29 @@
+# Copyright (c) 2018, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+# How to author commands: https://circleci.com/docs/2.0/reusing-config/#authoring-reusable-commands
+description: >
+  Installs the latest version of standard-version
+parameters:
+  version:
+    description: By default, the latest version of standard-version will be installed
+    default: latest
+    type: string
+
+steps:
+  - run:
+      name: Install standard-version
+      command: |
+        # check if standard-version needs to be installed
+        if command -v standard-version >> /dev/null 2>&1; then
+          echo "standard-version is already installed..."
+          echo "ignoring install request."
+          exit 0
+        else
+          yarn global add standard-version@<<parameters.version>>
+        fi
+  - run:
+      name: Verify standard-version installation
+      command: standard-version --help

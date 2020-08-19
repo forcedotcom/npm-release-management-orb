@@ -1,0 +1,47 @@
+# Copyright (c) 2018, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+# How to author commands: https://circleci.com/docs/2.0/reusing-config/#authoring-reusable-commands
+description: >
+  Use standard-version to prepare a release (version bump, git tag, changelogs)
+
+parameters:
+  git_username:
+    description: github user name
+    default: Release Orb
+    type: string
+  git_email:
+    description: github user email
+    default: alm-cli@salesforce.com
+    type: string
+
+steps:
+  - jq/install
+  - install-standard-version
+  - run:
+      name: Setup git
+      command: |
+        GIT_NAME=${GITHUB_USERNAME:=<<parameters.git_username>>}
+        GIT_EMAIL=${GITHUB_EMAIL:=<<parameters.git_email>>}
+        git config user.email $GIT_EMAIL
+        git config user.name $GIT_NAME
+  - run:
+      name: Prepare npm package release
+      command: |
+        PKG_NAME=$(cat package.json | jq -r .name)
+        PKG_VERSION=$(cat package.json | jq -r .version)
+        VERSIONS=$(npm view $PKG_NAME versions --json | jq .)
+
+        # Searches array of versions for one that matches the version we're attempting to publish in the job
+        # If the version already exists, MATCHING_VERSIONS will be >= 1 otherwise it will be 0
+        MATCHING_VERSIONS=$(echo $VERSIONS | jq "map(select(. == \"${PKG_VERSION}\")) | length")
+        if (( $MATCHING_VERSIONS == 0 )); then
+            echo "${PKG_NAME}@${PKG_VERSION} does not exist in the registry. Assuming that we want to publish that version"
+            standard-version --release-as $PKG_VERSION --commit-all --releaseCommitMessageFormat="chore(release): {{currentTag}} [ci skip]"
+        else
+            echo "${PKG_NAME}@${PKG_VERSION} exists in the registry. Using standard-version to bump to the next version"
+            standard-version --commit-all --releaseCommitMessageFormat="chore(release): {{currentTag}} [ci skip]"
+        fi
+        git push --follow-tags origin $CIRCLE_BRANCH

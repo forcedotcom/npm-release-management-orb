@@ -45,9 +45,6 @@ steps:
         - ~/node_modules
         - /usr/local/share/.cache/yarn
         - /usr/local/share/.config/yarn
-  - run:
-      name: Pack
-      command: yarn pack
   - when:
       condition: <<parameters.sign>>
       steps:

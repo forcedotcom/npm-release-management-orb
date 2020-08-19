@@ -35,13 +35,16 @@ steps:
       steps:
         - run:
             name: Publish npm package
-            command: npm publish --tag <<parameters.tag>> --access <<parameters.access>>
+            command: |
+              yarn pack
+              npm publish --tag <<parameters.tag>> --access <<parameters.access>>
   - when:
       condition: <<parameters.use_tarfile>>
       steps:
         - run:
             name: Publish npm package
             command: |
+              yarn pack
               PKG_VERSION=$(cat package.json | jq -r .version)
               TARFILE=$(ls | grep $PKG_VERSION.tgz)
               npm publish $TARFILE --tag <<parameters.tag>> --access <<parameters.access>>

@@ -49,6 +49,9 @@ steps:
       condition: <<parameters.sign>>
       steps:
         - prepare-release
+        - run:
+            name: yarn prepack
+            command: yarn prepack
         - sign:
             fingerprint: <<parameters.fingerprint>>
         - publish:
@@ -60,5 +63,8 @@ steps:
         not: <<parameters.sign>>
       steps:
         - prepare-release
+        - run:
+            name: yarn prepack
+            command: yarn prepack
         - publish:
             tag: <<parameters.tag>>

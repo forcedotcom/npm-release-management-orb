@@ -29,9 +29,6 @@ steps:
       command: |
         echo //registry.npmjs.org/:_authToken=$NPM_TOKEN > /root/.npmrc
         echo unsafe-perm = true >> /root/.npmrc
-  - run:
-      name: yarn pack
-      command: yarn pack
   - when:
       condition:
         not: <<parameters.use_tarfile>>

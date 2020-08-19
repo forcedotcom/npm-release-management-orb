@@ -34,4 +34,3 @@ steps:
 
         FILE_NAME=$(echo $RESULT | jq -r '.result.filename')
         aws s3 cp $FILE_NAME s3://dfc-data-production/media/salesforce-cli/signatures/
-

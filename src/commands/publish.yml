@@ -29,24 +29,25 @@ steps:
       command: |
         echo //registry.npmjs.org/:_authToken=$NPM_TOKEN > /root/.npmrc
         echo unsafe-perm = true >> /root/.npmrc
+  - run:
+      name: yarn pack
+      command: yarn pack
   - when:
       condition:
         not: <<parameters.use_tarfile>>
       steps:
         - run:
             name: Publish npm package
-            command: |
-              yarn pack
-              npm publish --tag <<parameters.tag>> --access <<parameters.access>>
+            command: npm publish --tag <<parameters.tag>> --access <<parameters.access>>
   - when:
       condition: <<parameters.use_tarfile>>
       steps:
         - run:
             name: Publish npm package
             command: |
-              yarn pack
               PKG_VERSION=$(cat package.json | jq -r .version)
               TARFILE=$(ls | grep $PKG_VERSION.tgz)
+              echo "publishing to npm using ${TARFILE}"
               npm publish $TARFILE --tag <<parameters.tag>> --access <<parameters.access>>
   - run:
       name: Wait for version to become available on npm

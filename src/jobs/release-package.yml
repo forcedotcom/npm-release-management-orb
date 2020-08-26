@@ -26,6 +26,10 @@ parameters:
     description: developer trusted fingerprint for signing packages
     default: '22:F4:87:2C:B2:22:04:1E:F5:D2:AB:AE:E7:69:81:10:1E:C1:F7:0B'
     type: string
+  dryrun:
+    description: if true, the job will run but will not publish to npm or push to git
+    default: false
+    type: boolean
 
 executor: default
 
@@ -40,8 +44,8 @@ steps:
       name: Install dependencies
       command: yarn
   - run:
-      name: Build
-      command: yarn build
+      name: Compile
+      command: yarn compile
   - save_cache:
       key: v1-npm-{{checksum ".circleci/config.yml"}}-{{checksum "yarn.lock"}}
       paths:
@@ -49,7 +53,15 @@ steps:
         - /usr/local/share/.cache/yarn
         - /usr/local/share/.config/yarn
   - when:
-      condition: <<parameters.sign>>
+      condition: <<parameters.dryrun>>
+      steps:
+        - prepare-release:
+            dryrun: <<parameters.dryrun>>
+  - when:
+      condition:
+        and:
+          - not: <<parameters.dryrun>>
+          - <<parameters.sign>>
       steps:
         - prepare-release
         - run:
@@ -63,7 +75,9 @@ steps:
         - verify-signed-package
   - when:
       condition:
-        not: <<parameters.sign>>
+        and:
+          - not: <<parameters.dryrun>>
+          - not: <<parameters.sign>>
       steps:
         - prepare-release
         - run:

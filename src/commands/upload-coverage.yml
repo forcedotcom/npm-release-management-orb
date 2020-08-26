@@ -1,0 +1,12 @@
+# Copyright (c) 2018, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+# How to author commands: https://circleci.com/docs/2.0/reusing-config/#authoring-reusable-commands
+description: >
+  Upload test coverage to codecov.io
+
+steps:
+  - run: ./node_modules/.bin/nyc report --reporter text-lcov > coverage.lcov
+  - run: curl -s https://codecov.io/bash | bash

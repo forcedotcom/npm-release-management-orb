@@ -1,0 +1,29 @@
+# Copyright (c) 2018, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+# How to author commands: https://circleci.com/docs/2.0/reusing-config/#authoring-reusable-commands
+description: >
+  Merge changes from one branch to another
+
+parameters:
+  target-branch:
+    description: the branch into which you want to merge changes
+    default: develop
+    type: string
+  main-branch:
+    description: the branch which has changes you want merged into the target-branch
+    default: master
+    type: string
+
+steps:
+  - configure-github
+  - run:
+      name: Merge
+      command: |
+        git fetch
+        git checkout <<parameters.target-branch>>
+        git pull origin <<parameters.target-branch>>
+        git merge origin/<<parameters.main-branch>>
+        git push origin <<parameters.target-branch>>

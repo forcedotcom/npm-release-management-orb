@@ -17,6 +17,7 @@ usage:
         - release-management/test-package:
             name: node-latest
             node_version: latest
+            upload-coverage: true
         - release-management/test-package:
             name: node-12
         - release-management/release-package:

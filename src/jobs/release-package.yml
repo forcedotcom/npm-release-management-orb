@@ -30,6 +30,10 @@ parameters:
     description: if true, the job will run but will not publish to npm or push to git
     default: false
     type: boolean
+  post-job-steps:
+    description: steps that you want to run after the job has finished running
+    type: steps
+    default: []
 
 executor: default
 
@@ -85,3 +89,4 @@ steps:
             command: yarn prepack
         - publish:
             tag: <<parameters.tag>>
+  - steps: <<parameters.post-job-steps>>

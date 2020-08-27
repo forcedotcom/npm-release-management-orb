@@ -11,6 +11,10 @@ parameters:
     description: version of node to run tests against
     type: string
     default: latest
+  upload-coverage:
+    description: if true, the job will submit code coverage report to codecov.io
+    default: false
+    type: boolean
 
 executor:
   name: default
@@ -34,8 +38,12 @@ steps:
         - ~/node_modules
         - /usr/local/share/.cache/yarn
         - /usr/local/share/.config/yarn
-  - run: ./bin/run --version
-  - run: ./bin/run --help
+  - run: test -f ./bin/run && ./bin/run --version || echo "No bin script"
+  - run: test -f ./bin/run && ./bin/run --help || echo "No bin script"
   - run:
       name: Testing
       command: yarn test
+  - when:
+      condition: <<parameters.upload-coverage>>
+      steps:
+        - upload-coverage

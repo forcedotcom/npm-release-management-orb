@@ -1,0 +1,51 @@
+# Copyright (c) 2018, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+# How to author commands: https://circleci.com/docs/2.0/reusing-config/#authoring-reusable-commands
+description: >
+  Create release on github. Requires either GITHUB_TOKEN or GH_TOKEN to be set in the environment. This token is a personal access token from a github account.
+
+steps:
+  - run:
+      name: Verify access token set in environment
+      command: |
+        TOKEN=${GH_TOKEN:=$GITHUB_TOKEN}
+        if [ -z "$TOKEN" ]; then
+            echo "neither GH_TOKEN nor GITHUB_TOKEN are set in the environment. Exiting job..."
+            exit 1
+        fi
+  - run:
+      name: Create release
+      command: |
+        TOKEN=${GH_TOKEN:=$GITHUB_TOKEN}
+        TAGS=$(git tag -l --sort=-v:refname)
+        LATEST=$(echo $TAGS | awk '{print $1}' | tr -d v)
+        PREVIOUS=$(echo $TAGS | awk '{print $2}' | tr -d v)
+
+        echo "Parsing CHANGELOG for notes between $LATEST and $PREVIOUS"
+
+        CAPTURING=false
+        CONTENTS=''
+        while IFS="" read -r p || [ -n "$p" ]
+        do
+            if [[ "$p" == *"### [$LATEST]"* ]]; then
+                CAPTURING=true
+            fi
+
+            if [[ "$p" == *"### [$PREVIOUS]"* ]]; then
+                CAPTURING=false
+            fi
+
+            if [ $CAPTURING = true ]; then
+                CONTENTS+=$(printf '%s\\n' "$p")
+            fi
+        done < CHANGELOG.md
+
+        echo Release description:
+        echo "$CONTENTS"
+        NEW_VERSION=$(echo $TAGS | awk '{print $1}')
+        HEADERS=$(printf 'Authorization: token %s' $TOKEN)
+        RELEASE_BODY=$(printf '{"tag_name": "v%s","target_commitish": "%s","name": "v%s","body": "%s","draft": false,"prerelease": false}' $LATEST $CIRCLE_BRANCH $LATEST "$CONTENTS")
+        curl -H "$HEADERS" --data "$RELEASE_BODY" https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/releases

@@ -5,13 +5,14 @@
 
 description: >
   Publishes npm package
-  The following environment variables are required if NOT signing:
+  The following environment variables are always required:
     - NPM_TOKEN
   The following environment variables are required if signing:
     - AWS_ACCESS_KEY_ID
     - AWS_SECRET_ACCESS_KEY
     - SALESFORCE_KEY
-    - NPM_TOKEN
+  The following environment variables are required if creating a github release:
+    - GITHUB_TOKEN/GH_TOKEN
 
 parameters:
   tag:
@@ -31,9 +32,13 @@ parameters:
     default: false
     type: boolean
   post-job-steps:
-    description: steps that you want to run after the job has finished running
+    description: steps that you want to run after the job has finished running (if dryrun is set to false, these steps will be skipped)
     type: steps
     default: []
+  github-release:
+    description: if true, job will create a release in github
+    type: boolean
+    default: false
 
 executor: default
 
@@ -56,11 +61,15 @@ steps:
         - ~/node_modules
         - /usr/local/share/.cache/yarn
         - /usr/local/share/.config/yarn
+
+  # when dryrun is true: prepare release
   - when:
       condition: <<parameters.dryrun>>
       steps:
         - prepare-release:
             dryrun: <<parameters.dryrun>>
+
+  # when dryrun is false and sign is true: prepare, sign, and publish release
   - when:
       condition:
         and:
@@ -77,6 +86,8 @@ steps:
             tag: <<parameters.tag>>
             use_tarfile: true
         - verify-signed-package
+
+  # when dryrun is false and sign is false: prepare and publish release
   - when:
       condition:
         and:
@@ -89,4 +100,18 @@ steps:
             command: yarn prepack
         - publish:
             tag: <<parameters.tag>>
-  - steps: <<parameters.post-job-steps>>
+
+  # when dryrun is false and github-release is true: create the github release
+  - when:
+      condition:
+        and:
+          - not: <<parameters.dryrun>>
+          - <<parameters.github-release>>
+      steps:
+        - create-github-release
+
+  # when dryrun is false: run post-job-steps
+  - when:
+      condition:
+        not: <<parameters.dryrun>>
+      steps: <<parameters.post-job-steps>>

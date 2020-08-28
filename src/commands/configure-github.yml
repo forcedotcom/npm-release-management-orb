@@ -22,7 +22,11 @@ steps:
   - run:
       name: Setup github username and email
       command: |
-        GIT_NAME=${GITHUB_USERNAME:=<<parameters.git_username>>}
-        GIT_EMAIL=${GITHUB_EMAIL:=<<parameters.git_email>>}
+        GIT_NAME_ENV=${GH_USERNAME:=$GITHUB_USERNAME}
+        GIT_NAME=${GIT_NAME_ENV:=<<parameters.git_username>>}
+
+        GIT_EMAIL_ENV=${GH_EMAIL:=$GITHUB_EMAIL}
+        GIT_EMAIL=${GIT_EMAIL_ENV:=<<parameters.git_email>>}
+
         git config user.email $GIT_EMAIL
         git config user.name $GIT_NAME

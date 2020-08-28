@@ -33,6 +33,10 @@ This orb is designed to make releasing npm packages straightforward and with as 
 
 4. Follow the [examples](https://circleci.com/orbs/registry/orb/salesforce/npm-release-management#usage-examples) for how to setup your config.yml
 
+5. IMPORTANT: If you are using this with never-before-published npm package, you will need to do the following to prevent build failures on the initial build:
+   1. `npm publish --access public`
+   2. `git tag v1.0.0 ; git push origin v1.0.0`
+
 ## Note on Version Bumps and Changelogs
 
 Version bumps and changelogs are generated based on [conventional commit messages](https://www.conventionalcommits.org/en/v1.0.0/) (We use the [standard-version](https://github.com/conventional-changelog/standard-version) library to do this).

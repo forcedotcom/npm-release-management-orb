@@ -1,0 +1,45 @@
+# Copyright (c) 2018, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+description: >
+  Validate that PR contains reference to work item id or a reference to a github issue
+
+executor: default
+
+steps:
+  - run:
+      name: Verify access token set in environment
+      command: |
+        TOKEN=${GH_TOKEN:=$GITHUB_TOKEN}
+        if [ -z "$TOKEN" ]; then
+            echo "neither GH_TOKEN nor GITHUB_TOKEN are set in the environment. Exiting job..."
+            exit 1
+        fi
+  - jq/install
+  - run:
+      name: Check for work item id or github issue
+      command: |
+        if [ -z "$CIRCLE_PULL_REQUEST" ]; then
+            echo "Job not running on a pull request. Skipping..."
+            exit 0
+        fi
+
+        TOKEN=${GH_TOKEN:=$GITHUB_TOKEN}
+        HEADERS=$(printf 'Authorization: token %s' $GH_TOKEN)
+
+        PR_NUM="${CIRCLE_PR_NUMBER:-${CIRCLE_PULL_REQUEST##*/}}"
+        RESULT=$(curl -H "$HEADERS" "https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls/$PR_NUM")
+        BODY=$(echo $RESULT | jq '.body')
+        TITLE=$(echo $RESULT | jq '.title')
+        echo Title: $TITLE
+        echo Body: $BODY
+
+        REF=$(echo $TITLE $BODY | grep -Eo '@W-[0-9]+@|#[0-9]+')
+        if [ -z "$REF" ]; then
+            echo "PR does not reference work item or github issue"
+            exit 1
+        else
+            echo "PR references $REF"
+        fi

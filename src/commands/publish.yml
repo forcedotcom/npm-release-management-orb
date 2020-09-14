@@ -46,21 +46,21 @@ steps:
               TARFILE=$(ls | grep $PKG_VERSION.tgz)
               echo "publishing to npm using ${TARFILE}"
               npm publish $TARFILE --tag <<parameters.tag>> --access <<parameters.access>>
-  - run:
-      name: Wait for version to become available on npm
-      command: |
-        PKG_VERSION=$(cat package.json | jq -r .version)
-        PKG_NAME=$(cat package.json | jq -r .name)
+        - run:
+            name: Wait for version to become available on npm
+            command: |
+              PKG_VERSION=$(cat package.json | jq -r .version)
+              PKG_NAME=$(cat package.json | jq -r .name)
 
-        MAX_TRIES=30
-        TRIES=0
-        until (($(npm view $PKG_NAME versions --json | jq "map(select(. == \"$PKG_VERSION\")) | length") > 0)) || (($TRIES >= $MAX_TRIES )); do
-            printf '.'
-            sleep 1
-            TRIES=$((TRIES+1))
-        done
+              MAX_TRIES=300
+              TRIES=0
+              until (($(npm view $PKG_NAME versions --json | jq "map(select(. == \"$PKG_VERSION\")) | length") > 0)) || (($TRIES >= $MAX_TRIES )); do
+                  printf '.'
+                  sleep 1
+                  TRIES=$((TRIES+1))
+              done
 
-        if (($TRIES >= $MAX_TRIES)); then
-            echo "Timeout waiting for tag. Exiting job"
-            exit 1
-        fi
+              if (($TRIES >= $MAX_TRIES)); then
+                  echo "Timeout waiting for tag. Exiting job"
+                  exit 1
+              fi

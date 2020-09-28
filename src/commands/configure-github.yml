@@ -10,11 +10,11 @@ description: >
 parameters:
   git_username:
     description: github user name
-    default: Deployment Bot
+    default: SF-CLI-BOT
     type: string
   git_email:
     description: github user email
-    default: alm-cli@salesforce.com
+    default: sf.cli.bot@gmail.com
     type: string
 
 steps:

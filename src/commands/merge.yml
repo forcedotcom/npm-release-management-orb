@@ -12,7 +12,7 @@ parameters:
     description: the branch into which you want to merge changes
     default: develop
     type: string
-  main-branch:
+  base-branch:
     description: the branch which has changes you want merged into the target-branch
     default: master
     type: string
@@ -25,5 +25,5 @@ steps:
         git fetch
         git checkout <<parameters.target-branch>>
         git pull origin <<parameters.target-branch>>
-        git merge origin/<<parameters.main-branch>>
+        git merge origin/<<parameters.base-branch>>
         git push origin <<parameters.target-branch>>

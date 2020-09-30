@@ -5,6 +5,7 @@
   - [Usage](#usage)
   - [Note on Version Bumps and Changelogs](#note-on-version-bumps-and-changelogs)
     - [Overriding Version Bump](#overriding-version-bump)
+  - [Using the SF-CLI-BOT for builds](#using-the-sf-cli-bot-for-builds)
   - [Environment Variable Reference](#environment-variable-reference)
   - [How To Contribute](#how-to-contribute)
 
@@ -29,7 +30,7 @@ This orb is designed to make releasing npm packages straightforward and with as 
 
 3. Add a user key to your SSH Keys in CircleCi
 
-    As part of the release job we create a new git tag based on the version in the package.json. This requires that you add a user key that has the permissions to push to github. To do this, simply go to the `SSH Keys` tab in the project settings and follow the directions for adding user keys.
+    As part of the release job we create a new git tag based on the version in the package.json. This requires that you add a user key that has the permissions to push to github. To do this, simply go to the `SSH Keys` tab in the project settings and follow the directions for adding user keys. See [Using the SF-CLI-BOT for builds](#using-the-sf-cli-bot-for-builds) section on how to use our github bot for this.
 
 4. Follow the [examples](https://circleci.com/orbs/registry/orb/salesforce/npm-release-management#usage-examples) for how to setup your config.yml
 
@@ -62,6 +63,12 @@ module.exports = { extends: ['@commitlint/config-conventional'] };
 ### Overriding Version Bump
 
 The default behavior of the orb is to use `standard-version` to determine the next version number. However, you can specifiy the version you want published by updating the version field in the `package.json` yourself. If that version does not exist, the orb will publish it. Otherwise, it will fall back to using `standard-version`
+
+## Using the SF-CLI-BOT for builds
+
+We've created the [SF-CLI-BOT](https://github.com/SF-CLI-BOT) bot user in github to do any github related tasks in the build (creating releases, pushing tags, merges changes back to a specific branch, etc...). Having this bot ensure that the required tokens and keys do not belong to any one person.
+
+If you would like to use this bot for your builds, contact the CLI team and we will add the ssh keys and github token to your CircleCI pipeline.
 
 ## Environment Variable Reference
 

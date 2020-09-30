@@ -30,11 +30,11 @@ steps:
         CONTENTS=''
         while IFS="" read -r p || [ -n "$p" ]
         do
-            if [[ "$p" == *"### [$LATEST]"* ]]; then
+            if [[ "$p" == *"[$LATEST]"* ]]; then
                 CAPTURING=true
             fi
 
-            if [[ "$p" == *"### [$PREVIOUS]"* ]]; then
+            if [[ "$p" == *"[$PREVIOUS]"* ]]; then
                 CAPTURING=false
             fi
 

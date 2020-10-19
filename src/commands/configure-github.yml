@@ -14,7 +14,7 @@ parameters:
     type: string
   git_email:
     description: github user email
-    default: sf.cli.bot@gmail.com
+    default: alm-cli@salesforce.com
     type: string
 
 steps:

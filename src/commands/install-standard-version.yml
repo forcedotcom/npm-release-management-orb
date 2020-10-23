@@ -22,7 +22,7 @@ steps:
           echo "ignoring install request."
           exit 0
         else
-          yarn global add standard-version@<<parameters.version>>
+          npm install -g standard-version@<<parameters.version>>
         fi
   - run:
       name: Verify standard-version installation

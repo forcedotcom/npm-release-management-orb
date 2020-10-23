@@ -20,9 +20,9 @@ parameters:
     default: latest
     type: string
   sign:
-    description: signs the package using sfdx-trust if set to true
-    default: false
-    type: boolean
+    description: space separated list of packages you want signed (must be relative to the root dir, e.g. packages/my-package)
+    default: ""
+    type: string
   dryrun:
     description: if true, the job will run but will not publish to npm or push to git
     default: false
@@ -67,19 +67,31 @@ steps:
       steps:
         - run:
             name: Release Dryrun
-            command: |
-              sf-release npm:package:release --dryrun --no-install --npmtag <<parameters.tag>>
+            command: sf-release npm:lerna:release --dryrun --no-install --npmtag <<parameters.tag>>
 
   # when dryrun is false and sign is true: sign and publish package
   - when:
       condition:
         and:
           - not: <<parameters.dryrun>>
+          - not: <<parameters.github-release>>
           - <<parameters.sign>>
       steps:
         - run:
             name: Sign and Release
-            command: sf-release npm:package:release --sign --no-install --npmtag <<parameters.tag>>
+            command: sf-release npm:lerna:release --sign <<parameters.sign>> --no-install --npmtag <<parameters.tag>>
+
+  # when dryrun is false and sign is true and github-release is true: sign and publish package and create github release
+  - when:
+      condition:
+        and:
+          - not: <<parameters.dryrun>>
+          - <<parameters.sign>>
+          - <<parameters.github-release>>
+      steps:
+        - run:
+            name: Sign and Release
+            command: sf-release npm:lerna:release --sign <<parameters.sign>> --no-install --npmtag <<parameters.tag>> --githubrelease
 
   # when dryrun is false and sign is false: publish package
   - when:
@@ -87,19 +99,23 @@ steps:
         and:
           - not: <<parameters.dryrun>>
           - not: <<parameters.sign>>
+          - not: <<parameters.github-release>>
       steps:
         - run:
             name: Release
-            command: sf-release npm:package:release --no-install --npmtag <<parameters.tag>>
+            command: sf-release npm:lerna:release --no-install --npmtag <<parameters.tag>>
 
-  # when dryrun is false and github-release is true: create the github release
+  # when dryrun is false and sign is false and github-release is true: publish package and create github release
   - when:
       condition:
         and:
           - not: <<parameters.dryrun>>
+          - not: <<parameters.sign>>
           - <<parameters.github-release>>
       steps:
-        - create-github-release
+        - run:
+            name: Release
+            command: sf-release npm:lerna:release --no-install --npmtag <<parameters.tag>> --githubrelease
 
   # when dryrun is false: run post-job-steps
   - when:

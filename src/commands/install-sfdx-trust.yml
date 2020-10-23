@@ -22,7 +22,7 @@ steps:
           echo "ignoring install request."
           exit 0
         else
-          yarn global add @salesforce/sfdx-trust@<<parameters.version>>
+          npm install -g @salesforce/sfdx-trust@<<parameters.version>>
         fi
   - run:
       name: Verify @salesforce/sfdx-trust installation

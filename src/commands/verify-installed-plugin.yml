@@ -1,0 +1,34 @@
+# Copyright (c) 2018, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+# How to author commands: https://circleci.com/docs/2.0/reusing-config/#authoring-reusable-commands
+
+description: >
+  Verify that plugin was installed
+
+steps:
+  - run:
+      name: 'Verify installed plugins'
+      command: |
+        if $(test -f ./bin/run) ; then
+          echo "Found bin script for $PWD at top level"
+          ./bin/run --version
+          ./bin/run --help
+          exit 0
+        else
+          echo "Top level package is not a plugin checking sub directories"
+          PLUGINS=$(find . -name "plugin-*" -type d | grep -v "node_modules")
+          for PLUGIN in $PLUGINS
+            do
+              echo $PLUGIN
+              if $(test -f $PLUGIN/bin/run) ; then
+                echo "Found bin script for $PLUGIN"
+                $PLUGIN/bin/run --version
+                $PLUGIN/bin/run --help
+              else
+                echo "No bin script found for $PLUGIN"
+              fi
+            done
+        fi

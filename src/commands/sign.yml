@@ -20,7 +20,7 @@ steps:
   - run:
       name: Set salesforce credentials
       command: |
-        echo $SALESFORCE_KEY | base64 --decode > /root/salesforce-cli.key
+        echo $SALESFORCE_KEY | base64 --decode > $HOME/salesforce-cli.key
   - run:
       name: Sign npm package
       command: |
@@ -28,9 +28,20 @@ steps:
         RESULT=$(sfdx-trust plugins:trust:sign \
           --signatureurl https://developer.salesforce.com/media/salesforce-cli/signatures \
           --publickeyurl https://developer.salesforce.com/media/salesforce-cli/sfdx-cli-03032020.crt \
-          --privatekeypath /root/salesforce-cli.key \
+          --privatekeypath $HOME/salesforce-cli.key \
           --json)
-        echo $RESULT | jq .
+        printf '%s' "$RESULT" | jq .
+
+        echo "Cleaning up the signing key"
+        rm -f $HOME/salesforce-cli.key
+
+        STATUS=$(printf '%s' "$RESULT" | jq .status)
+
+        if (($STATUS >= 1)); then
+            ERROR=$(printf '%s' "$RESULT" | jq .message)
+            echo "Signing failed: ${ERROR}"
+            exit 1
+        fi
 
         FILE_NAME=$(echo $RESULT | jq -r '.result.filename')
         aws s3 cp $FILE_NAME s3://dfc-data-production/media/salesforce-cli/signatures/

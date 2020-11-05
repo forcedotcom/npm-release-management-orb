@@ -27,8 +27,8 @@ steps:
   - run:
       name: Set npm credentials
       command: |
-        echo //registry.npmjs.org/:_authToken=$NPM_TOKEN > /root/.npmrc
-        echo unsafe-perm = true >> /root/.npmrc
+        echo //registry.npmjs.org/:_authToken=$NPM_TOKEN > $HOME/.npmrc
+        echo unsafe-perm = true >> $HOME/.npmrc
   - when:
       condition:
         not: <<parameters.use_tarfile>>
@@ -46,6 +46,7 @@ steps:
               TARFILE=$(ls | grep $PKG_VERSION.tgz)
               echo "publishing to npm using ${TARFILE}"
               npm publish $TARFILE --tag <<parameters.tag>> --access <<parameters.access>>
+              rm -f $HOME/.npmrc
         - run:
             name: Wait for version to become available on npm
             command: |

@@ -1,0 +1,31 @@
+# Copyright (c) 2018, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+# How to author commands: https://circleci.com/docs/2.0/reusing-config/#authoring-reusable-commands
+description: >
+  Installs the latest version of the @salesforce/plugin-release-management
+parameters:
+  version:
+    description: By default, the latest version of @salesforce/plugin-release-management (sf-release) will be installed
+    default: latest
+    type: string
+
+steps:
+  - run:
+      name: Install @salesforce/plugin-release-management
+      command: |
+        # check if sf-release needs to be installed
+        if command -v sf-release >> /dev/null 2>&1; then
+          echo "sf-release is already installed..."
+          echo "ignoring install request."
+          exit 0
+        else
+          npm install -g @salesforce/plugin-release-management@<<parameters.version>>
+        fi
+  - run:
+      name: Verify @salesforce/plugin-release-management installation
+      command: |
+        sf-release --version
+        sf-release npm --help

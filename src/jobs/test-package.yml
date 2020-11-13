@@ -38,8 +38,7 @@ steps:
         - ~/node_modules
         - /usr/local/share/.cache/yarn
         - /usr/local/share/.config/yarn
-  - run: test -f ./bin/run && ./bin/run --version || echo "No bin script"
-  - run: test -f ./bin/run && ./bin/run --help || echo "No bin script"
+  - verify-installed-plugin
   - run:
       name: Testing
       command: yarn test

@@ -23,13 +23,12 @@ parameters:
     default: "dev:alpha"
 
 jobs:
-  integration-test-verify-fingerprint:
+  integration-test:
     executor: release-management/default
     steps:
       - checkout
       - release-management/install-sfdx-trust
-      - release-management/verify-fingerprint
-
+      - release-management/install-sf-release
 
 workflows:
   # This `lint-pack_validate_publish-dev` workflow will run on any commit.
@@ -73,7 +72,7 @@ workflows:
       # integration tests of your choosing
 
       # an example job
-      - integration-test-verify-fingerprint
+      - integration-test
 
       # publish a semver version of the orb. relies on
       # the commit subject containing the text "[semver:patch|minor|major|skip]"
@@ -88,17 +87,7 @@ workflows:
           fail-if-semver-not-indicated: true
           publish-version-tag: false
           requires:
-            - integration-test-verify-fingerprint
+            - integration-test
           filters:
             branches:
               only: master
-  nightly:
-    triggers:
-      - schedule:
-          cron: "0 0 * * *"
-          filters:
-            branches:
-              only:
-                - master
-    jobs:
-      - integration-test-verify-fingerprint

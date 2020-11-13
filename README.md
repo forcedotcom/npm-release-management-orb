@@ -76,9 +76,9 @@ If you would like to use this bot for your builds, contact the CLI team and we w
 |------------------------------------|--------------------------------------------------------------------|----------------------------------------|
 | AWS_ACCESS_KEY_ID                  | access key id for aws s3                                           | Yes (only if signing packages)         |
 | AWS_SECRET_ACCESS_KEY              | secret access key for aws s3                                       | Yes (only if signing packages)         |
-| GITHUB_USERNAME (GH_USERNAME)      | github username that will be used for creating new tags            | No                                     |
-| GITHUB_EMAIL (GH_EMAIL)            | github email that will be used for creating new tags               | No                                     |
-| GITHUB_TOKEN (GH_TOKEN)            | github personal access token that will be used for release         | Yes (only if creating github releases) |
+| GH_USERNAME                        | github username that will be used for creating new tags            | No                                     |
+| GH_EMAIL                           | github email that will be used for creating new tags               | No                                     |
+| GH_TOKEN                           | github personal access token that will be used for release         | Yes (only if creating github releases) |
 | NPM_TOKEN                          | auth token for publishing to npm                                   | Yes                                    |
 | SALESFORCE_KEY                     | base64 encoded cert for plugin signing                             | Yes (only if signing packages)         |
 | SFDX_DEVELOPER_TRUSTED_FINGERPRINT | fingerprint from developer.salesforce.com. Used for plugin signing | No                                     |

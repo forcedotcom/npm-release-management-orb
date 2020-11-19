@@ -17,7 +17,7 @@ steps:
           ./bin/run --version
           ./bin/run --help
           exit 0
-        else
+        elif [ -d $CIRCLE_WORKING_DIRECTORY/packages ]; then
           echo "Top level package is not a plugin checking sub directories"
           PLUGINS=$(find . -name "plugin-*" -type d | grep -v "node_modules")
           for PLUGIN in $PLUGINS
@@ -31,4 +31,6 @@ steps:
                 echo "No bin script found for $PLUGIN"
               fi
             done
+        else
+          echo "No bin script found for $CIRCLE_PROJECT_REPONAME. That's probably okay..."
         fi

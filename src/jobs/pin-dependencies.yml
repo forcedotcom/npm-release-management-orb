@@ -1,0 +1,60 @@
+# Copyright (c) 2018, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+
+description: >
+  pin a list of dependencies to their 'latest' tag or a tag of your choosing
+executor: default
+parameters:
+  tag:
+    description: target tag to pin packages to. If it doesn't exist for a specific package it will default to 'latest'
+    type: string
+    default: latest
+  dryrun:
+    description: if true, the job will not make any permanant changes
+    default: false
+    type: boolean
+
+steps:
+  - checkout
+  - install-sf-release
+  - when:
+      condition: <<parameters.dryrun>>
+      steps:
+        - run:
+            name: dependencies:pin dryrun
+            command: sf-release npm:dependencies:pin --dryrun --tag <<parameters.tag>>
+  - when:
+      condition:
+        not: <<parameters.dryrun>>
+      steps:
+        - run:
+            name: dependencies:pin
+            command: sf-release npm:dependencies:pin --tag <<parameters.tag>>
+        - run:
+            name: commit package.json change
+            command: |
+              git status;
+              # if we have ONLY changed the package.json then we can commit and push
+              if  git status --porcelain v1 | grep 'package.json' && git status --porcelain v1 | wc -l == 1; then
+                git add package.json
+                git commit -m "Automatically adding package.json [skip ci]";
+                git push;
+                echo "Successfully pinned and commited package.json"
+                exit 0;
+              fi
+
+              # there are no changes to be committed.
+              if  git status --porcelain v1 | grep 'package.json' && git status --porcelain v1 | wc -l == 0; then
+                echo "No Changes Detected... continuing";
+                exit 0;
+              fi
+
+              # we've changed other things, so error
+              if  git status --porcelain v1 | grep 'package.json' && git status --porcelain v1 | wc -l > 1; then
+                echo "ERROR: more files were changed than expected";
+                exit 1
+              fi
+

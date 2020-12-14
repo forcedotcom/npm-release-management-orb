@@ -4,7 +4,7 @@
 # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 
 description: >
-  Validate that PR contains reference to work item id or a reference to a github issue
+  Validate that PR contains reference to work item id or a reference to a github issue. Job will be skipped if [skip-validate-pr] is found in the commit message
 
 executor: default
 
@@ -24,6 +24,13 @@ steps:
         if [ -z "$CIRCLE_PULL_REQUEST" ]; then
             echo "Job not running on a pull request. Skipping..."
             exit 0
+        fi
+
+        MESSAGE=$(git log --pretty=format:"%s" -n 1 $CIRCLE_SHA1)
+        SKIP_TAG='[skip-validate-pr]'
+        if [[ "$MESSAGE" == *"$SKIP_TAG"* ]]; then
+          echo "[skip-validate-pr] tag found in commit message. Skipping..."
+          exit 0
         fi
 
         TOKEN=${GH_TOKEN:=$GITHUB_TOKEN}

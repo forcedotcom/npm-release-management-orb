@@ -40,7 +40,7 @@ steps:
               # if we have ONLY changed the package.json then we can commit and push
               if  git status --porcelain v1 | grep 'package.json' && git status --porcelain v1 | wc -l == 1; then
                 git add package.json
-                git commit -m "Automatically adding package.json [skip ci]";
+                git commit -m "chore: pin dependencies in package.json [skip ci]";
                 git push;
                 echo "Successfully pinned and commited package.json"
                 exit 0;

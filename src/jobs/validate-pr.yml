@@ -18,6 +18,7 @@ steps:
             exit 1
         fi
   - jq/install
+  - checkout
   - run:
       name: Check for work item id or github issue
       command: |

@@ -32,6 +32,11 @@ steps:
           exit 0
         fi
 
+        if [[ "$CIRCLE_BRANCH" == *"dependabot"* ]]; then
+          echo "PR created by dependabot. Skipping..."
+          exit 0
+        fi
+
         MESSAGE=$(git log --pretty=format:"%s" -n 1 $CIRCLE_SHA1)
         SKIP_TAG='[skip-validate-pr]'
         if [[ "$MESSAGE" == *"$SKIP_TAG"* ]]; then

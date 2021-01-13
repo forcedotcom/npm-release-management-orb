@@ -78,6 +78,7 @@ If you would like to use this bot for your builds, contact the CLI team and we w
 | NPM_TOKEN                          | auth token for publishing to npm                                   | Yes                                    |
 | SALESFORCE_KEY                     | base64 encoded cert for plugin signing                             | Yes (only if signing packages)         |
 | SFDX_DEVELOPER_TRUSTED_FINGERPRINT | fingerprint from developer.salesforce.com. Used for plugin signing | No                                     |
+| NPM_REGISTRY                       | url to npm registry. Used for install and publish.                 | No                                     |
 
 
 ## How To Contribute

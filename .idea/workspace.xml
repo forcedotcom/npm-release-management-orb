@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="29b4078a-0f5f-47d6-a2aa-073fa5f9cf0a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/src/jobs/pin-dependencies.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/commands/pin-dependencies.yml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1kWZZcMs4IDHTUphaNZeu5VCok9" />
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/commands" />
+      <recent name="$PROJECT_DIR$/src/jobs" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="29b4078a-0f5f-47d6-a2aa-073fa5f9cf0a" name="Default Changelist" comment="" />
+      <created>1605818364625</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1605818364625</updated>
+      <workItem from="1605818365709" duration="1215000" />
+      <workItem from="1607636290018" duration="19102000" />
+      <workItem from="1607979373432" duration="5134000" />
+      <workItem from="1610574841279" duration="2852000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="534" y="-965" width="598" height="490" key="find.popup" timestamp="1610581560193">
+      <screen x="-447" y="-1440" width="2560" height="1440" />
+    </state>
+    <state x="534" y="-965" width="598" height="490" key="find.popup/-447.-1440.2560.1440/0.0.1680.1050@-447.-1440.2560.1440" timestamp="1610581560193" />
+    <state x="498" y="-374" key="run.anything.popup" timestamp="1607963729072">
+      <screen x="-447" y="-1440" width="2560" height="1440" />
+    </state>
+    <state x="498" y="-374" key="run.anything.popup/-447.-1440.2560.1440/0.0.1680.1050@-447.-1440.2560.1440" timestamp="1607963729072" />
+    <state x="498" y="-1109" width="670" height="676" key="search.everywhere.popup" timestamp="1607708330126">
+      <screen x="-447" y="-1440" width="2560" height="1440" />
+    </state>
+    <state x="498" y="-1109" width="670" height="676" key="search.everywhere.popup/-447.-1440.2560.1440/0.0.1680.1050@-447.-1440.2560.1440" timestamp="1607708330126" />
+  </component>
+</project>

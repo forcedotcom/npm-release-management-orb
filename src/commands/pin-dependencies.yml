@@ -1,0 +1,23 @@
+# Copyright (c) 2018, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+
+description: >
+  pin a list of dependencies to their 'latest' tag or a tag of your choosing
+
+parameters:
+  tag:
+    description: target tag to pin packages to. If it doesn't exist for a specific package it will default to 'latest'
+    type: string
+    default: latest
+
+steps:
+  - checkout
+  - install-sf-release
+  - run:
+      name: dependencies:pin
+      command: sf-release npm:dependencies:pin --tag <<parameters.tag>>
+
+

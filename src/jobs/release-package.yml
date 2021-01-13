@@ -27,6 +27,10 @@ parameters:
     description: if true, the job will run but will not publish to npm or push to git
     default: false
     type: boolean
+  pre-job-steps:
+    description: steps that you want to run after the job is setup, but before installing dependencies (dryrun is ignored)
+    type: steps
+    default: []
   post-job-steps:
     description: steps that you want to run after the job has finished running (if dryrun is set to false, these steps will be skipped)
     type: steps
@@ -48,6 +52,9 @@ steps:
       keys:
         - v1-npm-{{checksum ".circleci/config.yml"}}-{{checksum "yarn.lock"}}
         - v1-npm-{{checksum ".circleci/config.yml"}}
+
+  - steps: <<parameters.pre-job-steps>>
+
   - run:
       name: Install dependencies
       command: yarn

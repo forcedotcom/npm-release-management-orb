@@ -1,0 +1,32 @@
+# Copyright (c) 2018, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+description: >
+  Runs tests agasint latest typescript version and ES target
+
+parameters:
+  node_version:
+    description: version of node to run tests against
+    type: string
+    default: latest
+  ts_version:
+    description: version of typescript to run tests against
+    type: string
+    default: latest
+  es_target:
+    description: ES target to run tests against
+    type: string
+    default: ESNext
+
+executor:
+  name: default
+  tag: <<parameters.node_version>>
+
+steps:
+  - checkout
+  - install-sf-release
+  - run:
+      name: Update typescript version and ES target
+      command: sf-release typescript:update -v <<parameters.ts_version>> -t <<parameters.es_target>>

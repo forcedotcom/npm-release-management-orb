@@ -28,7 +28,7 @@ parameters:
     default: false
     type: boolean
   pre-job-steps:
-    description: steps that you want to run after the job is setup, but before installing dependencies (dryrun is ignored)
+    description: steps that you want to run before installing dependencies (dryrun is ignored)
     type: steps
     default: []
   post-job-steps:

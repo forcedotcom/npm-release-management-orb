@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 
-
+# How to author commands: https://circleci.com/docs/2.0/reusing-config/#authoring-reusable-commands
 description: >
   pin a list of dependencies to their 'latest' tag or a tag of your choosing
 

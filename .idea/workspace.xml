@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="29b4078a-0f5f-47d6-a2aa-073fa5f9cf0a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/jobs/pin-dependencies.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/commands/pin-dependencies.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/commands/pin-dependencies.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/commands/pin-dependencies.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

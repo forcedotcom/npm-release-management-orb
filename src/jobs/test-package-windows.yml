@@ -2,13 +2,8 @@
 # All rights reserved.
 # SPDX-License-Identifier: BSD-3-Clause
 # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
-
 description: >
   Runs tests for package on windows env
-
-orbs:
-  # For Testing on windows
-  win: circleci/windows@2.4.0
 
 executor: win/default
 

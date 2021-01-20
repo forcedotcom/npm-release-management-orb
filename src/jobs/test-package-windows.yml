@@ -10,29 +10,27 @@ orbs:
   # For Testing on windows
   win: circleci/windows@2.4.0
 
-jobs:
-  build-and-test-win:
-    description: "Run tests on windows"
-    executor: win/default
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-npm-{{checksum ".circleci/config.yml"}}-{{checksum "yarn.lock"}}
-            - v1-npm-{{checksum ".circleci/config.yml"}}
-      - run:
-          name: Install dependencies
-          command: yarn
-      - run:
-          name: Build
-          command: yarn build
-      - save_cache:
-          key: v1-npm-{{checksum ".circleci/config.yml"}}-{{checksum "yarn.lock"}}
-          paths:
-            - ~/node_modules
-            - /usr/local/share/.cache/yarn
-            - /usr/local/share/.config/yarn
-      - verify-installed-plugin
-      - run:
-          name: Testing
-          command: yarn test
+executor: win/default
+
+steps:
+  - checkout
+  - restore_cache:
+      keys:
+        - v1-npm-{{checksum ".circleci/config.yml"}}-{{checksum "yarn.lock"}}
+        - v1-npm-{{checksum ".circleci/config.yml"}}
+  - run:
+      name: Install dependencies
+      command: yarn
+  - run:
+      name: Build
+      command: yarn build
+  - save_cache:
+      key: v1-npm-{{checksum ".circleci/config.yml"}}-{{checksum "yarn.lock"}}
+      paths:
+        - ~/node_modules
+        - /usr/local/share/.cache/yarn
+        - /usr/local/share/.config/yarn
+  - verify-installed-plugin
+  - run:
+      name: Testing
+      command: yarn test

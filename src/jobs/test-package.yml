@@ -25,8 +25,8 @@ executor:
 
 steps:
   - run:
-    name: Set node version
-    command: nvm use << parameters.node_version >>
+      name: Set node version
+      command: nvm use << parameters.node_version >>
   - checkout
   - restore_cache:
       keys:

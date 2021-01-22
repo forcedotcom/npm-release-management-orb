@@ -22,7 +22,7 @@ parameters:
   os:
     description: operating system you want to test against
     type: enum
-    enum: ['linux','windows']
+    enum: ['linux','win/default']
     default: 'linux'
 
 executor:

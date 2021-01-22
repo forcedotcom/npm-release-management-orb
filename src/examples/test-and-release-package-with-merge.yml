@@ -24,10 +24,6 @@ usage:
             upload-coverage: true
         - release-management/test-package:
             name: node-12
-        - release-management/test-package-windows:
-            filters:
-              branches:
-                ignore: master
         - release-management/release-package:
             post-job-steps:
               - release-management/merge:

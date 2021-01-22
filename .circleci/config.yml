@@ -24,7 +24,7 @@ parameters:
 
 jobs:
   integration-test:
-    executor: release-management/default
+    executor: release-management/linux
     steps:
       - checkout
       - release-management/install-sfdx-trust

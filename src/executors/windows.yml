@@ -8,4 +8,5 @@ description: >
   Windows os
 
 machine:
-    image: windows-default # Windows machine image
+    image: "windows-server-2019-vs2019:*base-version"
+

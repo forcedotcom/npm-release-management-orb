@@ -10,7 +10,7 @@ parameters:
   node_version:
     description: version of node to run tests against
     type: string
-    default: latest
+    default: '15.6.0'
   ts_version:
     description: version of typescript to run tests against
     type: string
@@ -31,7 +31,7 @@ executor:
 steps:
   - run:
       name: Set node version
-      command: nvm use << parameters.node_version >>
+      command: nvm install << parameters.node_version >>
   - checkout
   - install-sf-release
   - run:

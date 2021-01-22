@@ -19,12 +19,18 @@ parameters:
     description: ES target to run tests against
     type: string
     default: ESNext
+  os:
+    description: operating system you want to test against
+    type: executor
+    default: 'linux'
 
 executor:
-  name: default
-  tag: <<parameters.node_version>>
+  name: << parameters.os >>
 
 steps:
+  - run:
+      name: Set node version
+      command: nvm use << parameters.node_version >>
   - checkout
   - install-sf-release
   - run:

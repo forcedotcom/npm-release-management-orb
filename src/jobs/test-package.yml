@@ -15,9 +15,14 @@ parameters:
     description: if true, the job will submit code coverage report to codecov.io
     default: false
     type: boolean
+  os:
+    description: operating system you want to test againstt
+    type: enum
+    enum: ['linux', 'windows']
+    default: 'linux' 
 
 executor:
-  name: default
+  name: << parameters.os >>
   tag: << parameters.node_version >>
 
 steps:

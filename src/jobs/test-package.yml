@@ -18,8 +18,8 @@ parameters:
   os:
     description: operating system you want to test againstt
     type: enum
-    enum: ['linux', 'windows']
-    default: 'linux' 
+    enum: ['linux','windows']
+    default: 'linux'
 
 executor:
   name: << parameters.os >>

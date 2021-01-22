@@ -6,4 +6,4 @@
 # How to author Executors: https://circleci.com/docs/2.0/reusing-config/#authoring-reusable-executors
 description: >
   Windows os
-executor: win/default
+windows: win/default

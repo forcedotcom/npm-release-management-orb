@@ -22,9 +22,11 @@ parameters:
 
 executor:
   name: << parameters.os >>
-  tag: << parameters.node_version >>
 
 steps:
+  - run:
+    name: Set node version
+    command: nvm use << parameters.node_version >>
   - checkout
   - restore_cache:
       keys:

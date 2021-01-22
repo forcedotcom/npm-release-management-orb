@@ -7,11 +7,5 @@
 description: >
   Windows os
 
-parameters:
-  tag:
-    default: "12"
-    type: string
 machine:
     image: windows-default # Windows machine image
-steps:
-  - run: nvm use << parameters.tag >>

@@ -17,7 +17,8 @@ parameters:
     type: boolean
   os:
     description: operating system you want to test against
-    type: executor
+    type: enum
+    enum: ['linux','windows']
     default: 'linux'
 
 executor:

@@ -7,8 +7,6 @@
 description: >
   An executor preloaded with Visual Studio 2019 plus a number of other
   development tools.
-machine:
-      image: windows-server-2019-vs2019:stable
 parameters:
   version:
     type: string

@@ -5,6 +5,31 @@
 
 # How to author Executors: https://circleci.com/docs/2.0/reusing-config/#authoring-reusable-executors
 description: >
-  Windows os
+  An executor preloaded with Visual Studio 2019 plus a number of other
+  development tools.
 machine:
       image: windows-server-2019-vs2019:stable
+parameters:
+  version:
+    type: string
+    description: The image version to use when executing. Defaults to "stable".
+    default: stable
+  shell:
+    type: string
+    description: |
+      The shell to use. Defaults to `powershell.exe -ExecutionPolicy Bypass`
+    default: powershell.exe -ExecutionPolicy Bypass
+  size:
+    type: enum
+    description: |
+      The size of Windows resource to use. Defaults to medium.
+    default: medium
+    enum:
+      - medium
+      - large
+      - xlarge
+      - 2xlarge
+machine:
+  image: 'windows-server-2019-vs2019:<< parameters.version >>'
+  resource_class: windows.<< parameters.size >>
+  shell: << parameters.shell >>

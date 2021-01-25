@@ -23,7 +23,7 @@ parameters:
     type: enum
     description: |
       The size of Windows resource to use. Defaults to medium.
-    default: medium
+    default: large
     enum:
       - medium
       - large

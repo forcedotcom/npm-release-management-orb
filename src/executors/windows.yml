@@ -7,7 +7,13 @@
 description: >
   An executor preloaded with Visual Studio 2019 plus a number of other
   development tools.
+parameters:
+  shell:
+    type: string
+    description: |
+      The shell to use. Defaults to `powershell.exe -ExecutionPolicy Bypass`
+    default: powershell.exe -ExecutionPolicy Bypass
 machine:
   image: 'windows-server-2019-vs2019:stable
   resource_class: windows.large
-  shell: powershell.exe -ExecutionPolicy Bypass
+  shell: << parameters.shell >>

@@ -9,8 +9,6 @@ orbs:
   aws-cli: circleci/aws-cli@1.2.1
   jq: circleci/jq@2.2.0
   sfchangecase: salesforce/change-case-management@3.2.0
-  # For Testing on windows
-  win: circleci/windows@2.4.0
 
 display:
   home_url: "https://circleci.com/orbs/registry/orb/salesforce/npm-release-management"

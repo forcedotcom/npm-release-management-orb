@@ -10,7 +10,7 @@ parameters:
   node_version:
     description: version of node to run tests against
     type: string
-    default: '15.6.0'
+    default: 'latest'
   ts_version:
     description: version of typescript to run tests against
     type: string
@@ -22,7 +22,7 @@ parameters:
   os:
     description: operating system you want to test against
     type: enum
-    enum: ['linux','win/default']
+    enum: ['linux','windows']
     default: 'linux'
 
 executor:
@@ -31,7 +31,13 @@ executor:
 steps:
   - run:
       name: Set node version
-      command: nvm install << parameters.node_version >>
+      command: |
+          if [ <<parameters.node_version>> = "latest" ]; then
+              nvm install --latest-npm
+          else
+              nvm install <<parameters.node_version>>
+          fi
+          nvm ls
   - checkout
   - install-sf-release
   - run:

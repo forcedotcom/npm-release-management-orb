@@ -25,15 +25,8 @@ executor:
   name: << parameters.os >>
 
 steps:
-  - run:
-      name: Set node version
-      command: |
-          if [ <<parameters.node_version>> = "latest" ]; then
-              nvm install --latest-npm
-          else
-              nvm install <<parameters.node_version>>
-          fi
-          nvm ls
+  - install-node:
+      version: <<parameters.node_version>>
   - checkout
   - restore_cache:
       keys:

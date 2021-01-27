@@ -15,7 +15,7 @@ parameters:
   shell:
     type: string
     description: |
-      The shell to use. Defaults to `powershell.exe -ExecutionPolicy Bypass`
+      The shell to use. Defaults to `bash.exe`
     default: bash.exe
   size:
     type: enum

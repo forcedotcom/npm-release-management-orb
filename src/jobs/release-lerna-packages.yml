@@ -36,7 +36,7 @@ parameters:
     type: boolean
     default: false
 
-executor: linux
+executor: default
 
 steps:
   - checkout

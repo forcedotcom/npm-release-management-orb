@@ -17,7 +17,7 @@ steps:
       name: Install and use node version
       command: |
           if [ <<parameters.version>> = "latest" ]; then
-              nvm install --latest-npm
+              nvm install node
           else
               nvm install <<parameters.version>>
           fi

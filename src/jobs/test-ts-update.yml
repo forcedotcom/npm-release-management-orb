@@ -10,7 +10,7 @@ parameters:
   node_version:
     description: version of node to run tests against
     type: string
-    default: latest
+    default: 'latest'
   ts_version:
     description: version of typescript to run tests against
     type: string
@@ -19,12 +19,18 @@ parameters:
     description: ES target to run tests against
     type: string
     default: ESNext
+  os:
+    description: operating system you want to test against
+    type: enum
+    enum: ['linux','windows']
+    default: 'linux'
 
 executor:
-  name: default
-  tag: <<parameters.node_version>>
+  name: << parameters.os >>
 
 steps:
+  - install-node:
+      version: <<parameters.node_version>>
   - checkout
   - install-sf-release
   - run:

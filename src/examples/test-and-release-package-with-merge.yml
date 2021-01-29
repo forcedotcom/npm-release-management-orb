@@ -24,6 +24,10 @@ usage:
             upload-coverage: true
         - release-management/test-package:
             name: node-12
+        - release-management/test-package:
+            name: node-latest
+            node_version: latest
+            os: windows
         - release-management/release-package:
             post-job-steps:
               - release-management/merge:

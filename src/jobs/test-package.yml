@@ -10,17 +10,23 @@ parameters:
   node_version:
     description: version of node to run tests against
     type: string
-    default: latest
+    default: 'latest'
   upload-coverage:
     description: if true, the job will submit code coverage report to codecov.io
     default: false
     type: boolean
+  os:
+    description: operating system you want to test against
+    type: enum
+    enum: ['linux','windows']
+    default: 'linux'
 
 executor:
-  name: default
-  tag: << parameters.node_version >>
+  name: << parameters.os >>
 
 steps:
+  - install-node:
+      version: <<parameters.node_version>>
   - checkout
   - restore_cache:
       keys:

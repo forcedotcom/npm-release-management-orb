@@ -6,7 +6,7 @@
 description: >
   Validate that PR contains reference to work item id or a reference to a github issue. Job will be skipped if [skip-validate-pr] is found in the commit message
 
-executor: linux
+executor: default
 
 steps:
   - run:

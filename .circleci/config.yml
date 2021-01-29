@@ -20,7 +20,7 @@ parameters:
     default: false
   dev-orb-version:
     type: string
-    default: "dev:alpha"
+    default: "4.3.0"
 
 jobs:
   integration-test:

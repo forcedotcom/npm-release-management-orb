@@ -40,7 +40,7 @@ parameters:
     type: boolean
     default: false
 
-executor: default
+executor: linux
 
 steps:
   - checkout

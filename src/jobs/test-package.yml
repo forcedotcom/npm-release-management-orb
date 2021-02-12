@@ -10,7 +10,7 @@ parameters:
   node_version:
     description: version of node to run tests against
     type: string
-    default: latest
+    default: "12"
   upload-coverage:
     description: if true, the job will submit code coverage report to codecov.io
     default: false

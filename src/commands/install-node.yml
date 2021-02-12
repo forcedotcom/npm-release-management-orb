@@ -43,6 +43,8 @@ steps:
               if("<<parameters.version>>" -eq "latest") {
                 choco install nodejs
               } else {
-                choco install nodejs --version <<parameters.version>> --allow-downgrade
+                $r = Invoke-WebRequest https://nodejs.org/download/release/index.json | ConvertFrom-Json
+                $latest_of_version = ($r | where { $_.version -like "v<<parameters.version>>*" })[0].version.substring(1)
+                choco install nodejs --version $latest_of_version --allow-downgrade
               }
               echo "Using node: $(node --version)"

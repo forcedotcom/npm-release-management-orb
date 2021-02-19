@@ -1,0 +1,50 @@
+# Copyright (c) 2018, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+# How to author commands: https://circleci.com/docs/2.0/reusing-config/#authoring-reusable-commands
+description: >
+  Install node version first
+
+parameters:
+  version:
+    description: version of node to install and use
+    default: latest
+    type: string
+  os:
+    description: operating system you want to install node on
+    type: enum
+    enum: ['linux', 'windows']
+    default: 'linux'
+
+steps:
+  - when:
+      condition:
+        equal: ['linux', <<parameters.os>>]
+      steps:
+        - run:
+            name: Install and use node version
+            command: |
+              if [[ "<<parameters.version>>" == "latest" ]]; then
+                nvm install node
+              else
+                nvm install <<parameters.version>>
+              fi
+              echo "Using node: $(node --version)"
+
+  - when:
+      condition:
+        equal: ['windows', <<parameters.os>>]
+      steps:
+        - run:
+            name: Install and use node version
+            command: |
+              if("<<parameters.version>>" -eq "latest") {
+                choco install nodejs
+              } else {
+                $r = Invoke-WebRequest https://nodejs.org/download/release/index.json | ConvertFrom-Json
+                $latest_of_version = ($r | where { $_.version -like "v<<parameters.version>>*" })[0].version.substring(1)
+                choco install nodejs --version $latest_of_version --allow-downgrade
+              }
+              echo "Using node: $(node --version)"

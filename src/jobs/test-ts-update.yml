@@ -21,10 +21,11 @@ parameters:
     default: ESNext
 
 executor:
-  name: default
-  tag: <<parameters.node_version>>
+  name: linux
 
 steps:
+  - install-node:
+      version: <<parameters.node_version>>
   - checkout
   - install-sf-release
   - run:

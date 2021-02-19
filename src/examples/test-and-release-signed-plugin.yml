@@ -24,6 +24,11 @@ usage:
             upload-coverage: true
         - release-management/test-package:
             name: node-12
+            node_version: '12'
+        - release-management/test-package:
+            name: win-node-12
+            node_version: '12'
+            os: windows
         - release-management/release-package:
             sign: true
             requires:

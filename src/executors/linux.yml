@@ -4,11 +4,10 @@
 # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 
 # How to author Executors: https://circleci.com/docs/2.0/reusing-config/#authoring-reusable-executors
+# https://circleci.com/docs/2.0/configuration-reference/#available-machine-images
+
 description: >
-  Default node executor
-docker:
-  - image: node:<<parameters.tag>>
-parameters:
-  tag:
-    default: "12"
-    type: string
+  Linux os
+
+machine: # executor type
+  image: ubuntu-2004:202010-01 # # recommended linux image - includes Ubuntu 20.04, docker 19.03.13, docker-compose 1.27.4

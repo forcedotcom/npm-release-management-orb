@@ -50,8 +50,8 @@ steps:
   - configure-github
   - restore_cache:
       keys:
-        - v1-npm-{{checksum ".circleci/config.yml"}}-{{checksum "yarn.lock"}}
-        - v1-npm-{{checksum ".circleci/config.yml"}}
+        - v2-npm-{{checksum ".circleci/config.yml"}}-{{checksum "yarn.lock"}}
+        - v2-npm-{{checksum ".circleci/config.yml"}}
 
   - steps: <<parameters.pre-job-steps>>
 
@@ -62,11 +62,11 @@ steps:
       name: Build
       command: yarn build
   - save_cache:
-      key: v1-npm-{{checksum ".circleci/config.yml"}}-{{checksum "yarn.lock"}}
+      key: v2-npm-{{checksum ".circleci/config.yml"}}-{{checksum "yarn.lock"}}
       paths:
         - ~/node_modules
-        - /usr/local/share/.cache/yarn
-        - /usr/local/share/.config/yarn
+        - ~/.cache/yarn
+        - ~/.config/yarn
 
   # when dryrun is true: publish with --dryrun flag
   - when:

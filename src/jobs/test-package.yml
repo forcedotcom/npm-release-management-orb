@@ -57,8 +57,8 @@ steps:
             key: v1-npm-{{checksum ".circleci/config.yml"}}-{{checksum "yarn.lock"}}
             paths:
               - ~/node_modules
-              - /usr/local/share/.cache/yarn
-              - /usr/local/share/.config/yarn
+              - ~/.cache/yarn
+              - ~/.config/yarn
         - verify-installed-plugin
   - run:
       name: Testing

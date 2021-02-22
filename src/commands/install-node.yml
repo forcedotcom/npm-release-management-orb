@@ -26,11 +26,16 @@ steps:
         - run:
             name: Install and use node version
             command: |
+              echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+              echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
               if [[ "<<parameters.version>>" == "latest" ]]; then
                 nvm install node
+                nvm alias default node
               else
                 nvm install <<parameters.version>>
+                nvm alias default <<parameters.version>>
               fi
+
               echo "Using node: $(node --version)"
 
   - when:

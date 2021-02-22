@@ -62,7 +62,9 @@ steps:
         - verify-installed-plugin
   - run:
       name: Testing
-      command: yarn test
+      command: |
+        echo "Using node: $(node --version)"
+        yarn test
   - when:
       condition: <<parameters.upload-coverage>>
       steps:

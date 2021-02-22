@@ -22,7 +22,7 @@ This orb is designed to make releasing npm packages straightforward and with as 
       release-management: salesforce/npm-release-management@x.y.z
     ```
 
-    NOTE: We recommend pinning the major version (e.g. `salesforce/npm-release-management@1`) so that you automatically recieve all minor and patch updates.
+    NOTE: We recommend pinning the major version (e.g. `salesforce/npm-release-management@4`) so that you automatically recieve all minor and patch updates.
 
 2. Setup the required environment variables.
 

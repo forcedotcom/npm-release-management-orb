@@ -18,13 +18,13 @@ parameters:
     default: 'linux'
 
 steps:
-  
+
   - when:
       condition:
         # windows installer has a UI.  so we install node version
         equal: ['windows', <<parameters.os>>]
       steps:
-        - when: 
+        - when:
           condition: <<parameters.version>>
           steps:
           - run:

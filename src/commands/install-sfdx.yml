@@ -20,35 +20,44 @@ parameters:
 # there are four combos of OS and version
 steps:
   - run:
-      name: Install SFDX - NPM <<parameters.version>> on windows
-      command: |
-        npm install sfdx-cli@<<parameters.version>> --global
       when:
         condition:
           and:
             # windows installer has a UI.  so we install node version
             - equal: ['windows', <<parameters.os>>]
             - <<parameters.version>>
-  - run:
-      name: Install SFDX - NPM latest on windows
+      name: Install SFDX - NPM <<parameters.version>> on windows
       command: |
-          npm install sfdx-cli --global
+        npm install sfdx-cli@<<parameters.version>> --global
+
+  - run:
       when:
         condition:
           and:
             - equal: ['windows', <<parameters.os>>]
             - not: <<parameters.version>>
-  - run:
-      name: Install SFDX - NPM on linux @<<parameters.version>>
+      name: Install SFDX - NPM latest on windows
+      # if no version, use the latest
       command: |
-        command -v npm >/dev/null 2>&1 || { echo >&2 "npm not installed in the current environment.  Aborting."; exit 1; }
-        npm install sfdx-cli@<<parameters.version>> --global
+          npm install sfdx-cli --global
+
+  - run:
       when:
         condition:
           and:
             - equal: ['linux', <<parameters.os>>]
             - not: <<parameters.version>>
+      name: Install SFDX - NPM on linux @<<parameters.version>>
+      command: |
+        command -v npm >/dev/null 2>&1 || { echo >&2 "npm not installed in the current environment.  Aborting."; exit 1; }
+        npm install sfdx-cli@<<parameters.version>> --global
+
   - run:
+      when:
+        condition:
+          and:
+            - equal: ['linux', <<parameters.os>>]
+            - <<parameters.version>>
       name: Install SFDX - Standalone on linux
       command: |
         cd /tmp
@@ -56,11 +65,7 @@ steps:
         mkdir sfdx
         tar xJf sfdx-linux-amd64.tar.xz -C sfdx --strip-components 1
         ./sfdx/install
-      when:
-        condition:
-          and:
-            - equal: ['linux', <<parameters.os>>]
-            - <<parameters.version>>
+
   - run:
       name: Verify SFDX installation
       command: sfdx --version

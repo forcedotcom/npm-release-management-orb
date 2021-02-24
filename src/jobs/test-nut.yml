@@ -35,12 +35,12 @@ steps:
   - install-sfdx:
       version: <<parameters.sfdx_version>>
   - when:
-      condition: <<parameters.nut_executable>>  
-      steps:      
+      condition: <<parameters.nut_executable>>
+      steps:
           run:
               name: Verify access token set in environment
               command: |
-                export TESTKIT_EXECUTABLE_PATH=<<parameters.nut_executable>>         
+                export TESTKIT_EXECUTABLE_PATH=<<parameters.nut_executable>>
   - checkout
   - when:
       condition:

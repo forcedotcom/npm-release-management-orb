@@ -34,6 +34,7 @@ steps:
       os: <<parameters.os>>
   - install-sfdx:
       version: <<parameters.sfdx_version>>
+      os: <<parameters.os>>
   - when:
       condition: <<parameters.nut_executable>>
       steps:

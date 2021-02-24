@@ -27,15 +27,16 @@ steps:
             condition: <<parameters.version>>
             steps:
               - run:
-                name: Install SFDX - NPM
-                command: |
-                    npm install sfdx-cli@<<parameters.version>> --global
+                  name: Install SFDX - NPM
+                  command: |
+                      npm install sfdx-cli@<<parameters.version>> --global
         - unless:
             condition: <<parameters.version>>
             steps:
-              name: Install SFDX - NPM
-              command: |
-                npm install sfdx-cli --global
+              - run:
+                  name: Install SFDX - NPM
+                  command: |
+                    npm install sfdx-cli --global
   - when:
       condition:
         equal: ['linux', <<parameters.os>>]

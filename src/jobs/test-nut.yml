@@ -12,7 +12,7 @@ parameters:
     type: string
     default: "12"
   os:
-    description: operating system you want to test against
+    description: operating system to run tests on
     type: enum
     enum: ['linux', 'windows']
     default: 'linux'

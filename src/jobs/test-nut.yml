@@ -77,4 +77,4 @@ steps:
       name: Nuts
       command: |
         echo "Using node: $(node --version)"
-        yarn test:nut
+        yarn test:nuts

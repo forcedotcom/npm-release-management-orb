@@ -17,7 +17,7 @@ usage:
         - release-management/validate-pr:
             filters:
               branches:
-                ignore: master
+                ignore: main
         - release-management/test-package:
             name: node-latest
             node_version: latest
@@ -35,4 +35,4 @@ usage:
               - node-latest
             filters:
               branches:
-                only: master
+                only: main

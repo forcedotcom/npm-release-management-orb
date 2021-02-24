@@ -18,19 +18,18 @@ parameters:
     default: 'linux'
 
 steps:
-
   - when:
       condition:
         # windows installer has a UI.  so we install node version
         equal: ['windows', <<parameters.os>>]
       steps:
         - when:
-          condition: <<parameters.version>>
-          steps:
-            - run:
-              name: Install SFDX - NPM
-              command: |
-                  npm install sfdx-cli@<<parameters.version>> --global
+            condition: <<parameters.version>>
+            steps:
+              - run:
+                name: Install SFDX - NPM
+                command: |
+                    npm install sfdx-cli@<<parameters.version>> --global
         - unless:
             condition: <<parameters.version>>
             steps:
@@ -43,7 +42,7 @@ steps:
       steps:
         # when version is defined.
         - when:
-          condition: << parameters.version >>
+            condition: << parameters.version >>
           steps:
             - run:
                 name: Install SFDX - NPM
@@ -52,7 +51,7 @@ steps:
                   npm install sfdx-cli@<<parameters.version>> --global
         # unless version is _not_ defined.
         - unless:
-          condition: <<parameters.version>>
+            condition: <<parameters.version>>
           steps:
             - run:
                 name: Install SFDX - Standalone

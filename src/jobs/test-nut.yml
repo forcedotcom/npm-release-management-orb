@@ -38,10 +38,10 @@ steps:
   - when:
       condition: <<parameters.nut_executable>>
       steps:
-          run:
-              name: Verify access token set in environment
-              command: |
-                export TESTKIT_EXECUTABLE_PATH=<<parameters.nut_executable>>
+        run:
+          name: Verify access token set in environment
+          command: |
+            export TESTKIT_EXECUTABLE_PATH=<<parameters.nut_executable>>
   - checkout
   - when:
       condition:

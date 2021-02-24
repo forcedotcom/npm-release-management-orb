@@ -27,10 +27,10 @@ steps:
         - when:
           condition: <<parameters.version>>
           steps:
-          - run:
+            - run:
               name: Install SFDX - NPM
               command: |
-                npm install sfdx-cli@<<parameters.version>> --global
+                  npm install sfdx-cli@<<parameters.version>> --global
         - unless:
             condition: <<parameters.version>>
             steps:
@@ -42,7 +42,7 @@ steps:
         equal: ['linux', <<parameters.os>>]
       steps:
         # when version is defined.
-      - when:
+        - when:
           condition: << parameters.version >>
           steps:
             - run:
@@ -50,8 +50,8 @@ steps:
                 command: |
                   command -v npm >/dev/null 2>&1 || { echo >&2 "npm not installed in the current environment.  Aborting."; exit 1; }
                   npm install sfdx-cli@<<parameters.version>> --global
-      # unless version is _not_ defined.
-      - unless:
+        # unless version is _not_ defined.
+        - unless:
           condition: <<parameters.version>>
           steps:
             - run:

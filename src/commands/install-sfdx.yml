@@ -19,49 +19,49 @@ parameters:
 
 # there are four combos of OS and version
 steps:
-  - run:
-      when:
-          and:
-            # windows installer has a UI.  so we install node version
-            - equal: ['windows', <<parameters.os>>]
-            - <<parameters.version>>
-      name: Install SFDX - NPM <<parameters.version>> on windows
-      command: |
-        npm install sfdx-cli@<<parameters.version>> --global
-
-  - run:
-      when:
+  - when:
+      and:
+        # windows installer has a UI.  so we install node version
+        - equal: ['windows', <<parameters.os>>]
+        - <<parameters.version>>
+      steps:
+        run:
+          name: Install SFDX - NPM <<parameters.version>> on windows
+          command: |
+            npm install sfdx-cli@<<parameters.version>> --global
+  - when:
+      and:
+        - equal: ['windows', <<parameters.os>>]
+        - not: <<parameters.version>>
+      steps:
+        run:
+          name: Install SFDX - NPM latest on windows
+          # if no version, use the latest
+          command: |
+              npm install sfdx-cli --global
+  - when:
         and:
-          - equal: ['windows', <<parameters.os>>]
+          - equal: ['linux', <<parameters.os>>]
+          - <<parameters.version>>
+        steps:
+          run:        
+            name: Install SFDX - NPM on linux @<<parameters.version>>
+            command: |
+              command -v npm >/dev/null 2>&1 || { echo >&2 "npm not installed in the current environment.  Aborting."; exit 1; }
+              npm install sfdx-cli@<<parameters.version>> --global
+  - when:
+        and:
+          - equal: ['linux', <<parameters.os>>]
           - not: <<parameters.version>>
-      name: Install SFDX - NPM latest on windows
-      # if no version, use the latest
-      command: |
-          npm install sfdx-cli --global
-
-  - run:
-      when:
-          and:
-            - equal: ['linux', <<parameters.os>>]
-            - <<parameters.version>>
-      name: Install SFDX - NPM on linux @<<parameters.version>>
-      command: |
-        command -v npm >/dev/null 2>&1 || { echo >&2 "npm not installed in the current environment.  Aborting."; exit 1; }
-        npm install sfdx-cli@<<parameters.version>> --global
-
-  - run:
-      when:
-          and:
-            - equal: ['linux', <<parameters.os>>]
-            - not: <<parameters.version>>
-      name: Install SFDX - Standalone on linux
-      command: |
-        cd /tmp
-        wget https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
-        mkdir sfdx
-        tar xJf sfdx-linux-amd64.tar.xz -C sfdx --strip-components 1
-        ./sfdx/install
-
+        steps:
+          run:
+            name: Install SFDX - Standalone on linux
+            command: |
+              cd /tmp
+              wget https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
+              mkdir sfdx
+              tar xJf sfdx-linux-amd64.tar.xz -C sfdx --strip-components 1
+              ./sfdx/install
   - run:
       name: Verify SFDX installation
       command: sfdx --version

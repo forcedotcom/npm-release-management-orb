@@ -20,19 +20,21 @@ parameters:
 # there are four combos of OS and version
 steps:
   - when:
-      and:
-        # windows installer has a UI.  so we install node version
-        - equal: ['windows', <<parameters.os>>]
-        - <<parameters.version>>
+      condition:
+        and:
+          # windows installer has a UI.  so we install node version
+          - equal: ['windows', <<parameters.os>>]
+          - <<parameters.version>>
       steps:
         run:
           name: Install SFDX - NPM <<parameters.version>> on windows
           command: |
             npm install sfdx-cli@<<parameters.version>> --global
   - when:
-      and:
-        - equal: ['windows', <<parameters.os>>]
-        - not: <<parameters.version>>
+      condition:
+        and:
+          - equal: ['windows', <<parameters.os>>]
+          - not: <<parameters.version>>
       steps:
         run:
           name: Install SFDX - NPM latest on windows
@@ -40,16 +42,18 @@ steps:
           command: |
               npm install sfdx-cli --global
   - when:
+      condition:
         and:
           - equal: ['linux', <<parameters.os>>]
           - <<parameters.version>>
-        steps:
-          run:
-            name: Install SFDX - NPM on linux @<<parameters.version>>
-            command: |
-              command -v npm >/dev/null 2>&1 || { echo >&2 "npm not installed in the current environment.  Aborting."; exit 1; }
-              npm install sfdx-cli@<<parameters.version>> --global
+      steps:
+        run:
+          name: Install SFDX - NPM on linux @<<parameters.version>>
+          command: |
+            command -v npm >/dev/null 2>&1 || { echo >&2 "npm not installed in the current environment.  Aborting."; exit 1; }
+            npm install sfdx-cli@<<parameters.version>> --global
   - when:
+      condition:
         and:
           - equal: ['linux', <<parameters.os>>]
           - not: <<parameters.version>>

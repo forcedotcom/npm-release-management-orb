@@ -23,8 +23,7 @@ steps:
       when:
           and:
             # windows installer has a UI.  so we install node version
-            - condition:
-                equal: ['windows', <<parameters.os>>]
+            - equal: ['windows', <<parameters.os>>]
             - <<parameters.version>>
       name: Install SFDX - NPM <<parameters.version>> on windows
       command: |
@@ -33,8 +32,7 @@ steps:
   - run:
       when:
         and:
-          - condition:
-              equal: ['windows', <<parameters.os>>]
+          - equal: ['windows', <<parameters.os>>]
           - not: <<parameters.version>>
       name: Install SFDX - NPM latest on windows
       # if no version, use the latest
@@ -44,8 +42,7 @@ steps:
   - run:
       when:
           and:
-            - condition:
-                equal: ['linux', <<parameters.os>>]
+            - equal: ['linux', <<parameters.os>>]
             - <<parameters.version>>
       name: Install SFDX - NPM on linux @<<parameters.version>>
       command: |
@@ -55,8 +52,7 @@ steps:
   - run:
       when:
           and:
-            - condition:
-                equal: ['linux', <<parameters.os>>]
+            - equal: ['linux', <<parameters.os>>]
             - not: <<parameters.version>>
       name: Install SFDX - Standalone on linux
       command: |

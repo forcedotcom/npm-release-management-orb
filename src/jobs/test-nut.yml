@@ -4,7 +4,7 @@
 # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 
 description: >
-  Runs NUTs for package
+  Runs NUTs for package.  Set environment: TESTKIT_EXECUTABLE_PATH:whatever to use an executable besides bin/run 
 
 parameters:
   node_version:
@@ -20,10 +20,6 @@ parameters:
     description: 'By default, the latest version of the standalone CLI will be installed. To install via npm, supply a version tag such as "latest" or "6".'
     default: ''
     type: string
-  nut_executable:
-    description: 'By default, nuts will run using bin/run (to test the plugin code)'
-    default: ''
-    type: string
 
 executor:
   name: << parameters.os >>
@@ -35,13 +31,6 @@ steps:
   - install-sfdx:
       version: <<parameters.sfdx_version>>
       os: <<parameters.os>>
-  - when:
-      condition: <<parameters.nut_executable>>
-      steps:
-        run:
-          name: Verify access token set in environment
-          command: |
-            export TESTKIT_EXECUTABLE_PATH=<<parameters.nut_executable>>
   - checkout
   - when:
       condition:

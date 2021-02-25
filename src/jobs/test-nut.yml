@@ -4,7 +4,7 @@
 # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 
 description: >
-  Runs NUTs for package.  Set environment: TESTKIT_EXECUTABLE_PATH:whatever to use an executable besides bin/run 
+  Runs NUTs for package.  Set environment: TESTKIT_EXECUTABLE_PATH:whatever to use an executable besides bin/run
 
 parameters:
   node_version:

@@ -6,12 +6,12 @@ usage:
   orbs:
     release-management: salesforce/npm-release-management@x.y.z
 
-workflows:
-  version: 2
-  nuts:
-    jobs:
-      - release-management/test-nut:
-          name: nuts-on-linux
-      - release-management/test-nut:
-          name: nuts-on-windows
-          os: windows
+  workflows:
+    version: 2
+    nuts:
+      jobs:
+        - release-management/test-nut:
+            name: nuts-on-linux
+        - release-management/test-nut:
+            name: nuts-on-windows
+            os: windows

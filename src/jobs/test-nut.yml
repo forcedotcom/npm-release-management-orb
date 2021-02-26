@@ -64,7 +64,13 @@ steps:
               - ~/.config/yarn
         - verify-installed-plugin
   - run:
+      name: Create artifact dir
+      command: |
+        mkdir artifacts
+  - run:
       name: Nuts
       command: |
         echo "Using node: $(node --version)"
         yarn test:nuts
+  - store_artifacts:
+      path: artifacts

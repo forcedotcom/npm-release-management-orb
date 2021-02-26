@@ -1,6 +1,10 @@
-version: 2.1
-orbs:
-  release-management: salesforce/npm-release-management@x.y.z
+description: >
+  Test npm package against on latest windows and linux by running nut-unit-tests (NUTs)
+
+usage:
+  version: 2.1
+  orbs:
+    release-management: salesforce/npm-release-management@x.y.z
 
 workflows:
   version: 2

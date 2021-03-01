@@ -42,12 +42,6 @@ steps:
         - run:
             name: Build
             command: yarn build
-        - run:
-            # windows/testkit circle don't put artifacts in correct directory.  We're turning that off until fixed
-            # this overrides use of sessions.zip() in any NUTs that use testkit
-            name: Remove environment for artifact zips
-            command: |
-              [Environment]::SetEnvironmentVariable("TESTKIT_ENABLE_ZIP",$null,"Machine")
   - when:
       condition:
         equal: ['linux', <<parameters.os>>]
@@ -77,6 +71,6 @@ steps:
       name: Nuts
       command: |
         echo "Using node: $(node --version)"
-        yarn test:nuts
+        TESTKIT_ENABLE_ZIP=true yarn test:nuts
   - store_artifacts:
       path: artifacts

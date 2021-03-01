@@ -72,5 +72,6 @@ steps:
       command: |
         echo "Using node: $(node --version)"
         TESTKIT_ENABLE_ZIP=true yarn test:nuts
+      # this is in the command instead of the circle project environment to prevent it from happening on windows
   - store_artifacts:
       path: artifacts

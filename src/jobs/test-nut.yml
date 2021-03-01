@@ -42,14 +42,11 @@ steps:
         - run:
             name: Build
             command: yarn build
-        - run:
-            name: set TESTKIT_ENABLE_ZIP for artifacts on linux
-            command: |
-              echo "export TESTKIT_ENABLE_ZIP=true" >> $BASH_ENV
   - when:
       condition:
         equal: ['linux', <<parameters.os>>]
       steps:
+        
         - restore_cache:
             keys:
               - v2-npm-{{checksum ".circleci/config.yml"}}-{{checksum "yarn.lock"}}
@@ -67,6 +64,10 @@ steps:
               - ~/.cache/yarn
               - ~/.config/yarn
         - verify-installed-plugin
+        - run:
+            name: set TESTKIT_ENABLE_ZIP for artifacts on linux
+            command: |
+              echo "export TESTKIT_ENABLE_ZIP=true" >> $BASH_ENV
   - run:
       name: Create artifact dir
       command: |

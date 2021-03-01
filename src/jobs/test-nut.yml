@@ -42,6 +42,9 @@ steps:
         - run:
             name: Build
             command: yarn build
+        - run: # windows/testkit circle don't put artifacts in correct directory.  We're turning that off until fixed
+            name: Remove environment for artifact zips
+            command: Remove-Item Env:\TESTKIT_ENABLE_ZIP
   - when:
       condition:
         equal: ['linux', <<parameters.os>>]
@@ -52,7 +55,7 @@ steps:
               - v2-npm-{{checksum ".circleci/config.yml"}}
         - run:
             name: Install dependencies
-            command: yarn
+            command: yarn        
         - run:
             name: Build
             command: yarn build

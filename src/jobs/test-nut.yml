@@ -42,7 +42,9 @@ steps:
         - run:
             name: Build
             command: yarn build
-        - run: # windows/testkit circle don't put artifacts in correct directory.  We're turning that off until fixed
+        - run: 
+            # windows/testkit circle don't put artifacts in correct directory.  We're turning that off until fixed
+            # this overrides use of sessions.zip() in any NUTs that use testkit
             name: Remove environment for artifact zips
             command: Remove-Item Env:\TESTKIT_ENABLE_ZIP
   - when:

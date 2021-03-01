@@ -42,6 +42,10 @@ steps:
         - run:
             name: Build
             command: yarn build
+        - run:
+            name: set TESTKIT_ENABLE_ZIP for artifacts on linux
+            command: |
+              echo "export TESTKIT_ENABLE_ZIP=true" >> $BASH_ENV
   - when:
       condition:
         equal: ['linux', <<parameters.os>>]
@@ -71,7 +75,7 @@ steps:
       name: Nuts
       command: |
         echo "Using node: $(node --version)"
-        TESTKIT_ENABLE_ZIP=true yarn test:nuts
+        yarn test:nuts
       # this is in the command instead of the circle project environment to prevent it from happening on windows
   - store_artifacts:
       path: artifacts

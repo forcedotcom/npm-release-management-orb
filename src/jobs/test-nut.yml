@@ -46,7 +46,6 @@ steps:
       condition:
         equal: ['linux', <<parameters.os>>]
       steps:
-        
         - restore_cache:
             keys:
               - v2-npm-{{checksum ".circleci/config.yml"}}-{{checksum "yarn.lock"}}

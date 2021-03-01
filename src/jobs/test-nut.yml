@@ -25,13 +25,6 @@ executor:
   name: << parameters.os >>
 
 steps:
-  # nuts only run on pull requests
-  - when:
-      condition:
-        not: $CIRCLE_PULL_REQUEST
-      steps:
-        - run:
-            command: circleci-agent step halt
   - install-node:
       version: <<parameters.node_version>>
       os: <<parameters.os>>

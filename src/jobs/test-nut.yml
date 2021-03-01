@@ -27,7 +27,7 @@ executor:
 steps:
   # nuts only run on pull requests
   - when:
-      condition: 
+      condition:
         not: $CIRCLE_PULL_REQUEST
       steps:
         - run:

@@ -79,5 +79,9 @@ steps:
       command: |
         echo "Using node: $(node --version)"
         yarn test:nuts
-  - store_artifacts:
-      path: artifacts
+  - when:
+      condition:
+        equal: ['linux', <<parameters.os>>]
+      steps:
+        - store_artifacts:
+            path: artifacts

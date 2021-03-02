@@ -14,7 +14,7 @@ parameters:
     type: string
   base-branch:
     description: the branch which has changes you want merged into the target-branch
-    default: master
+    default: main
     type: string
 
 steps:

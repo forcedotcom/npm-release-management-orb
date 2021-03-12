@@ -31,6 +31,12 @@ steps:
               if [[ "<<parameters.version>>" == "latest" ]]; then
                 nvm install node
                 nvm alias default node
+              elif [[ "<<parameters.version>>" ==  "lts" ]]; then
+                nvm install $(nvm_alias lts/*)
+                nvm alias default $(nvm_alias lts/*)
+              elif [[ "<<parameters.version>>" == "lts-maintenance" ]]; then
+                nvm install $(nvm-alias lts/-1)
+                nvm alias default $(nvm_alias lts/-1)
               else
                 nvm install <<parameters.version>>
                 nvm alias default <<parameters.version>>

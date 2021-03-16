@@ -46,8 +46,7 @@ steps:
   - configure-github
   - restore_cache:
       keys:
-        - v2-npm-{{checksum ".circleci/config.yml"}}-{{checksum "yarn.lock"}}
-        - v2-npm-{{checksum ".circleci/config.yml"}}
+        - v3-npm-{{checksum "yarn.lock"}}
   - run:
       name: Install dependencies
       command: yarn
@@ -55,8 +54,9 @@ steps:
       name: Build
       command: yarn build
   - save_cache:
-      key: v2-npm-{{checksum ".circleci/config.yml"}}-{{checksum "yarn.lock"}}
+      key: v3-npm-{{checksum "yarn.lock"}}
       paths:
+        - node_modules
         - ~/node_modules
         - ~/.cache/yarn
         - ~/.config/yarn

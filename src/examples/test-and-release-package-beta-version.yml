@@ -1,0 +1,50 @@
+# Copyright (c) 2018, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+description: >
+  Test npm package against node@12 and node@latest and then publish the package to npm
+usage:
+  version: 2.1
+  orbs:
+    release-management: salesforce/npm-release-management@x.y.z
+
+  workflows:
+    version: 2
+    test-and-release:
+      jobs:
+        - release-management/validate-pr:
+            filters:
+              branches:
+                ignore: main
+        - release-management/test-package:
+            name: node-latest
+            node_version: latest
+            upload-coverage: true
+        - release-management/test-package:
+            name: node-12
+            node_version: '12'
+        - release-management/test-package:
+            name: win-node-12
+            node_version: '12'
+            os: windows
+        - release-management/release-package:
+            post-job-steps:
+              # Try to update the beta branch with changes to main
+              - release-management/merge:
+                  base-branch: main
+                  target-branch: beta
+            requires:
+              - node-latest
+            filters:
+              branches:
+                only: main
+        - release-management/release-package:
+            requires:
+              - node-latest
+            tag: beta
+            prerelease: true
+            filters:
+              branches:
+                only: beta

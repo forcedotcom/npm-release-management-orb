@@ -50,13 +50,9 @@ steps:
         MESSAGE=$(git log --pretty=format:"%s" -n 1 $CIRCLE_SHA1)
         HAS_SKIP_TAG=$(echo $TITLE $BODY $MESSAGE | grep -Eo '\[skip-validate-pr\]')
         if [ -z "$HAS_SKIP_TAG" ]; then
-          echo "[skip-validate-pr] tag found in commit message. Skipping..."
-          exit 0
-        fi
-
-        REF=$(echo $TITLE $BODY | grep -Eo '@W-[0-9]+@|#[0-9]+')
             echo "PR does not reference work item or github issue"
             exit 1
         else
-            echo "PR references $REF"
+          echo "[skip-validate-pr] tag found in commit or PR message. Skipping..."
+          exit 0
         fi

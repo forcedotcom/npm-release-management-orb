@@ -79,7 +79,7 @@ steps:
         - run:
             name: Release Dryrun
             command: |
-              sf-release npm:package:release --dryrun --no-install --npmtag <<parameters.tag>>
+              sf-release npm:package:release --dryrun --no-install --npmtag "<<parameters.tag>>""
   # when dryrun and prerelease is true: publish with --dryrun and --prerelease flags
   - when:
       condition: <<parameters.dryrun>>
@@ -87,7 +87,7 @@ steps:
         - run:
             name: Release Dryrun
             command: |
-              sf-release npm:package:release --dryrun --no-install --npmtag <<parameters.tag>> --prerelease $CIRCLE_BRANCH
+              sf-release npm:package:release --dryrun --no-install --npmtag "<<parameters.tag>>" --prerelease $CIRCLE_BRANCH
 
   # when dryrun is false and sign is true: sign and publish package
   - when:
@@ -98,7 +98,7 @@ steps:
       steps:
         - run:
             name: Sign and Release
-            command: sf-release npm:package:release --sign --no-install --npmtag <<parameters.tag>>
+            command: sf-release npm:package:release --sign --no-install --npmtag "<<parameters.tag>>"
   # when dryrun is false and sign is true and prerelease is true: sign and publish prerelease package
   - when:
       condition:
@@ -108,7 +108,7 @@ steps:
       steps:
         - run:
             name: Sign and Release
-            command: sf-release npm:package:release --sign --no-install --npmtag <<parameters.tag>> --prerelease $CIRCLE_BRANCH
+            command: sf-release npm:package:release --sign --no-install --npmtag "<<parameters.tag>>" --prerelease $CIRCLE_BRANCH
 
   # when dryrun is false and sign is false: publish package
   - when:
@@ -119,7 +119,7 @@ steps:
       steps:
         - run:
             name: Release
-            command: sf-release npm:package:release --no-install --npmtag <<parameters.tag>>
+            command: sf-release npm:package:release --no-install --npmtag "<<parameters.tag>>"
   # when dryrun is false and sign is false and prerelease is true: publish prerelease package
   - when:
       condition:
@@ -129,7 +129,7 @@ steps:
       steps:
         - run:
             name: Release
-            command: sf-release npm:package:release --no-install --npmtag <<parameters.tag>> --prerelease $CIRCLE_BRANCH
+            command: sf-release npm:package:release --no-install --npmtag "<<parameters.tag>>" --prerelease $CIRCLE_BRANCH
 
   # when dryrun is false and github-release is true: create the github release
   - when:

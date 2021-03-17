@@ -44,6 +44,7 @@ usage:
             requires:
               - node-latest
             prerelease: true
+            tag: "" # don't publish a tag for this branch
             # main will publish latest
             filters:
               branches:

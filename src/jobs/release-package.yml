@@ -135,7 +135,7 @@ steps:
         and:
           - not: <<parameters.dryrun>>
           - not: <<parameters.sign>>
-          <<parameters.prerelease>>
+          - <<parameters.prerelease>>
       steps:
         - run:
             name: Release

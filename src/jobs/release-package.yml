@@ -74,7 +74,10 @@ steps:
 
   # when dryrun is true: publish with --dryrun flag
   - when:
-      condition: <<parameters.dryrun>>
+      condition:
+        and:
+          - <<parameters.dryrun>>
+          - not: <<parameters.prerelease>>
       steps:
         - run:
             name: Release Dryrun
@@ -82,7 +85,10 @@ steps:
               sf-release npm:package:release --dryrun --no-install --npmtag "<<parameters.tag>>""
   # when dryrun and prerelease is true: publish with --dryrun and --prerelease flags
   - when:
-      condition: <<parameters.dryrun>>
+      condition:
+        and:
+          - <<parameters.dryrun>>
+          - <<parameters.prerelease>>
       steps:
         - run:
             name: Release Dryrun
@@ -94,6 +100,7 @@ steps:
       condition:
         and:
           - not: <<parameters.dryrun>>
+          - not: <<parameters.prerelease>>
           - <<parameters.sign>>
       steps:
         - run:
@@ -104,6 +111,7 @@ steps:
       condition:
         and:
           - not: <<parameters.dryrun>>
+          - <<parameters.prerelease>>
           - <<parameters.sign>>
       steps:
         - run:
@@ -116,6 +124,7 @@ steps:
         and:
           - not: <<parameters.dryrun>>
           - not: <<parameters.sign>>
+          - not: <<parameters.prerelease>>
       steps:
         - run:
             name: Release
@@ -126,6 +135,7 @@ steps:
         and:
           - not: <<parameters.dryrun>>
           - not: <<parameters.sign>>
+          <<parameters.prerelease>>
       steps:
         - run:
             name: Release

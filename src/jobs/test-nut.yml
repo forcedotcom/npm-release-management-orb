@@ -20,6 +20,10 @@ parameters:
     description: 'By default, the latest version of the standalone CLI will be installed. To install via npm, supply a version tag such as "latest" or "6".'
     default: ''
     type: string
+  sfdx_executable_path:
+    description: "Path to sfdx executable to be used by NUTs, defaults to ''"
+    default: ''
+    type: string
 
 executor:
   name: << parameters.os >>
@@ -73,6 +77,9 @@ steps:
         mkdir artifacts
   - run:
       name: Nuts
+      environment:
+        TESTKIT_EXECUTABLE_PATH: <<parameters.sfdx_executable_path>>
+
       command: |
         echo "Using node: $(node --version)"
         yarn test:nuts

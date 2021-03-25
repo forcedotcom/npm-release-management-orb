@@ -78,7 +78,7 @@ steps:
         - ~/.cache/yarn
         - ~/.config/yarn
   # - if environment looks like it is prepped to do change cases,
-  - when: 
+  - when:
       condition:
         and:
           - $SF_CHANGE_CASE_SFDX_AUTH_URL
@@ -182,9 +182,9 @@ steps:
         not: <<parameters.dryrun>>
       steps: <<parameters.post-job-steps>>
 
-  - when: 
-      condition: 
-        and: 
+  - when:
+      condition:
+        and:
           - $SF_CHANGE_CASE_SFDX_AUTH_URL
           - $SF_CHANGE_CASE_CHANGE_RECORD_TYPE_ID
           - $SF_CHANGE_CASE_CHANGE_TEMPLATE_RECORD_TYPE_ID

@@ -13,6 +13,12 @@ description: >
     - SALESFORCE_KEY
   The following environment variables are required if creating a github release:
     - GH_TOKEN
+  The following environment variables are required for CTC
+    - SF_CHANGE_CASE_SFDX_AUTH_URL
+    - SF_CHANGE_CASE_CHANGE_RECORD_TYPE_ID
+    - SF_CHANGE_CASE_CHANGE_TEMPLATE_RECORD_TYPE_ID
+    - SF_CHANGE_CASE_TEMPLATE_ID
+    - SF_CHANGE_CASE_SCHEDULE_BUILD
 
 parameters:
   tag:
@@ -50,10 +56,6 @@ steps:
   - checkout
   - install-sfdx-trust
   - install-sf-release
-  # - if SF_CHANGE_CASE_SFDX_AUTH_URL is in env, 
-  # install the CTC plugin and verify
-  # create the change case   
-  # assert any other required env vars exist
   - install-standard-version
   - configure-github
   - restore_cache:
@@ -75,10 +77,10 @@ steps:
         - ~/node_modules
         - ~/.cache/yarn
         - ~/.config/yarn
-  # - if environment looks like it is prepped to do change cases, 
+  # - if environment looks like it is prepped to do change cases,
   - when: 
-      condition: 
-        and: 
+      condition:
+        and:
           - $SF_CHANGE_CASE_SFDX_AUTH_URL
           - $SF_CHANGE_CASE_CHANGE_RECORD_TYPE_ID
           - $SF_CHANGE_CASE_CHANGE_TEMPLATE_RECORD_TYPE_ID
@@ -92,10 +94,9 @@ steps:
               sfchangecase --version
         - run:
             name: verify that we can release right now
-            command: |      
+            command: |
               sfchangecase create --configurationitem NPM --location $CIRCLE_REPOSITORY_URL
               sfchangecase check --location $CIRCLE_REPOSITORY_URL
-        
 
   # when dryrun is true: publish with --dryrun flag
   - when:
@@ -180,7 +181,7 @@ steps:
       condition:
         not: <<parameters.dryrun>>
       steps: <<parameters.post-job-steps>>
-  
+
   - when: 
       condition: 
         and: 
@@ -191,14 +192,12 @@ steps:
           - $SF_CHANGE_CASE_SCHEDULE_BUILD
       steps:
         - run:
-            name: not able to release, so close the case
+            name: not able to release, so close the CTC case
             when: on_fail
-            command: |      
+            command: |
               sfchangecase close --location $CIRCLE_REPOSITORY_URL --status 'Not Implemented'
         - run:
-            name: not able to release, so close the case
+            name: successful release, so close the CTC case
             when: on_success
-            command: |      
+            command: |
               sfchangecase close --location $CIRCLE_REPOSITORY_URL
-  
-  # close the case

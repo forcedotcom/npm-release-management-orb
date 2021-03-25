@@ -15,8 +15,6 @@ description: >
     - GH_TOKEN
   The following environment variables are required for CTC
     - SF_CHANGE_CASE_SFDX_AUTH_URL
-    - SF_CHANGE_CASE_CHANGE_RECORD_TYPE_ID
-    - SF_CHANGE_CASE_CHANGE_TEMPLATE_RECORD_TYPE_ID
     - SF_CHANGE_CASE_TEMPLATE_ID
     - SF_CHANGE_CASE_SCHEDULE_BUILD
 
@@ -82,13 +80,13 @@ steps:
   - run:
       name: CTC install, verify, create case and get clearance to release
       command: |
-        if [ "$SF_CHANGE_CASE_SFDX_AUTH_URL" && "$SF_CHANGE_CASE_CHANGE_RECORD_TYPE_ID" && "$SF_CHANGE_CASE_CHANGE_TEMPLATE_RECORD_TYPE_ID" && "$SF_CHANGE_CASE_TEMPLATE_ID" && "$SF_CHANGE_CASE_SCHEDULE_BUILD"  ]; then
+        if [[ -z "${SF_CHANGE_CASE_SFDX_AUTH_URL}" ] || [ -z "${SF_CHANGE_CASE_TEMPLATE_ID}" ] || [ -z "${SF_CHANGE_CASE_SCHEDULE_BUILD}" ]]
+            echo "Environment not configured for CTC"
+        else
             npm install @salesforce/change-case-management --global
             sfchangecase --version
-            sfchangecase create --configurationitem NPM --location "https://github.com/${CIRCLE_PROJECT_REPONAME}/${CIRCLE_PROJECT_USERNAME}"
-            sfchangecase check --location "https://github.com/${CIRCLE_PROJECT_REPONAME}/${CIRCLE_PROJECT_USERNAME}"
-        else
-            echo "Environment not configured for CTC"
+            sfchangecase create --configurationitem NPM --location "https://github.com/$CIRCLE_PROJECT_REPONAME/$CIRCLE_PROJECT_USERNAME"
+            sfchangecase check --location "https://github.com/$CIRCLE_PROJECT_REPONAME/$CIRCLE_PROJECT_USERNAME"
         fi
 
   # when dryrun is true: publish with --dryrun flag
@@ -180,13 +178,17 @@ steps:
       name: not able to release, so close the CTC case
       when: on_fail
       command: |
-        if [ "$SF_CHANGE_CASE_SFDX_AUTH_URL" && "$SF_CHANGE_CASE_CHANGE_RECORD_TYPE_ID" && "$SF_CHANGE_CASE_CHANGE_TEMPLATE_RECORD_TYPE_ID" && "$SF_CHANGE_CASE_TEMPLATE_ID" && "$SF_CHANGE_CASE_SCHEDULE_BUILD"  ]; then
-            sfchangecase close --location "https://github.com/${CIRCLE_PROJECT_REPONAME}/${CIRCLE_PROJECT_USERNAME}" --status 'Not Implemented'
+        if [[ -z "${SF_CHANGE_CASE_SFDX_AUTH_URL}" ] || [ -z "${SF_CHANGE_CASE_TEMPLATE_ID}" ] || [ -z "${SF_CHANGE_CASE_SCHEDULE_BUILD}" ]]
+            echo "Environment not configured for CTC"
+        else
+            sfchangecase close --location "https://github.com/$CIRCLE_PROJECT_REPONAME/$CIRCLE_PROJECT_USERNAME" --status 'Not Implemented'
         fi
   - run:
       name: successful release, so close the CTC case
       when: on_success
       command: |
-        if [ "$SF_CHANGE_CASE_SFDX_AUTH_URL" && "$SF_CHANGE_CASE_CHANGE_RECORD_TYPE_ID" && "$SF_CHANGE_CASE_CHANGE_TEMPLATE_RECORD_TYPE_ID" && "$SF_CHANGE_CASE_TEMPLATE_ID" && "$SF_CHANGE_CASE_SCHEDULE_BUILD"  ]; then
-            sfchangecase close --location "https://github.com/${CIRCLE_PROJECT_REPONAME}/${CIRCLE_PROJECT_USERNAME}"
+        if [[ -z "${SF_CHANGE_CASE_SFDX_AUTH_URL}" ] || [ -z "${SF_CHANGE_CASE_TEMPLATE_ID}" ] || [ -z "${SF_CHANGE_CASE_SCHEDULE_BUILD}" ]]
+            echo "Environment not configured for CTC"
+        else
+            sfchangecase close --location "https://github.com/$CIRCLE_PROJECT_REPONAME/$CIRCLE_PROJECT_USERNAME"
         fi

@@ -78,7 +78,7 @@ steps:
         - ~/.cache/yarn
         - ~/.config/yarn
   # - if environment looks like it is prepped to do change cases,
-  
+
   - run:
       name: CTC install, verify, create case and get clearance to release
       command: |
@@ -175,7 +175,7 @@ steps:
         not: <<parameters.dryrun>>
       steps: <<parameters.post-job-steps>>
 
-  
+
   - run:
       name: not able to release, so close the CTC case
       when: on_fail

@@ -81,11 +81,11 @@ steps:
   - when:
       condition:
         and:
-          - $SF_CHANGE_CASE_SFDX_AUTH_URL
-          - $SF_CHANGE_CASE_CHANGE_RECORD_TYPE_ID
-          - $SF_CHANGE_CASE_CHANGE_TEMPLATE_RECORD_TYPE_ID
-          - $SF_CHANGE_CASE_TEMPLATE_ID
-          - $SF_CHANGE_CASE_SCHEDULE_BUILD
+          - ${SF_CHANGE_CASE_SFDX_AUTH_URL}
+          - ${SF_CHANGE_CASE_CHANGE_RECORD_TYPE_ID}
+          - ${SF_CHANGE_CASE_CHANGE_TEMPLATE_RECORD_TYPE_ID}
+          - ${SF_CHANGE_CASE_TEMPLATE_ID}
+          - ${SF_CHANGE_CASE_SCHEDULE_BUILD}
       steps:
         - run:
             name: install CTC plugin and verify
@@ -95,8 +95,8 @@ steps:
         - run:
             name: verify that we can release right now
             command: |
-              sfchangecase create --configurationitem NPM --location https://github.com/$CIRCLE_PROJECT_REPONAME/CIRCLE_PROJECT_USERNAME
-              sfchangecase check --location https://github.com/$CIRCLE_PROJECT_REPONAME/CIRCLE_PROJECT_USERNAME
+              sfchangecase create --configurationitem NPM --location https://github.com/${CIRCLE_PROJECT_REPONAME}/${CIRCLE_PROJECT_USERNAME}
+              sfchangecase check --location https://github.com/${CIRCLE_PROJECT_REPONAME}/${CIRCLE_PROJECT_USERNAME}
 
   # when dryrun is true: publish with --dryrun flag
   - when:
@@ -185,19 +185,19 @@ steps:
   - when:
       condition:
         and:
-          - $SF_CHANGE_CASE_SFDX_AUTH_URL
-          - $SF_CHANGE_CASE_CHANGE_RECORD_TYPE_ID
-          - $SF_CHANGE_CASE_CHANGE_TEMPLATE_RECORD_TYPE_ID
-          - $SF_CHANGE_CASE_TEMPLATE_ID
-          - $SF_CHANGE_CASE_SCHEDULE_BUILD
+          - ${SF_CHANGE_CASE_SFDX_AUTH_URL}
+          - ${SF_CHANGE_CASE_CHANGE_RECORD_TYPE_ID}
+          - ${SF_CHANGE_CASE_CHANGE_TEMPLATE_RECORD_TYPE_ID}
+          - ${SF_CHANGE_CASE_TEMPLATE_ID}
+          - ${SF_CHANGE_CASE_SCHEDULE_BUILD}
       steps:
         - run:
             name: not able to release, so close the CTC case
             when: on_fail
             command: |
-              sfchangecase close --location https://github.com/$CIRCLE_PROJECT_REPONAME/CIRCLE_PROJECT_USERNAME --status 'Not Implemented'
+              sfchangecase close --location https://github.com/${CIRCLE_PROJECT_REPONAME}/${CIRCLE_PROJECT_USERNAME} --status 'Not Implemented'
         - run:
             name: successful release, so close the CTC case
             when: on_success
             command: |
-              sfchangecase close --location https://github.com/$CIRCLE_PROJECT_REPONAME/CIRCLE_PROJECT_USERNAME
+              sfchangecase close --location https://github.com/${CIRCLE_PROJECT_REPONAME}/${CIRCLE_PROJECT_USERNAME}

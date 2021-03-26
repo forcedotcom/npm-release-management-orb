@@ -176,7 +176,7 @@ steps:
         not: <<parameters.dryrun>>
       steps: <<parameters.post-job-steps>>
 
-  # clean up the CTC cases if 
+  # clean up the CTC cases if
   - when:
       condition:
           equal: ['latest', <<parameters.tag>>]

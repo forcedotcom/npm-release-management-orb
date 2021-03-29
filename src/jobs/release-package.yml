@@ -172,16 +172,22 @@ steps:
   # clean up the CTC cases
   - when:
       condition:
-          and:
-            - equal: ['latest', <<parameters.tag>>]
-            - on_fail
+        equal: ['latest', <<parameters.tag>>]
       steps:
-        - change-case-close:
-            status: 'Not Implemented'
-  - when:
-      condition:
-          and:
-            - equal: ['latest', <<parameters.tag>>]
-            - on_success
-      steps:
-        - change-case-close
+        - run:
+            when: on_fail
+            command: |
+              if [ -z "${SF_CHANGE_CASE_SFDX_AUTH_URL}" ] || [ -z "${SF_CHANGE_CASE_TEMPLATE_ID}" ] || [ -z "${SF_CHANGE_CASE_SCHEDULE_BUILD}" ]; then
+                  echo "Environment not configured for CTC"
+              else
+                  sfchangecase close --location "https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME" --status "Not Implemented"
+              fi
+        - run:
+            when: on_success
+            command: |
+              if [ -z "${SF_CHANGE_CASE_SFDX_AUTH_URL}" ] || [ -z "${SF_CHANGE_CASE_TEMPLATE_ID}" ] || [ -z "${SF_CHANGE_CASE_SCHEDULE_BUILD}" ]; then
+                  echo "Environment not configured for CTC"
+              else
+                  sfchangecase close --location "https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME"
+              fi
+  

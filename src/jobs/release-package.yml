@@ -190,4 +190,3 @@ steps:
               else
                   sfchangecase close --location "https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME"
               fi
-  

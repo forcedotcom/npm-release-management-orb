@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 
+version: 2.1
 description: >
   Runs NUTs for package.  Set environment: TESTKIT_EXECUTABLE_PATH:whatever to use an executable besides bin/run
 
@@ -24,6 +25,10 @@ parameters:
     description: "Path to sfdx executable to be used by NUTs, defaults to ''"
     default: ''
     type: string
+  module_version:
+    description: "The version of the module repo to checkout, '' defaults to branch/PR"
+    default: ''
+    type: string
 
 executor:
   name: << parameters.os >>
@@ -35,7 +40,20 @@ steps:
   - install-sfdx:
       version: <<parameters.sfdx_version>>
       os: <<parameters.os>>
-  - checkout
+  - when:
+      condition:
+        equal: ['', <<parameters.module_version>>]
+        steps:
+          - checkout
+  - when:
+      condition:
+        and:
+          - not:
+            - equal: ['', <<parameters.module_version>>]
+        steps:
+          - run:
+              name: Checkout using git
+              command: git clone --branch v<<parameters.module_version>> $CIRCLE_REPOSITORY_URL
   - when:
       condition:
         equal: ['windows', <<parameters.os>>]
@@ -79,7 +97,6 @@ steps:
       name: Nuts
       environment:
         TESTKIT_EXECUTABLE_PATH: <<parameters.sfdx_executable_path>>
-
       command: |
         echo "Using node: $(node --version)"
         yarn test:nuts

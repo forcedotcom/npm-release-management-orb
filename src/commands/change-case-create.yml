@@ -7,17 +7,12 @@
 description: >
   create a change case.  Reqires install-change-case-mgmt to have been run
 
-parameters:
-  configuration_item:
-    description: Matches a GUS configuration item (example 'NPM')  The first part of the path is hard-coded to 'Salesforce.SF_Off_Core.DeveloperTools'.
-    type: string
-
 steps:
   - run:
       name: create change case
       command: |
-          if [ -z "${SF_CHANGE_CASE_SFDX_AUTH_URL}" ] || [ -z "${SF_CHANGE_CASE_TEMPLATE_ID}" ] || [ -z "${SF_CHANGE_CASE_SCHEDULE_BUILD}" ]; then
+          if [ -z "${SF_CHANGE_CASE_SFDX_AUTH_URL}" ] || [ -z "${SF_CHANGE_CASE_TEMPLATE_ID}" ] || [ -z "${SF_CHANGE_CASE_SCHEDULE_BUILD}" ] || [ -z "${SF_CHANGE_CASE_CONFIGURATION_ITEM}"] ; then
               echo "Environment not configured for CTC"
           else
-              sfchangecase create --configurationitem <<parameters.configuration_item>> --location "https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME"
+              sfchangecase create --location "https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME"
           fi

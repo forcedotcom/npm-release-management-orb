@@ -82,9 +82,7 @@ steps:
           equal: ['latest', <<parameters.tag>>]
       steps:
         - install-change-case-mgmt
-        - change-case-create:
-            configuration_item: NPM
-
+        - change-case-create
   # when dryrun is true: publish with --dryrun flag
   - when:
       condition:

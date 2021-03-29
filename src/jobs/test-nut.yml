@@ -25,8 +25,8 @@ parameters:
     description: "Path to sfdx executable to be used by NUTs, defaults to ''"
     default: ''
     type: string
-  module_version:
-    description: "The version of the module repo to checkout, '' defaults to branch/PR"
+  repo_tag:
+    description: "The tag of the module repo to checkout, '' defaults to branch/PR"
     default: ''
     type: string
 
@@ -42,18 +42,18 @@ steps:
       os: <<parameters.os>>
   - when:
       condition:
-        equal: ['', <<parameters.module_version>>]
+        equal: ['', <<parameters.repo_tag>>]
         steps:
           - checkout
   - when:
       condition:
         and:
           - not:
-            - equal: ['', <<parameters.module_version>>]
+            - equal: ['', <<parameters.repo_tag>>]
         steps:
           - run:
               name: Checkout using git
-              command: git clone --branch v<<parameters.module_version>> $CIRCLE_REPOSITORY_URL
+              command: git clone --branch v<<parameters.repo_tag>> $CIRCLE_REPOSITORY_URL
   - when:
       condition:
         equal: ['windows', <<parameters.os>>]

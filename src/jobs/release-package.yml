@@ -176,6 +176,7 @@ steps:
       steps:
         - run:
             when: on_fail
+            name: Close CTC case as Not Implemented
             command: |
               if [ -z "${SF_CHANGE_CASE_SFDX_AUTH_URL}" ] || [ -z "${SF_CHANGE_CASE_TEMPLATE_ID}" ] || [ -z "${SF_CHANGE_CASE_SCHEDULE_BUILD}" ]; then
                   echo "Environment not configured for CTC"
@@ -183,6 +184,7 @@ steps:
                   sfchangecase close --location "https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME" --status "Not Implemented"
               fi
         - run:
+            name: All Good! Close CTC case/implementations
             when: on_success
             command: |
               if [ -z "${SF_CHANGE_CASE_SFDX_AUTH_URL}" ] || [ -z "${SF_CHANGE_CASE_TEMPLATE_ID}" ] || [ -z "${SF_CHANGE_CASE_SCHEDULE_BUILD}" ]; then

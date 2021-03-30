@@ -26,10 +26,10 @@ parameters:
     description: "Path to sfdx executable to be used by NUTs, defaults to ''"
     default: ''
     type: string
-#  repo_tag:
-#    description: "The tag of the module repo to checkout, '' defaults to branch/PR"
-#    default: ''
-#    type: string
+  repo_tag:
+    description: "The tag of the module repo to checkout, '' defaults to branch/PR"
+    default: ''
+    type: string
 
 executor:
   name: << parameters.os >>
@@ -41,21 +41,19 @@ steps:
   - install-sfdx:
       version: <<parameters.sfdx_version>>
       os: <<parameters.os>>
-#  - when:
-#      condition:
-#        and:
-#          equal: ['', <<parameters.repo_tag>>]
-#          steps:
-#            checkout
-#  - when:
-#      condition:
-#        and:
-#          not:
-#            equal: ['', <<parameters.repo_tag>>]
-#          steps:
-#            - run:
-#                name: Checkout using git
-#                command: git clone --branch v<<parameters.repo_tag>> $CIRCLE_REPOSITORY_URL
+  - when:
+      condition:
+          equal: ['', <<parameters.repo_tag>>]
+      steps:
+        checkout
+  - when:
+      condition:
+        not:
+          equal: ['', <<parameters.repo_tag>>]
+      steps:
+        - run:
+            name: Checkout using git
+            command: git clone --branch v<<parameters.repo_tag>> $CIRCLE_REPOSITORY_URL
   - when:
       condition:
         equal: ['windows', <<parameters.os>>]

@@ -22,10 +22,10 @@ parameters:
     description: 'By default, the latest version of the standalone CLI will be installed. To install via npm, supply a version tag such as "latest" or "6".'
     default: ''
     type: string
-#  sfdx_executable_path:
-#    description: "Path to sfdx executable to be used by NUTs, defaults to ''"
-#    default: ''
-#    type: string
+  sfdx_executable_path:
+    description: "Path to sfdx executable to be used by NUTs, defaults to ''"
+    default: ''
+    type: string
 #  repo_tag:
 #    description: "The tag of the module repo to checkout, '' defaults to branch/PR"
 #    default: ''

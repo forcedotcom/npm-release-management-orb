@@ -32,6 +32,9 @@ parameters:
 executor:
   name: << parameters.os >>
 
+environment:
+  TESTKIT_EXECUTABLE_PATH: <<parameters.sfdx_executable_path>>
+
 steps:
   - install-node:
       version: <<parameters.node_version>>

@@ -47,9 +47,8 @@ steps:
           - checkout
   - when:
       condition:
-        and:
-          - not:
-            - equal: ['', <<parameters.repo_tag>>]
+        not:
+          equal: ['', <<parameters.repo_tag>>]
         steps:
           - run:
               name: Checkout using git

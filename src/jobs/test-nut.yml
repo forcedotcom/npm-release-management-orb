@@ -3,8 +3,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 
-# test comment
-
 description: >
   Runs NUTs for package.  Set environment: TESTKIT_EXECUTABLE_PATH:whatever to use an executable besides bin/run
 
@@ -95,8 +93,6 @@ steps:
         mkdir artifacts
   - run:
       name: Nuts
-      environment:
-        TESTKIT_EXECUTABLE_PATH: <<parameters.sfdx_executable_path>>
       command: |
         echo "Using node: $(node --version)"
         yarn test:nuts

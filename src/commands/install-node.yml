@@ -31,6 +31,9 @@ steps:
         - run:
             name: Install and use node version
             command: |
+              echo $(nvm --version)
+              echo $(nvm_alias lts/*)
+              echo $(nvm_alias lts/-1)
               if [[ "<<parameters.version>>" == "latest" ]]; then
                 nvm install node
                 nvm alias default node

@@ -3,7 +3,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 
-version: 2.1
 description: >
   Runs NUTs for package.  Set environment: TESTKIT_EXECUTABLE_PATH:whatever to use an executable besides bin/run
 
@@ -44,17 +43,19 @@ steps:
       os: <<parameters.os>>
   - when:
       condition:
-        equal: ['', <<parameters.repo_tag>>]
-        steps:
-          - checkout
+        and:
+          equal: ['', <<parameters.repo_tag>>]
+          steps:
+            - checkout
   - when:
       condition:
-        not:
-          equal: ['', <<parameters.repo_tag>>]
-        steps:
-          - run:
-              name: Checkout using git
-              command: git clone --branch v<<parameters.repo_tag>> $CIRCLE_REPOSITORY_URL
+        and:
+          not:
+            equal: ['', <<parameters.repo_tag>>]
+          steps:
+            - run:
+                name: Checkout using git
+                command: git clone --branch v<<parameters.repo_tag>> $CIRCLE_REPOSITORY_URL
   - when:
       condition:
         equal: ['windows', <<parameters.os>>]

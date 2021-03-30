@@ -46,7 +46,7 @@ steps:
         and:
           equal: ['', <<parameters.repo_tag>>]
           steps:
-            - checkout
+            checkout
   - when:
       condition:
         and:

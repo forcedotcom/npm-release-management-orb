@@ -26,15 +26,16 @@ steps:
         - run:
             name: Update & Setup NVM
             command: |
+              # Update NVM
               wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+              # Populate lts versions from nodejs.org
+              nvm ls-remote --lts
+              # Setup NVM
               echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
-              echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+              echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
         - run:
             name: Install and use node version
             command: |
-              echo $(nvm --version)
-              echo $(nvm_alias lts/*)
-              echo $(nvm_alias lts/-1)
               if [[ "<<parameters.version>>" == "latest" ]]; then
                 nvm install node
                 nvm alias default node

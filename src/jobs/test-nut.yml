@@ -6,8 +6,6 @@
 description: >
   Runs NUTs for package.  Set environment: TESTKIT_EXECUTABLE_PATH:whatever to use an executable besides bin/run
 
-# Test comment
-
 parameters:
   node_version:
     description: version of node to run tests against

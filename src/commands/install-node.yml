@@ -24,8 +24,9 @@ steps:
         equal: ['linux', <<parameters.os>>]
       steps:
         - run:
-            name: Setup NVM
+            name: Update & Setup NVM
             command: |
+              wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
               echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
               echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
         - run:

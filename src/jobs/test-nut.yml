@@ -42,20 +42,15 @@ steps:
   - install-sfdx:
       version: <<parameters.sfdx_version>>
       os: <<parameters.os>>
-  - when:
-      condition:
-          equal: ['', <<parameters.repo_tag>>]
-      steps:
-        checkout
+  - checkout
   - when:
       condition:
         not:
           equal: ['', <<parameters.repo_tag>>]
       steps:
-        - checkout
         - run:
             name: Switch to tag v<<parameters.repo_tag>>
-            command: git checkout --branch v<<parameters.repo_tag>>
+            command: git checkout v<<parameters.repo_tag>>
   - when:
       condition:
         equal: ['windows', <<parameters.os>>]

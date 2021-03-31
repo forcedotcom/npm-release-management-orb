@@ -24,18 +24,29 @@ steps:
         equal: ['linux', <<parameters.os>>]
       steps:
         - run:
+            name: Setup NVM
+            command: |
+              # Update NVM
+              wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+              # Setup NVM
+              echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+              echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+        - run:
+            name: Update NVM
+            command: |
+              # Populate lts versions from nodejs.org
+              nvm ls-remote --lts
+        - run:
             name: Install and use node version
             command: |
-              echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
-              echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
               if [[ "<<parameters.version>>" == "latest" ]]; then
                 nvm install node
                 nvm alias default node
               elif [[ "<<parameters.version>>" ==  "lts" ]]; then
                 nvm install $(nvm_alias lts/*)
                 nvm alias default $(nvm_alias lts/*)
-              elif [[ "<<parameters.version>>" == "lts-maintenance" ]]; then
-                nvm install $(nvm-alias lts/-1)
+              elif [[ "<<parameters.version>>" == "maintenance" ]]; then
+                nvm install $(nvm_alias lts/-1)
                 nvm alias default $(nvm_alias lts/-1)
               else
                 nvm install <<parameters.version>>

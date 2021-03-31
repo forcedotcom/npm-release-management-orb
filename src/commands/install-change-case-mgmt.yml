@@ -18,7 +18,7 @@ steps:
       command: |
         if [ -z "${SF_CHANGE_CASE_SFDX_AUTH_URL}" ] || [ -z "${SF_CHANGE_CASE_TEMPLATE_ID}" ] || [ -z "${SF_CHANGE_CASE_SCHEDULE_BUILD}" ]; then
             echo "Environment not configured for CTC"
-            sfchangecase --version
         else
           npm install -g @salesforce/change-case-management@<<parameters.version>>
+          sfchangecase --version
         fi

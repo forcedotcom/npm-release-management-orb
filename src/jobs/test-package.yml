@@ -45,7 +45,9 @@ steps:
       steps:
         - restore_cache:
             keys:
+              - v3-npm-{{ CIRCLE_BRANCH }}-{{checksum "yarn.lock"}}
               - v3-npm-{{checksum "yarn.lock"}}
+              - v3-npm
         - run:
             name: Install dependencies
             command: yarn
@@ -53,7 +55,7 @@ steps:
             name: Build
             command: yarn build
         - save_cache:
-            key: v3-npm-{{checksum "yarn.lock"}}
+            key: v3-npm-{{ CIRCLE_BRANCH }}-{{checksum "yarn.lock"}}
             paths:
               - node_modules
               - ~/node_modules

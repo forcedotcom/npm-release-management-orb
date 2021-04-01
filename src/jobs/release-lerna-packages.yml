@@ -56,7 +56,7 @@ steps:
       name: Build
       command: yarn build
   - save_cache:
-      key: v3-npm-{{checksum "yarn.lock"}}
+      key: v3-npm-{{ CIRCLE_BRANCH }}-{{checksum "yarn.lock"}}
       paths:
         - node_modules
         - ~/node_modules

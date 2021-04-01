@@ -46,7 +46,9 @@ steps:
   - configure-github
   - restore_cache:
       keys:
+        - v3-npm-{{ CIRCLE_BRANCH }}-{{checksum "yarn.lock"}}
         - v3-npm-{{checksum "yarn.lock"}}
+        - v3-npm
   - run:
       name: Install dependencies
       command: yarn

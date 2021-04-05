@@ -60,7 +60,7 @@ steps:
   - restore_cache:
       keys:
         - v3-npm-{{ CIRCLE_BRANCH }}-{{checksum "yarn.lock"}}
-        - v3-npm-{{checksum "yarn.lock"}}
+        - v3-npm-{{ CIRCLE_BRANCH }}
         - v3-npm
 
   - steps: <<parameters.pre-job-steps>>
@@ -73,6 +73,20 @@ steps:
       command: yarn build
   - save_cache:
       key: v3-npm-{{ CIRCLE_BRANCH }}-{{checksum "yarn.lock"}}
+      paths:
+        - node_modules
+        - ~/node_modules
+        - ~/.cache/yarn
+        - ~/.config/yarn
+  - save_cache:
+      key: v3-npm-{{ CIRCLE_BRANCH }}
+      paths:
+        - node_modules
+        - ~/node_modules
+        - ~/.cache/yarn
+        - ~/.config/yarn
+  - save_cache:
+      key: v3-npm
       paths:
         - node_modules
         - ~/node_modules

@@ -82,7 +82,7 @@ steps:
         echo "Using node: $(node --version)"
         yarn test
   - when:
-      condition: 
+      condition:
         equal: <<parameters.upload-coverage>>
         and:
           not:

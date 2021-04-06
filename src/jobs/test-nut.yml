@@ -20,9 +20,20 @@ parameters:
     description: 'By default, the latest version of the standalone CLI will be installed. To install via npm, supply a version tag such as "latest" or "6".'
     default: ''
     type: string
+  sfdx_executable_path:
+    description: "Path to sfdx executable to be used by NUTs, defaults to ''"
+    default: ''
+    type: string
+  repo_tag:
+    description: "The tag of the module repo to checkout, '' defaults to branch/PR"
+    default: ''
+    type: string
 
 executor:
   name: << parameters.os >>
+
+environment:
+  TESTKIT_EXECUTABLE_PATH: <<parameters.sfdx_executable_path>>
 
 steps:
   - install-node:
@@ -32,6 +43,14 @@ steps:
       version: <<parameters.sfdx_version>>
       os: <<parameters.os>>
   - checkout
+  - when:
+      condition:
+        not:
+          equal: ['', <<parameters.repo_tag>>]
+      steps:
+        - run:
+            name: Switch to tag v<<parameters.repo_tag>>
+            command: git checkout v<<parameters.repo_tag>>
   - when:
       condition:
         equal: ['windows', <<parameters.os>>]
@@ -48,7 +67,9 @@ steps:
       steps:
         - restore_cache:
             keys:
-              - v3-npm-{{checksum "yarn.lock"}}
+              - v3-npm-{{ CIRCLE_BRANCH }}-{{checksum "yarn.lock"}}
+              - v3-npm-{{ CIRCLE_BRANCH }}
+              - v3-npm
         - run:
             name: Install dependencies
             command: yarn
@@ -56,7 +77,21 @@ steps:
             name: Build
             command: yarn build
         - save_cache:
-            key: v3-npm-{{checksum "yarn.lock"}}
+            key: v3-npm-{{ CIRCLE_BRANCH }}-{{checksum "yarn.lock"}}
+            paths:
+              - node_modules
+              - ~/node_modules
+              - ~/.cache/yarn
+              - ~/.config/yarn
+        - save_cache:
+            key: v3-npm-{{ CIRCLE_BRANCH }}
+            paths:
+              - node_modules
+              - ~/node_modules
+              - ~/.cache/yarn
+              - ~/.config/yarn
+        - save_cache:
+            key: v3-npm
             paths:
               - node_modules
               - ~/node_modules
@@ -75,6 +110,8 @@ steps:
       name: Nuts
       command: |
         echo "Using node: $(node --version)"
+        echo "Environment Variables:"
+        env
         yarn test:nuts
       # this is in the command instead of the circle project environment to prevent it from happening on windows
   - store_artifacts:

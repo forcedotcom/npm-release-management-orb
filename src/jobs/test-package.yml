@@ -86,6 +86,6 @@ steps:
         and:
           - equal: ['linux', <<parameters.os>>]
           - and:
-            - equal: <<parameters.upload-coverage>>        
+              - equal: <<parameters.upload-coverage>>
       steps:
         - upload-coverage

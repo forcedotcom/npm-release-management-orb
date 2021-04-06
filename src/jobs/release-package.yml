@@ -59,8 +59,8 @@ steps:
   - configure-github
   - restore_cache:
       keys:
-        - v3-npm-{{ CIRCLE_BRANCH }}-{{checksum "yarn.lock"}}
-        - v3-npm-{{ CIRCLE_BRANCH }}
+        - v3-npm-{{ .Branch }}-{{checksum "yarn.lock"}}
+        - v3-npm-{{ .Branch }}
         - v3-npm
 
   - steps: <<parameters.pre-job-steps>>
@@ -72,14 +72,14 @@ steps:
       name: Build
       command: yarn build
   - save_cache:
-      key: v3-npm-{{ CIRCLE_BRANCH }}-{{checksum "yarn.lock"}}
+      key: v3-npm-{{ .Branch }}-{{checksum "yarn.lock"}}
       paths:
         - node_modules
         - ~/node_modules
         - ~/.cache/yarn
         - ~/.config/yarn
   - save_cache:
-      key: v3-npm-{{ CIRCLE_BRANCH }}
+      key: v3-npm-{{ .Branch }}
       paths:
         - node_modules
         - ~/node_modules

@@ -83,9 +83,9 @@ steps:
         yarn test
   - when:
       condition:
-        equal: <<parameters.upload-coverage>>
         and:
-          not:
-            equal: [windows, <<parameters.os>>]
+          - equal: ['linux', <<parameters.os>>]
+          - and:
+            - equal: <<parameters.upload-coverage>>        
       steps:
         - upload-coverage

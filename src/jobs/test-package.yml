@@ -84,7 +84,7 @@ steps:
   - when:
       condition: <<parameters.upload-coverage>>
         and:
-          - not:
-            - equal: [windows, <<parameters.os>>]
+          not:
+            equal: [windows, <<parameters.os>>]
       steps:
         - upload-coverage

@@ -9,4 +9,4 @@ description: >
 
 steps:
   - run: ./node_modules/.bin/nyc report --reporter text-lcov > coverage.lcov
-  - codecov/upload:
+  - codecov/upload

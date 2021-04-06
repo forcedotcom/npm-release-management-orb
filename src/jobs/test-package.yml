@@ -82,6 +82,9 @@ steps:
         echo "Using node: $(node --version)"
         yarn test
   - when:
-      condition: <<parameters.upload-coverage>>
+      condition:
+        and: <<parameters.upload-coverage>>
+        not:
+          equal: [windows, <<parameters.os>>]
       steps:
         - upload-coverage

@@ -112,6 +112,13 @@ steps:
         echo "Using node: $(node --version)"
         echo "Environment Variables:"
         env
+        echo "Merging context org with local org"
+        TESTKIT_AUTH_URL_SV="${ORG}_TESTKIT_AUTH_URL";
+        TESTKIT_AUTH_URL=${!TESTKIT_AUTH_URL_SV};
+
+        echo "context: ${GS0_TESTKIT_AUTH_URL}"
+        echo "context: ${TESTKIT_AUTH_URL}"
+
         yarn test:nuts
       # this is in the command instead of the circle project environment to prevent it from happening on windows
   - store_artifacts:

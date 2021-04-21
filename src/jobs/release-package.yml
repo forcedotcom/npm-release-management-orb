@@ -48,10 +48,17 @@ parameters:
     description: if true, it will use the version <version>-<branch>.0
     type: boolean
     default: false
+  node_version:
+    description: version of node to use
+    type: string
+    default: "12"
 
 executor: linux
 
 steps:
+  - install-node:
+      version: <<parameters.node_version>>
+      os: linux
   - checkout
   - install-sfdx-trust
   - install-sf-release

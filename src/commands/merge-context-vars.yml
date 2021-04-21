@@ -6,33 +6,65 @@
 # How to author commands: https://circleci.com/docs/2.0/reusing-config/#authoring-reusable-commands
 description: >
   Merge local testkit variables with context
-
+parameters:
+  os:
+    description: operating system to run tests on
+    type: enum
+    enum: ['linux', 'windows']
+    default: 'linux'
+# there are four combos of OS and version
 steps:
   - when:
-    condition:
-      - equal: ['linux', << parameters.os >>]
-    steps:
-      - run:
-          name: map context variables
+      condition:
+        and:
+          # windows installer has a UI.  so we install node version
+          - equal: ['windows', <<parameters.os>>]
+      steps:
+        run:
+          name: Install SFDX - NPM <<parameters.os>> on windows
           command: |
+            echo "windows"
+            env
+  - when:
+      condition:
+        and:
+          - equal: ['linux', <<parameters.os>>]
+      steps:
+        run:
+          name: Install SFDX - NPM on linux @<<parameters.os>>
+          command: |
+            echo "linux"
             for var in TESTKIT_AUTH_URL TESTKIT_HUB_INSTANCE TESTKIT_HUB_USERNAME TESTKIT_JWT_CLIENT_ID TESTKIT_JWT_KEY
             do
               if [ -z ${!var} ]
               then
                 echo "'$var' is unset"
-              else
+              else 
                 echo "var is set to '$var'";
                 context_var="${var}_CONTEXT";
                 echo "export $var=${!context_var}" >> $BASH_ENV
               fi
             done
-  - when:
-    condition:
-      - equal: ['windows', << parameters.os >]
-    steps:
-      - run:
-          name: map context variables
-          command: |
-            echo "running on windows << parameters.os >>"
-            env
+  - run:
+      name: Verify SFDX installation
+      command: sfdx --version            
+# steps:
+#   - when:
+#     condition:
+#       - equal: ['linux', << parameters.os >>]
+#     steps:
+#       - run:
+#           name: Map context variables
+#           command: |
+#             echo "running on linux << parameter.os >>"
+#             env
+#   - when:
+#     condition:
+#       - equal: ['windows', << parameters.os >>]
+#     steps:
+#       - run:
+#           name: Map context variables
+#           command: |
+#             echo "running on windows << parameters.os >>"
+#             env
 

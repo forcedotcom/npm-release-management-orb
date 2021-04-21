@@ -16,9 +16,7 @@ parameters:
 steps:
   - when:
       condition:
-        and:
-          # windows installer has a UI.  so we install node version
-          - equal: ['windows', <<parameters.os>>]
+       equal: ['windows', <<parameters.os>>]
       steps:
         run:
           name: map context to local on <<parameters.os>>
@@ -27,8 +25,7 @@ steps:
             env
   - when:
       condition:
-        and:
-          - equal: ['linux', <<parameters.os>>]
+        equal: ['linux', <<parameters.os>>]
       steps:
         run:
           name: map context to local on <<parameters.os>>

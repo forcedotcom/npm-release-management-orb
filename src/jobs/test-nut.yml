@@ -106,6 +106,7 @@ steps:
       name: Create artifact dir
       command: |
         mkdir artifacts
+  - merge-context-vars
   - run:
       name: Nuts
       command: |

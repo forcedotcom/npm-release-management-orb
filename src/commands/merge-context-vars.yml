@@ -1,0 +1,38 @@
+# Copyright (c) 2021, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+# How to author commands: https://circleci.com/docs/2.0/reusing-config/#authoring-reusable-commands
+description: >
+  Merge local testkit variables with context
+
+steps:
+  - when:
+    condition:
+      - equal: ['linux', << parameters.os >>]
+    steps:
+      - run:
+          name: map context variables
+          command: |
+            for var in TESTKIT_AUTH_URL TESTKIT_HUB_INSTANCE TESTKIT_HUB_USERNAME TESTKIT_JWT_CLIENT_ID TESTKIT_JWT_KEY
+            do
+              if [ -z ${!var} ]
+              then
+                echo "'$var' is unset"
+              else 
+                echo "var is set to '$var'";
+                context_var="${var}_CONTEXT";
+                echo "export $var=${!context_var}" >> $BASH_ENV
+              fi
+            done
+  - when:
+    condition:
+      - equal: ['windows', << parameters.os >]
+    steps:
+      - run:
+          name: map context variables
+          command: | 
+            echo "running on windows << parameters.os >>"
+            env
+          

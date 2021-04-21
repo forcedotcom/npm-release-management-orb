@@ -42,6 +42,8 @@ steps:
   - install-sfdx:
       version: <<parameters.sfdx_version>>
       os: <<parameters.os>>
+  - merge-context-vars:
+      os: <<parameters.os>>
   - checkout
   - when:
       condition:
@@ -106,8 +108,6 @@ steps:
       name: Create artifact dir
       command: |
         mkdir artifacts
-  - merge-context-vars:
-    os: <<parameters.os>>
   - run:
       name: Nuts
       command: |

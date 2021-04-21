@@ -20,7 +20,7 @@ steps:
               if [ -z ${!var} ]
               then
                 echo "'$var' is unset"
-              else 
+              else
                 echo "var is set to '$var'";
                 context_var="${var}_CONTEXT";
                 echo "export $var=${!context_var}" >> $BASH_ENV
@@ -32,7 +32,7 @@ steps:
     steps:
       - run:
           name: map context variables
-          command: | 
+          command: |
             echo "running on windows << parameters.os >>"
             env
-          
+

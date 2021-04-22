@@ -45,11 +45,11 @@ steps:
             for var in TESTKIT_AUTH_URL TESTKIT_HUB_INSTANCE TESTKIT_HUB_USERNAME TESTKIT_JWT_CLIENT_ID TESTKIT_JWT_KEY
             do
               echo "var is set to '$var'";
-              if [ -z ${!var} ]
+              context_var="${var}_CONTEXT";
+              if [ -z ${!var} ] && [ -z ${!context_var} ]
               then
-                echo "'$var' is unset"
+                echo "'$var' and '$context_var' are unset"
               else
-                context_var="${var}_CONTEXT";
                 echo "export $var=${!context_var}" >> $BASH_ENV
               fi
             done

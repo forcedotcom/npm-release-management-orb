@@ -22,6 +22,8 @@ steps:
           name: map context to local on <<parameters.os>>
           command: |
             echo "windows"
+            Write-Host $BASH_ENV
+            Write-Host "------------------------------------------------"
             $variables = "TESTKIT_AUTH_URL", "TESTKIT_HUB_INSTANCE", "TESTKIT_HUB_USERNAME", "TESTKIT_JWT_CLIENT_ID", "TESTKIT_JWT_KEY";
             foreach ($variable in $variables) {
               $name = $variable + '_CONTEXT';
@@ -30,8 +32,10 @@ steps:
               if ($value) {
                 Write-Host "setting: ${variable}"
                 $new = $variable + '_COPY'
-                [System.Environment]::SetEnvironmentVariable($new, $value);
-                [System.Environment]::SetEnvironmentVariable($variable, $value);
+                [System.Environment]::SetEnvironmentVariable($new, $value, "User");
+                [System.Environment]::SetEnvironmentVariable($variable, $value, "User");
+                Copy-Item -Path Env:\$name -Destination Env:\$variable
+                echo "export $variable=${value}" >> $BASH_ENV
               }
               $value2 = [System.Environment]::GetEnvironmentVariable($variable);
               Write-Host "value2: ${value2}"

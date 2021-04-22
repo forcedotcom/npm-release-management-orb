@@ -28,8 +28,11 @@ steps:
               $value = [System.Environment]::GetEnvironmentVariable($name);
               Write-Host "name: ${name} value: ${value}";
               if ($value) {
+                Write-Host "setting: ${variable}"
                 [System.Environment]::SetEnvironmentVariable($variable, $value);
               }
+              $value2 = [System.Environment]::GetEnvironmentVariable($variable);
+              Write-Host "value2: ${value2}"
             }
   - when:
       condition:

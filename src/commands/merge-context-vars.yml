@@ -34,12 +34,15 @@ steps:
                 $new = $variable + '_COPY'
                 [System.Environment]::SetEnvironmentVariable($new, $value, "User");
                 [System.Environment]::SetEnvironmentVariable($variable, $value, "User");
+                $val = [System.Environment]::GetEnvironmentVariable($variable);
+                Write-Host "val: ${val}"
                 Copy-Item -Path Env:\$name -Destination Env:\$variable
                 echo "export $variable=${value}" >> $BASH_ENV
               }
               $value2 = [System.Environment]::GetEnvironmentVariable($variable);
               Write-Host "value2: ${value2}"
             }
+            env
   - when:
       condition:
         equal: ['linux', <<parameters.os>>]

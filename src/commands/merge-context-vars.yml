@@ -31,7 +31,7 @@ steps:
                 Copy-Item -Path Env:\$name -Destination Env:\$variable
               } else {
                 Write-Host "${name} and ${variable} are unset"
-              ]
+              }
             }
             env
   - when:

@@ -29,7 +29,9 @@ steps:
               $valueOrg = [System.Environment]::GetEnvironmentVariable($variable);
               if ($value -And $valueOrg) {
                 Copy-Item -Path Env:\$name -Destination Env:\$variable
-              }
+              } else [
+                Write-Host "${name} and ${variable} are unset"
+              ]
             }
             env
   - when:
@@ -46,7 +48,7 @@ steps:
               context_var="${var}_CONTEXT";
               if [ -z ${!var} ] && [ -z ${!context_var} ]
               then
-                echo "'$var' is unset"
+                echo "'$var' and '$context_var' are unset"
               else
                 echo "export $var=${!context_var}" >> $BASH_ENV
               fi

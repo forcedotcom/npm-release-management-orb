@@ -22,7 +22,15 @@ steps:
           name: map context to local on <<parameters.os>>
           command: |
             echo "windows"
-            env
+            $variables = "TESTKIT_AUTH_URL", "TESTKIT_HUB_INSTANCE", "TESTKIT_HUB_USERNAME", "TESTKIT_JWT_CLIENT_ID", "TESTKIT_JWT_KEY";
+            foreach ($variable in $variables) {
+              $name = $variable + '_CONTEXT';
+              $value = [System.Environment]::GetEnvironmentVariable($name);
+              Write-Host "name: ${name} value: ${value}";
+              if ($value) {
+                [System.Environment]::SetEnvironmentVariable($variable, $value);
+              }
+            }
   - when:
       condition:
         equal: ['linux', <<parameters.os>>]

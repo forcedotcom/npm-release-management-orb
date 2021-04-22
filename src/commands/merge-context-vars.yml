@@ -27,10 +27,7 @@ steps:
               $name = $variable + '_CONTEXT';
               $value = [System.Environment]::GetEnvironmentVariable($name);
               if ($value) {
-                Write-Host "setting: ${variable}"
-                # [System.Environment]::SetEnvironmentVariable($variable, $value, "User");
                 Copy-Item -Path Env:\$name -Destination Env:\$variable
-                # echo "export $variable=${value}" >> $BASH_ENV
               }
             }
             env
@@ -44,12 +41,11 @@ steps:
             echo "linux"
             for var in TESTKIT_AUTH_URL TESTKIT_HUB_INSTANCE TESTKIT_HUB_USERNAME TESTKIT_JWT_CLIENT_ID TESTKIT_JWT_KEY
             do
-              if [ -z ${!var} ]
+              context_var="${var}_CONTEXT";
+              if [ -z ${!context_var} ]
               then
-                echo "'$var' is unset"
+                echo "'$context_var' is unset"
               else
-                echo "var is set to '$var'";
-                context_var="${var}_CONTEXT";
                 echo "export $var=${!context_var}" >> $BASH_ENV
               fi
             done

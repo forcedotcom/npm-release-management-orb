@@ -29,6 +29,8 @@ steps:
               Write-Host "name: ${name} value: ${value}";
               if ($value) {
                 Write-Host "setting: ${variable}"
+                $new = $variable + '_COPY'
+                [System.Environment]::SetEnvironmentVariable($new, $value);
                 [System.Environment]::SetEnvironmentVariable($variable, $value);
               }
               $value2 = [System.Environment]::GetEnvironmentVariable($variable);

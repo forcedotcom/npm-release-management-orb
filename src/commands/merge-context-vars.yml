@@ -26,7 +26,8 @@ steps:
             foreach ($variable in $variables) {
               $name = $variable + '_CONTEXT';
               $value = [System.Environment]::GetEnvironmentVariable($name);
-              if ($value) {
+              $valueOrg = [System.Environment]::GetEnvironmentVariable($variable);
+              if ($value -And $valueOrg) {
                 Copy-Item -Path Env:\$name -Destination Env:\$variable
               }
             }
@@ -41,10 +42,11 @@ steps:
             echo "linux"
             for var in TESTKIT_AUTH_URL TESTKIT_HUB_INSTANCE TESTKIT_HUB_USERNAME TESTKIT_JWT_CLIENT_ID TESTKIT_JWT_KEY
             do
+              echo "var is set to '$var'";
               context_var="${var}_CONTEXT";
-              if [ -z ${!context_var} ]
+              if [ -z ${!var} ] && [ -z ${!context_var} ]
               then
-                echo "'$context_var' is unset"
+                echo "'$var' is unset"
               else
                 echo "export $var=${!context_var}" >> $BASH_ENV
               fi

@@ -29,7 +29,7 @@ steps:
               $valueOrg = [System.Environment]::GetEnvironmentVariable($variable);
               if ($value -And $valueOrg) {
                 Copy-Item -Path Env:\$name -Destination Env:\$variable
-              } else [
+              } else {
                 Write-Host "${name} and ${variable} are unset"
               ]
             }

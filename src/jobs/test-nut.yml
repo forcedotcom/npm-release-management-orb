@@ -24,6 +24,10 @@ parameters:
     description: "Path to sfdx executable to be used by NUTs, defaults to ''"
     default: ''
     type: string
+  npm_module_name:
+    description: "The fully qualified npm module name, i.e. @salesforce/plugins-data, defaults to ''"
+    default: ''
+    type: string
   repo_tag:
     description: "The tag of the module repo to checkout, '' defaults to branch/PR"
     default: ''
@@ -49,8 +53,8 @@ steps:
           equal: ['', <<parameters.repo_tag>>]
       steps:
         - run:
-            name: Switch to tag v<<parameters.repo_tag>>
-            command: git checkout v<<parameters.repo_tag>>
+            name: Switch to tag v<<parameters.repo_tag>> or  <<parameters.npm_module_name>>@<<parameters.repo_tag>>
+            command: git checkout v<<parameters.repo_tag>> || git checkout <<parameters.npm_module_name>>@<<parameters.repo_tag>>
   - when:
       condition:
         equal: ['windows', <<parameters.os>>]

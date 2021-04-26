@@ -49,9 +49,8 @@ steps:
   - checkout
   - when:
       condition:
-        and:
-          equal: ['windows', <<parameters.os>>]
-          not: <<parameters.repo_tag>>
+        equal: ['windows', <<parameters.os>>]
+        not: <<parameters.repo_tag>>
       steps:
         - run:
             name: Switch to tag v<<parameters.repo_tag>> or  <<parameters.npm_module_name>>@<<parameters.repo_tag>>
@@ -63,9 +62,8 @@ steps:
               }
   - when:
       condition:
-        and:
-          equal: ['linux', <<parameters.os>>]
-          not: <<parameters.repo_tag>>
+        equal: ['linux', <<parameters.os>>]
+        not: <<parameters.repo_tag>>
       steps:
         - run:
             name: Switch to tag v<<parameters.repo_tag>> or  <<parameters.npm_module_name>>@<<parameters.repo_tag>>

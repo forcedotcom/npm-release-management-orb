@@ -49,8 +49,23 @@ steps:
   - checkout
   - when:
       condition:
-        not:
-          equal: ['', <<parameters.repo_tag>>]
+        and:
+          - equal: ['windows', <<parameters.os>>]
+          - <<parameters.repo_tag>>
+      steps:
+        - run:
+            name: Switch to tag v<<parameters.repo_tag>> or  <<parameters.npm_module_name>>@<<parameters.repo_tag>>
+            command: |
+              git checkout v<<parameters.repo_tag>>
+              if (!$?)
+              {
+                git checkout <<parameters.npm_module_name>>@<<parameters.repo_tag>>
+              }
+  - when:
+      condition:
+        and:
+          - equal: ['linux', <<parameters.os>>]
+          - <<parameters.repo_tag>>
       steps:
         - run:
             name: Switch to tag v<<parameters.repo_tag>> or  <<parameters.npm_module_name>>@<<parameters.repo_tag>>

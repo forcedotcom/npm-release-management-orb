@@ -50,8 +50,9 @@ steps:
   - when:
       condition:
         equal: ['windows', <<parameters.os>>]
-        not:
-          equal: ['', <<parameters.repo_tag>>]
+        and:
+          not:
+            equal: ['', <<parameters.repo_tag>>]
       steps:
         - run:
             name: Switch to tag v<<parameters.repo_tag>> or  <<parameters.npm_module_name>>@<<parameters.repo_tag>>
@@ -64,8 +65,9 @@ steps:
   - when:
       condition:
         equal: ['linux', <<parameters.os>>]
-        not:
-          equal: ['', <<parameters.repo_tag>>]
+        and:
+          not:
+            equal: ['', <<parameters.repo_tag>>]
       steps:
         - run:
             name: Switch to tag v<<parameters.repo_tag>> or  <<parameters.npm_module_name>>@<<parameters.repo_tag>>

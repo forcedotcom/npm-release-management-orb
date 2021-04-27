@@ -10,7 +10,7 @@ parameters:
   node_version:
     description: version of node to run tests against
     type: string
-    default: "12"
+    default: "latest"
   os:
     description: operating system to run tests on
     type: enum

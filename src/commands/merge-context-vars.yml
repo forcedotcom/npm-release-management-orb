@@ -19,7 +19,7 @@ steps:
        equal: ['windows', <<parameters.os>>]
       steps:
         run:
-          name: map context to local on <<parameters.os>>
+          name: Map context to local on <<parameters.os>>
           command: |
             echo "windows"
             $variables = "TESTKIT_AUTH_URL", "TESTKIT_HUB_INSTANCE", "TESTKIT_HUB_USERNAME", "TESTKIT_JWT_CLIENT_ID", "TESTKIT_JWT_KEY";
@@ -39,7 +39,7 @@ steps:
         equal: ['linux', <<parameters.os>>]
       steps:
         run:
-          name: map context to local on <<parameters.os>>
+          name: Map context to local on <<parameters.os>>
           command: |
             echo "linux"
             for var in TESTKIT_AUTH_URL TESTKIT_HUB_INSTANCE TESTKIT_HUB_USERNAME TESTKIT_JWT_CLIENT_ID TESTKIT_JWT_KEY

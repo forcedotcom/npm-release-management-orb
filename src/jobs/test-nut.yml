@@ -129,13 +129,8 @@ steps:
       name: Create artifact dir
       command: |
         mkdir artifacts
-  - when:
-      condition:
-        equal: [ 'gs0', <<parameters.context_name>> ]
-      steps:
-        context: 'gs0'
-        merge-context-vars:
-          os: <<parameters.os>>
+  - merge-context-vars:
+      os: <<parameters.os>>
   - run:
       name: Nuts
       command: |

@@ -1,0 +1,58 @@
+# Copyright (c) 2021, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+# How to author commands: https://circleci.com/docs/2.0/reusing-config/#authoring-reusable-commands
+description: >
+  Merge local testkit variables with context
+parameters:
+  os:
+    description: operating system to run tests on
+    type: enum
+    enum: ['linux', 'windows']
+    default: 'linux'
+# there are four combos of OS and version
+steps:
+  - when:
+      condition:
+       equal: ['windows', <<parameters.os>>]
+      steps:
+        run:
+          name: Map context to local on <<parameters.os>>
+          command: |
+            echo "windows"
+            $variables = "TESTKIT_AUTH_URL", "TESTKIT_HUB_INSTANCE", "TESTKIT_HUB_USERNAME", "TESTKIT_JWT_CLIENT_ID", "TESTKIT_JWT_KEY";
+            foreach ($variable in $variables) {
+              $name = $variable + '_CONTEXT';
+              $value = [System.Environment]::GetEnvironmentVariable($name);
+              $valueOrg = [System.Environment]::GetEnvironmentVariable($variable);
+              if ($value -And $valueOrg) {
+                Copy-Item -Path Env:\$name -Destination Env:\$variable
+              } else {
+                Write-Host "${name} and ${variable} are unset"
+              }
+            }
+            env
+  - when:
+      condition:
+        equal: ['linux', <<parameters.os>>]
+      steps:
+        run:
+          name: Map context to local on <<parameters.os>>
+          command: |
+            echo "linux"
+            for var in TESTKIT_AUTH_URL TESTKIT_HUB_INSTANCE TESTKIT_HUB_USERNAME TESTKIT_JWT_CLIENT_ID TESTKIT_JWT_KEY
+            do
+              echo "var is set to '$var'";
+              context_var="${var}_CONTEXT";
+              if [ -z ${!var} ] && [ -z ${!context_var} ]
+              then
+                echo "'$var' and '$context_var' are unset"
+              else
+                echo "export $var=${!context_var}" >> $BASH_ENV
+              fi
+            done
+  - run:
+      name: Verify SFDX installation
+      command: sfdx --version

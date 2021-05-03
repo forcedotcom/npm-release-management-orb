@@ -32,6 +32,10 @@ parameters:
     description: "The tag of the module repo to checkout, '' defaults to branch/PR"
     default: ''
     type: string
+  context_name:
+    description: 'Name of the context devhub name'
+    default: 'gs40'
+    type: string
 
 executor:
   name: << parameters.os >>
@@ -125,8 +129,20 @@ steps:
       name: Create artifact dir
       command: |
         mkdir artifacts
-  - merge-context-vars:
-      os: <<parameters.os>>
+  - when:
+      condition:
+        equal: [ 'gs0', <<parameters.context_name>> ]
+          - steps:
+              context: 'gs0'
+              merge-context-vars:
+                os: <<parameters.os>>
+  - when:
+      condition:
+        equal: [ 'na40', <<parameters.context_name>> ]
+          - steps:
+              context: 'na40'
+              merge-context-vars:
+                 os: <<parameters.os>>
   - run:
       name: Nuts
       command: |

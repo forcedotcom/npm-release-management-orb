@@ -16,7 +16,7 @@ parameters:
 steps:
   - when:
       condition:
-       equal: ['windows', <<parameters.os>>]
+        equal: ['windows', <<parameters.os>>]
       steps:
         run:
           name: Map context to local on <<parameters.os>>

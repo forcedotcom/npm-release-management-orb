@@ -132,17 +132,17 @@ steps:
   - when:
       condition:
         equal: [ 'gs0', <<parameters.context_name>> ]
-          - steps:
-              context: 'gs0'
-              merge-context-vars:
-                os: <<parameters.os>>
+      steps:
+        context: 'gs0'
+        - merge-context-vars:
+          os: <<parameters.os>>
   - when:
       condition:
         equal: [ 'na40', <<parameters.context_name>> ]
-          - steps:
-              context: 'na40'
-              merge-context-vars:
-                 os: <<parameters.os>>
+      steps:
+        context: 'na40'
+          - merge-context-vars:
+            os: <<parameters.os>>
   - run:
       name: Nuts
       command: |

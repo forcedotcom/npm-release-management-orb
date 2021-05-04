@@ -22,6 +22,7 @@ steps:
           name: Map context to local on <<parameters.os>>
           command: |
             echo "windows"
+            env
             $variables = "TESTKIT_AUTH_URL", "TESTKIT_HUB_INSTANCE", "TESTKIT_HUB_USERNAME", "TESTKIT_JWT_CLIENT_ID", "TESTKIT_JWT_KEY";
             foreach ($variable in $variables) {
               $name = $variable + '_CONTEXT';
@@ -42,17 +43,18 @@ steps:
           name: Map context to local on <<parameters.os>>
           command: |
             echo "linux"
+            env
             for var in TESTKIT_AUTH_URL TESTKIT_HUB_INSTANCE TESTKIT_HUB_USERNAME TESTKIT_JWT_CLIENT_ID TESTKIT_JWT_KEY
-            do
               echo "var is set to '$var'";
               context_var="${var}_CONTEXT";
-              if [ -z ${!var} ] && [ -z ${!context_var} ]
+              if [ -n "${!var}" ] && [ -n "${!context_var}" ]
               then
-                echo "'$var' and '$context_var' are unset"
+               echo "export $var=${!context_var}" >> $BASH_ENV
               else
-                echo "export $var=${!context_var}" >> $BASH_ENV
+               echo "'$var' or '$context_var' are unset"
               fi
             done
+            env
   - run:
       name: Verify SFDX installation
       command: sfdx --version

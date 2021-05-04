@@ -43,11 +43,11 @@ steps:
           name: Map context to local on <<parameters.os>>
           command: |
             echo "linux"
-            env
             for var in TESTKIT_AUTH_URL TESTKIT_HUB_INSTANCE TESTKIT_HUB_USERNAME TESTKIT_JWT_CLIENT_ID TESTKIT_JWT_KEY
+            do
               echo "var is set to '$var'";
               context_var="${var}_CONTEXT";
-              if [ -n "${!var}" ] && [ -n "${!context_var}" ]
+              if [ -z ${!var} ] && [ -z ${!context_var} ]
               then
                echo "export $var=${!context_var}" >> $BASH_ENV
               else

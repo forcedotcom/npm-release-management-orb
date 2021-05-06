@@ -54,7 +54,7 @@ parameters:
     type: string
   context_name:
     description: 'Name of the context devhub name'
-    default: 'gs40'
+    default: 'na40'
     type: string
 
 executor:

@@ -56,10 +56,10 @@ steps:
       condition:
         equal: ["windows", <<parameters.os>>]
       steps:
-        - run: choco config set cacheLocation %LOCALAPPDATA%/Temp/chocolatey
+        - run: choco config set cacheLocation C:\Users\circleci\project\chocolatey-cache
         - restore_cache:
             keys:
-              - chocolatey-<<parameters.version>>
+              - v1-chocolatey-<parameters.version>>
         - run:
             name: Install and use node version
             command: |
@@ -72,6 +72,6 @@ steps:
               }
               echo "Using node: $(node --version)"
         - save_cache:
-            key: chocolatey-<<parameters.version>>
+            key: v1-chocolatey-<parameters.version>>
             paths:
-              - "%LOCALAPPDATA%/Temp/chocolatey"
+              - C:\Users\circleci\project\chocolatey-cache

@@ -84,8 +84,54 @@ steps:
       command: yarn build
   - when:
       condition:
+        equal: ["windows", <<parameters.os>>]
+      steps:
+        - save_cache:
+            key: v4-npm-<<parameters.os>>-{{ .Branch }}-{{checksum "yarn.lock"}}
+            paths:
+              - node_modules
+              - ~/AppData/Roaming/npm/node_modules
+              - ~/AppData/Local/Yarn/cache
+              - ~/AppData/Local/Yarn/config/global
+        - save_cache:
+            key: v4-npm-<<parameters.os>>-{{ .Branch }}
+            paths:
+              - node_modules
+              - ~/AppData/Roaming/npm/node_modules
+              - ~/AppData/Local/Yarn/cache
+              - ~/AppData/Local/Yarn/config/global
+        - save_cache:
+            key: v4-npm-<<parameters.os>>
+            paths:
+              - node_modules
+              - ~/AppData/Roaming/npm/node_modules
+              - ~/AppData/Local/Yarn/cache
+              - ~/AppData/Local/Yarn/config/global
+  - when:
+      condition:
         equal: ["linux", <<parameters.os>>]
       steps:
+        - save_cache:
+            key: v4-npm-<<parameters.os>>-{{ .Branch }}-{{checksum "yarn.lock"}}
+            paths:
+              - node_modules
+              - ~/node_modules
+              - ~/.cache/yarn
+              - ~/.config/yarn
+        - save_cache:
+            key: v4-npm-<<parameters.os>>-{{ .Branch }}
+            paths:
+              - node_modules
+              - ~/node_modules
+              - ~/.cache/yarn
+              - ~/.config/yarn
+        - save_cache:
+            key: v4-npm-<<parameters.os>>
+            paths:
+              - node_modules
+              - ~/node_modules
+              - ~/.cache/yarn
+              - ~/.config/yarn
         - verify-installed-plugin
         - run:
             name: set TESTKIT_ENABLE_ZIP for artifacts on linux

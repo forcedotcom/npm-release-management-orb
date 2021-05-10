@@ -31,9 +31,9 @@ steps:
   - checkout
   - restore_cache:
       keys:
-        - v3-npm-<<parameters.os>>-{{ .Branch }}-{{checksum "yarn.lock"}}
-        - v3-npm-<<parameters.os>>-{{ .Branch }}
-        - v3-npm-<<parameters.os>>
+        - v4-npm-<<parameters.os>>-{{ .Branch }}-{{checksum "yarn.lock"}}
+        - v4-npm-<<parameters.os>>-{{ .Branch }}
+        - v4-npm-<<parameters.os>>
   - run:
       name: Install dependencies
       command: yarn
@@ -45,21 +45,21 @@ steps:
         equal: ["windows", <<parameters.os>>]
       steps:
         - save_cache:
-            key: v3-npm-<<parameters.os>>-{{ .Branch }}-{{checksum "yarn.lock"}}
+            key: v4-npm-<<parameters.os>>-{{ .Branch }}-{{checksum "yarn.lock"}}
             paths:
               - node_modules
               - ~/AppData/Roaming/npm/node_modules
               - ~/AppData/Local/Yarn/cache
               - ~/AppData/Local/Yarn/config/global
         - save_cache:
-            key: v3-npm-<<parameters.os>>-{{ .Branch }}
+            key: v4-npm-<<parameters.os>>-{{ .Branch }}
             paths:
               - node_modules
               - ~/AppData/Roaming/npm/node_modules
               - ~/AppData/Local/Yarn/cache
               - ~/AppData/Local/Yarn/config/global
         - save_cache:
-            key: v3-npm-<<parameters.os>>
+            key: v4-npm-<<parameters.os>>
             paths:
               - node_modules
               - ~/AppData/Roaming/npm/node_modules
@@ -70,21 +70,21 @@ steps:
         equal: ["linux", <<parameters.os>>]
       steps:
         - save_cache:
-            key: v3-npm-<<parameters.os>>-{{ .Branch }}-{{checksum "yarn.lock"}}
+            key: v4-npm-<<parameters.os>>-{{ .Branch }}-{{checksum "yarn.lock"}}
             paths:
               - node_modules
               - ~/node_modules
               - ~/.cache/yarn
               - ~/.config/yarn
         - save_cache:
-            key: v3-npm-<<parameters.os>>-{{ .Branch }}
+            key: v4-npm-<<parameters.os>>-{{ .Branch }}
             paths:
               - node_modules
               - ~/node_modules
               - ~/.cache/yarn
               - ~/.config/yarn
         - save_cache:
-            key: v3-npm-<<parameters.os>>
+            key: v4-npm-<<parameters.os>>
             paths:
               - node_modules
               - ~/node_modules

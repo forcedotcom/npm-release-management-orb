@@ -43,6 +43,11 @@ steps:
   - install-node:
       version: <<parameters.node_version>>
       os: <<parameters.os>>
+  - restore_cache:
+      keys:
+        - v4-npm-<<parameters.os>>-{{ .Branch }}-{{checksum "yarn.lock"}}
+        - v4-npm-<<parameters.os>>-{{ .Branch }}
+        - v4-npm-<<parameters.os>>
   - install-sfdx:
       version: <<parameters.sfdx_version>>
       os: <<parameters.os>>
@@ -70,12 +75,6 @@ steps:
         - run:
             name: Switch to tag v<<parameters.repo_tag>> or  <<parameters.npm_module_name>>@<<parameters.repo_tag>>
             command: git checkout v<<parameters.repo_tag>> || git checkout <<parameters.npm_module_name>>@<<parameters.repo_tag>>
-
-  - restore_cache:
-      keys:
-        - v4-npm-<<parameters.os>>-{{ .Branch }}-{{checksum "yarn.lock"}}
-        - v4-npm-<<parameters.os>>-{{ .Branch }}
-        - v4-npm-<<parameters.os>>
   - run:
       name: Install dependencies
       command: yarn

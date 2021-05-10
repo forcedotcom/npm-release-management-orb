@@ -15,13 +15,13 @@ parameters:
   os:
     description: operating system you want to install node on
     type: enum
-    enum: ['linux', 'windows']
-    default: 'linux'
+    enum: ["linux", "windows"]
+    default: "linux"
 
 steps:
   - when:
       condition:
-        equal: ['linux', <<parameters.os>>]
+        equal: ["linux", <<parameters.os>>]
       steps:
         - run:
             name: Install and use node version
@@ -54,8 +54,12 @@ steps:
 
   - when:
       condition:
-        equal: ['windows', <<parameters.os>>]
+        equal: ["windows", <<parameters.os>>]
       steps:
+        - command: choco config set cacheLocation %LOCALAPPDATA%/Temp/chocolatey
+        - restore_cache:
+            keys:
+              - chocolatey-<<parameters.version>>
         - run:
             name: Install and use node version
             command: |
@@ -67,3 +71,7 @@ steps:
                 choco install nodejs --version $latest_of_version --allow-downgrade
               }
               echo "Using node: $(node --version)"
+        - save_cache:
+            key: chocolatey-<<parameters.version>>
+            paths:
+              - "%LOCALAPPDATA%/Temp/chocolatey"

@@ -56,7 +56,7 @@ steps:
       condition:
         equal: ["windows", <<parameters.os>>]
       steps:
-        - run: choco config set cacheLocation C:\Users\circleci\project\chocolatey-cache
+        - run: choco config set cacheLocation C:\Users\circleci\chocolatey-cache
         - restore_cache:
             keys:
               - v1-chocolatey-<parameters.version>>
@@ -74,4 +74,4 @@ steps:
         - save_cache:
             key: v1-chocolatey-<parameters.version>>
             paths:
-              - C:\Users\circleci\project\chocolatey-cache
+              - C:\Users\circleci\chocolatey-cache

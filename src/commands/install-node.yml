@@ -59,7 +59,7 @@ steps:
         - run: choco config set cacheLocation C:\Users\circleci\chocolatey-cache
         - restore_cache:
             keys:
-              - v2-chocolatey-<parameters.version>>
+              - v2-chocolatey-<<parameters.version>>
         - run:
             name: Install and use node version
             command: |
@@ -72,6 +72,6 @@ steps:
               }
               echo "Using node: $(node --version)"
         - save_cache:
-            key: v2-chocolatey-<parameters.version>>
+            key: v2-chocolatey-<<parameters.version>>
             paths:
               - C:\Users\circleci\chocolatey-cache

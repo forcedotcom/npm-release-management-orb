@@ -56,7 +56,7 @@ steps:
       condition:
         equal: ["windows", <<parameters.os>>]
       steps:
-        - command: choco config set cacheLocation %LOCALAPPDATA%/Temp/chocolatey
+        - run: choco config set cacheLocation %LOCALAPPDATA%/Temp/chocolatey
         - restore_cache:
             keys:
               - chocolatey-<<parameters.version>>

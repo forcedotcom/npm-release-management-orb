@@ -48,23 +48,23 @@ steps:
             key: v3-npm-<<parameters.os>>-{{ .Branch }}-{{checksum "yarn.lock"}}
             paths:
               - node_modules
-              - '%APPDATA%\npm\node_modules'
-              - '%LOCALAPPDATA%\Yarn\cache'
-              - '%LOCALAPPDATA%\Yarn\config\global'
+              - ~/AppData/Roaming/npm/node_modules
+              - ~/AppData/Local/Yarn/cache
+              - ~/AppData/Local/Yarn/config/global
         - save_cache:
             key: v3-npm-<<parameters.os>>-{{ .Branch }}
             paths:
               - node_modules
-              - '%APPDATA%\npm\node_modules'
-              - '%LOCALAPPDATA%\Yarn\cache'
-              - '%LOCALAPPDATA%\Yarn\config\global'
+              - ~/AppData/Roaming/npm/node_modules
+              - ~/AppData/Local/Yarn/cache
+              - ~/AppData/Local/Yarn/config/global
         - save_cache:
             key: v3-npm-<<parameters.os>>
             paths:
               - node_modules
-              - '%APPDATA%\npm\node_modules'
-              - '%LOCALAPPDATA%\Yarn\cache'
-              - '%LOCALAPPDATA%\Yarn\config\global'
+              - ~/AppData/Roaming/npm/node_modules
+              - ~/AppData/Local/Yarn/cache
+              - ~/AppData/Local/Yarn/config/global
   - when:
       condition:
         equal: ["linux", <<parameters.os>>]

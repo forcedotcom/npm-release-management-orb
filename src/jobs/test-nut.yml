@@ -43,6 +43,7 @@ steps:
   - install-node:
       version: <<parameters.node_version>>
       os: <<parameters.os>>
+  - checkout
   - restore_cache:
       keys:
         - v4-npm-<<parameters.os>>-{{ .Branch }}-{{checksum "yarn.lock"}}
@@ -51,7 +52,6 @@ steps:
   - install-sfdx:
       version: <<parameters.sfdx_version>>
       os: <<parameters.os>>
-  - checkout
   - when:
       condition:
         and:

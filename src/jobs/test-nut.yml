@@ -54,12 +54,12 @@ steps:
           - <<parameters.repo_tag>>
       steps:
         - run:
-            name: Switch to tag v<<parameters.repo_tag>> or  <<parameters.npm_module_name>>@<<parameters.repo_tag>>
+            name: Switch to tag v<<parameters.repo_tag>> or <<parameters.npm_module_name>>@<<parameters.repo_tag>>
             command: |
-              git checkout v<<parameters.repo_tag>>
+              git checkout "v<<parameters.repo_tag>>"
               if (!$?)
               {
-                git checkout <<parameters.npm_module_name>>@<<parameters.repo_tag>>
+                git checkout "<<parameters.npm_module_name>>@<<parameters.repo_tag>>"
               }
   - when:
       condition:
@@ -68,7 +68,7 @@ steps:
           - <<parameters.repo_tag>>
       steps:
         - run:
-            name: Switch to tag v<<parameters.repo_tag>> or  <<parameters.npm_module_name>>@<<parameters.repo_tag>>
+            name: Switch to tag v<<parameters.repo_tag>> or <<parameters.npm_module_name>>@<<parameters.repo_tag>>
             command: git checkout v<<parameters.repo_tag>> || git checkout <<parameters.npm_module_name>>@<<parameters.repo_tag>>
   - when:
       condition:

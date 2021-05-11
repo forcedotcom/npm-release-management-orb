@@ -66,9 +66,9 @@ steps:
   - configure-github
   - restore_cache:
       keys:
-        - v3-npm-{{ .Branch }}-{{checksum "yarn.lock"}}
-        - v3-npm-{{ .Branch }}
-        - v3-npm
+        - v5-npm-{{ .Branch }}-{{checksum "yarn.lock"}}
+        - v5-npm-{{ .Branch }}
+        - v5-npm
 
   - steps: <<parameters.pre-job-steps>>
 
@@ -79,21 +79,21 @@ steps:
       name: Build
       command: yarn build
   - save_cache:
-      key: v3-npm-{{ .Branch }}-{{checksum "yarn.lock"}}
+      key: v5-npm-{{ .Branch }}-{{checksum "yarn.lock"}}
       paths:
         - node_modules
         - ~/node_modules
         - ~/.cache/yarn
         - ~/.config/yarn
   - save_cache:
-      key: v3-npm-{{ .Branch }}
+      key: v5-npm-{{ .Branch }}
       paths:
         - node_modules
         - ~/node_modules
         - ~/.cache/yarn
         - ~/.config/yarn
   - save_cache:
-      key: v3-npm
+      key: v5-npm
       paths:
         - node_modules
         - ~/node_modules
@@ -103,7 +103,7 @@ steps:
   # - if environment looks like it is prepped to do change cases, and we're on "latest" tag
   - when:
       condition:
-          equal: ['latest', <<parameters.tag>>]
+        equal: ["latest", <<parameters.tag>>]
       steps:
         - install-change-case-mgmt
         - change-case-create
@@ -194,7 +194,7 @@ steps:
   # clean up the CTC cases
   - when:
       condition:
-        equal: ['latest', <<parameters.tag>>]
+        equal: ["latest", <<parameters.tag>>]
       steps:
         - run:
             when: on_fail

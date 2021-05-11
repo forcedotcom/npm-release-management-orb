@@ -14,23 +14,23 @@ parameters:
   os:
     description: operating system to run tests on
     type: enum
-    enum: ['linux', 'windows']
-    default: 'linux'
+    enum: ["linux", "windows"]
+    default: "linux"
   sfdx_version:
     description: 'By default, the latest version of the standalone CLI will be installed. To install via npm, supply a version tag such as "latest" or "6".'
-    default: ''
+    default: ""
     type: string
   sfdx_executable_path:
     description: "Path to sfdx executable to be used by NUTs, defaults to ''"
-    default: ''
+    default: ""
     type: string
   npm_module_name:
     description: "The fully qualified npm module name, i.e. @salesforce/plugins-data, defaults to ''"
-    default: ''
+    default: ""
     type: string
   repo_tag:
     description: "The tag of the module repo to checkout, '' defaults to branch/PR"
-    default: ''
+    default: ""
     type: string
 
 executor:
@@ -50,7 +50,7 @@ steps:
   - when:
       condition:
         and:
-          - equal: ['windows', <<parameters.os>>]
+          - equal: ["windows", <<parameters.os>>]
           - <<parameters.repo_tag>>
       steps:
         - run:
@@ -64,7 +64,7 @@ steps:
   - when:
       condition:
         and:
-          - equal: ['linux', <<parameters.os>>]
+          - equal: ["linux", <<parameters.os>>]
           - <<parameters.repo_tag>>
       steps:
         - run:
@@ -72,7 +72,7 @@ steps:
             command: git checkout v<<parameters.repo_tag>> || git checkout <<parameters.npm_module_name>>@<<parameters.repo_tag>>
   - when:
       condition:
-        equal: ['windows', <<parameters.os>>]
+        equal: ["windows", <<parameters.os>>]
       steps:
         - run:
             name: Install dependencies
@@ -82,13 +82,13 @@ steps:
             command: yarn build
   - when:
       condition:
-        equal: ['linux', <<parameters.os>>]
+        equal: ["linux", <<parameters.os>>]
       steps:
         - restore_cache:
             keys:
-              - v3-npm-{{ .Branch }}-{{checksum "yarn.lock"}}
-              - v3-npm-{{ .Branch }}
-              - v3-npm
+              - v5-npm-{{ .Branch }}-{{checksum "yarn.lock"}}
+              - v5-npm-{{ .Branch }}
+              - v5-npm
         - run:
             name: Install dependencies
             command: yarn
@@ -96,21 +96,21 @@ steps:
             name: Build
             command: yarn build
         - save_cache:
-            key: v3-npm-{{ .Branch }}-{{checksum "yarn.lock"}}
+            key: v5-npm-{{ .Branch }}-{{checksum "yarn.lock"}}
             paths:
               - node_modules
               - ~/node_modules
               - ~/.cache/yarn
               - ~/.config/yarn
         - save_cache:
-            key: v3-npm-{{ .Branch }}
+            key: v5-npm-{{ .Branch }}
             paths:
               - node_modules
               - ~/node_modules
               - ~/.cache/yarn
               - ~/.config/yarn
         - save_cache:
-            key: v3-npm
+            key: v5-npm
             paths:
               - node_modules
               - ~/node_modules

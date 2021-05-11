@@ -51,7 +51,7 @@ parameters:
   node_version:
     description: version of node to use
     type: string
-    default: "12"
+    default: '12'
 
 executor: linux
 
@@ -103,7 +103,7 @@ steps:
   # - if environment looks like it is prepped to do change cases, and we're on "latest" tag
   - when:
       condition:
-        equal: ["latest", <<parameters.tag>>]
+        equal: ['latest', <<parameters.tag>>]
       steps:
         - install-change-case-mgmt
         - change-case-create
@@ -194,7 +194,7 @@ steps:
   # clean up the CTC cases
   - when:
       condition:
-        equal: ["latest", <<parameters.tag>>]
+        equal: ['latest', <<parameters.tag>>]
       steps:
         - run:
             when: on_fail

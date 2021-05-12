@@ -8,6 +8,4 @@ description: >
   Upload test coverage to codecov.io
 
 steps:
-  - run:
-      name: Run and Upload CodeCov
-      command: "echo Run and Upload CodeCov"
+  - run: echo "code coverage not implemented"

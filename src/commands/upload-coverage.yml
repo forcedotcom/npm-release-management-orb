@@ -8,5 +8,4 @@ description: >
   Upload test coverage to codecov.io
 
 steps:
-  - run: ./node_modules/.bin/nyc report --reporter text-lcov > coverage.lcov
-  - codecov/upload
+  - run: echo "code coverage not implemented"

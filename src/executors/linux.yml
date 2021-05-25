@@ -9,5 +9,17 @@
 description: >
   Linux os
 
+parameters:
+  size:
+    type: enum
+    description: |
+      The size of machine resource to use. Defaults to medium.
+    default: medium
+    enum:
+      - medium
+      - large
+      - xlarge
+      - 2xlarge
 machine: # executor type
   image: ubuntu-2004:202010-01 # # recommended linux image - includes Ubuntu 20.04, docker 19.03.13, docker-compose 1.27.4
+  resource_class: << parameters.size >>

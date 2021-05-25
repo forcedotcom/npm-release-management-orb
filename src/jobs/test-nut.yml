@@ -10,31 +10,42 @@ parameters:
   node_version:
     description: version of node to run tests against
     type: string
-    default: "latest"
+    default: 'latest'
   os:
     description: operating system to run tests on
     type: enum
-    enum: ["linux", "windows"]
-    default: "linux"
+    enum: ['linux', 'windows']
+    default: 'linux'
   sfdx_version:
     description: 'By default, the latest version of the standalone CLI will be installed. To install via npm, supply a version tag such as "latest" or "6".'
-    default: ""
+    default: ''
     type: string
   sfdx_executable_path:
     description: "Path to sfdx executable to be used by NUTs, defaults to ''"
-    default: ""
+    default: ''
     type: string
   npm_module_name:
     description: "The fully qualified npm module name, i.e. @salesforce/plugins-data, defaults to ''"
-    default: ""
+    default: ''
     type: string
   repo_tag:
     description: "The tag of the module repo to checkout, '' defaults to branch/PR"
-    default: ""
+    default: ''
     type: string
+  size:
+    type: enum
+    description: |
+      The size of machine resource to use. Defaults to medium.
+    default: medium
+    enum:
+      - medium
+      - large
+      - xlarge
+      - 2xlarge
 
 executor:
   name: << parameters.os >>
+  size: << parameters.size >>
 
 environment:
   TESTKIT_EXECUTABLE_PATH: <<parameters.sfdx_executable_path>>
@@ -50,7 +61,7 @@ steps:
   - when:
       condition:
         and:
-          - equal: ["windows", <<parameters.os>>]
+          - equal: ['windows', <<parameters.os>>]
           - <<parameters.repo_tag>>
       steps:
         - run:
@@ -64,7 +75,7 @@ steps:
   - when:
       condition:
         and:
-          - equal: ["linux", <<parameters.os>>]
+          - equal: ['linux', <<parameters.os>>]
           - <<parameters.repo_tag>>
       steps:
         - run:
@@ -72,7 +83,7 @@ steps:
             command: git checkout v<<parameters.repo_tag>> || git checkout <<parameters.npm_module_name>>@<<parameters.repo_tag>>
   - when:
       condition:
-        equal: ["windows", <<parameters.os>>]
+        equal: ['windows', <<parameters.os>>]
       steps:
         - run:
             name: Install dependencies
@@ -82,7 +93,7 @@ steps:
             command: yarn build
   - when:
       condition:
-        equal: ["linux", <<parameters.os>>]
+        equal: ['linux', <<parameters.os>>]
       steps:
         - restore_cache:
             keys:

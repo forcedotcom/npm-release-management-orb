@@ -1,0 +1,28 @@
+# Copyright (c) 2018, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+description: >
+  Merges one green, mergeable patch/minor dependabot PR
+
+parameters:
+  max-version-bump:
+    description: maximum allowed version bump.  You probably don't want to automate major version bumps!
+    type: enum
+    enum: ['patch', 'minor', 'major']
+    default: 'minor'
+
+executor:
+  name: linux
+
+steps:
+  - install-node:
+  - checkout
+  - install-sf-release
+  - run:
+      name: Install dependencies
+      command: yarn
+  - run:
+      name: Upgrade one dependency
+      command: sf-release dependabot:automerge --max-version-bump "<<max-version-bump>>"

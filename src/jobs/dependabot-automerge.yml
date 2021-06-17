@@ -17,7 +17,7 @@ executor:
   name: linux
 
 steps:
-  - install-node:
+  - install-node
   - checkout
   - install-sf-release
   - run:

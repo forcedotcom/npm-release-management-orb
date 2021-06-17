@@ -25,4 +25,4 @@ steps:
       command: yarn
   - run:
       name: Upgrade one dependency
-      command: sf-release dependabot:automerge --max-version-bump "<<max-version-bump>>"
+      command: sf-release dependabot:automerge --max-version-bump "<<parameters.max-version-bump>>"

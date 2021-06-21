@@ -209,8 +209,9 @@ steps:
   # clean up the CTC cases
   - when:
       condition:
-        - equal: [true, $NEEDS_RELEASE]
-        - equal: ['latest', <<parameters.tag>>]
+        and:
+          - equal: [true, $NEEDS_RELEASE]
+          - equal: ['latest', <<parameters.tag>>]
       steps:
         - run:
             when: on_fail

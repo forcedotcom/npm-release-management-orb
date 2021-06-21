@@ -109,8 +109,9 @@ steps:
   # - if environment looks like it is prepped to do change cases, and we're on "latest" tag
   - when:
       condition:
-        - equal: ['latest', <<parameters.tag>>]
-        - equal: [true, $NEEDS_RELEASE]
+        and:
+          - equal: ['latest', <<parameters.tag>>]
+          - equal: [true, $NEEDS_RELEASE]
       steps:
         - install-change-case-mgmt
         - change-case-create

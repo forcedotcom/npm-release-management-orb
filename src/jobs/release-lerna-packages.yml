@@ -77,10 +77,18 @@ steps:
         - ~/.cache/yarn
         - ~/.config/yarn
 
+  # - run npm:release:validate to see if a release is necessary - will set env var NEEDS_RELEASE
+  - when:
+      condition:
+        not: <<parameters.dryrun>>
+      steps:
+        check-if-releasable
   # - if environment looks like it is prepped to do change cases, and we're on "latest" tag
   - when:
       condition:
-        equal: ["latest", <<parameters.tag>>]
+        and:
+          - equal: ['latest', <<parameters.tag>>]
+          - equal: [true, $NEEDS_RELEASE]
       steps:
         - install-change-case-mgmt
         - change-case-create
@@ -97,6 +105,7 @@ steps:
   - when:
       condition:
         and:
+          - equal: [true, $NEEDS_RELEASE]
           - not: <<parameters.dryrun>>
           - not: <<parameters.github-release>>
           - <<parameters.sign>>
@@ -109,6 +118,7 @@ steps:
   - when:
       condition:
         and:
+          - equal: [true, $NEEDS_RELEASE]
           - not: <<parameters.dryrun>>
           - <<parameters.sign>>
           - <<parameters.github-release>>
@@ -121,6 +131,7 @@ steps:
   - when:
       condition:
         and:
+          - equal: [true, $NEEDS_RELEASE]
           - not: <<parameters.dryrun>>
           - not: <<parameters.sign>>
           - not: <<parameters.github-release>>
@@ -133,6 +144,7 @@ steps:
   - when:
       condition:
         and:
+          - equal: [true, $NEEDS_RELEASE]
           - not: <<parameters.dryrun>>
           - not: <<parameters.sign>>
           - <<parameters.github-release>>
@@ -144,13 +156,17 @@ steps:
   # when dryrun is false: run post-job-steps
   - when:
       condition:
-        not: <<parameters.dryrun>>
+        and:
+          - equal: [ true, $NEEDS_RELEASE ]
+          - not: <<parameters.dryrun>>
       steps: <<parameters.post-job-steps>>
 
   # clean up the CTC cases
   - when:
       condition:
-        equal: ["latest", <<parameters.tag>>]
+        and:
+          - equal: [ true, $NEEDS_RELEASE ]
+          - equal: ["latest", <<parameters.tag>>]
       steps:
         - run:
             when: on_fail

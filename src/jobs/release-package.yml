@@ -103,9 +103,9 @@ steps:
   # - run npm:release:validate to see if a release is necessary - will set env var NEEDS_RELEASE
   - when:
       condition:
-        - not: <<parameters.dryrun>>
+        not: <<parameters.dryrun>>
       steps:
-        - check-if-releasable
+        check-if-releasable
   # - if environment looks like it is prepped to do change cases, and we're on "latest" tag
   - when:
       condition:

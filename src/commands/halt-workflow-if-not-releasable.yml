@@ -10,7 +10,7 @@ description: >
 
 steps:
   - run:
-      name: Hale Workflow if not Releasable
+      name: Halt Workflow if not Releasable
       command: |
         NEEDS_RELEASE=$(sf-release npm:release:validate)
         if [ "${NEEDS_RELEASE}" == "false" ]; then

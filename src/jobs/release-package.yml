@@ -105,13 +105,11 @@ steps:
       condition:
         not: <<parameters.dryrun>>
       steps:
-        check-if-releasable
+        halt-workflow-if-not-releasable
   # - if environment looks like it is prepped to do change cases, and we're on "latest" tag
   - when:
       condition:
-        and:
-          - equal: ['latest', <<parameters.tag>>]
-          - equal: [true, $NEEDS_RELEASE]
+        equal: ['latest', <<parameters.tag>>]
       steps:
         - install-change-case-mgmt
         - change-case-create
@@ -142,7 +140,6 @@ steps:
   - when:
       condition:
         and:
-          - equal: [true, $NEEDS_RELEASE]
           - not: <<parameters.dryrun>>
           - not: <<parameters.prerelease>>
           - <<parameters.sign>>
@@ -154,7 +151,6 @@ steps:
   - when:
       condition:
         and:
-          - equal: [true, $NEEDS_RELEASE]
           - not: <<parameters.dryrun>>
           - <<parameters.prerelease>>
           - <<parameters.sign>>
@@ -167,7 +163,6 @@ steps:
   - when:
       condition:
         and:
-          - equal: [true, $NEEDS_RELEASE]
           - not: <<parameters.dryrun>>
           - not: <<parameters.sign>>
           - not: <<parameters.prerelease>>
@@ -179,7 +174,6 @@ steps:
   - when:
       condition:
         and:
-          - equal: [true, $NEEDS_RELEASE]
           - not: <<parameters.dryrun>>
           - not: <<parameters.sign>>
           - <<parameters.prerelease>>
@@ -192,7 +186,6 @@ steps:
   - when:
       condition:
         and:
-          - equal: [true, $NEEDS_RELEASE]
           - not: <<parameters.dryrun>>
           - <<parameters.github-release>>
       steps:
@@ -201,17 +194,13 @@ steps:
   # when dryrun is false: run post-job-steps
   - when:
       condition:
-        and:
-          - equal: [true, $NEEDS_RELEASE]
-          - not: <<parameters.dryrun>>
+        not: <<parameters.dryrun>>
       steps: <<parameters.post-job-steps>>
 
   # clean up the CTC cases
   - when:
       condition:
-        and:
-          - equal: [true, $NEEDS_RELEASE]
-          - equal: ['latest', <<parameters.tag>>]
+        equal: ['latest', <<parameters.tag>>]
       steps:
         - run:
             when: on_fail

@@ -82,13 +82,11 @@ steps:
       condition:
         not: <<parameters.dryrun>>
       steps:
-        check-if-releasable
+        halt-workflow-if-not-releasable
   # - if environment looks like it is prepped to do change cases, and we're on "latest" tag
   - when:
       condition:
-        and:
-          - equal: ['latest', <<parameters.tag>>]
-          - equal: [true, $NEEDS_RELEASE]
+        equal: ["latest", <<parameters.tag>>]
       steps:
         - install-change-case-mgmt
         - change-case-create
@@ -105,7 +103,6 @@ steps:
   - when:
       condition:
         and:
-          - equal: [true, $NEEDS_RELEASE]
           - not: <<parameters.dryrun>>
           - not: <<parameters.github-release>>
           - <<parameters.sign>>
@@ -118,7 +115,6 @@ steps:
   - when:
       condition:
         and:
-          - equal: [true, $NEEDS_RELEASE]
           - not: <<parameters.dryrun>>
           - <<parameters.sign>>
           - <<parameters.github-release>>
@@ -131,7 +127,6 @@ steps:
   - when:
       condition:
         and:
-          - equal: [true, $NEEDS_RELEASE]
           - not: <<parameters.dryrun>>
           - not: <<parameters.sign>>
           - not: <<parameters.github-release>>
@@ -144,7 +139,6 @@ steps:
   - when:
       condition:
         and:
-          - equal: [true, $NEEDS_RELEASE]
           - not: <<parameters.dryrun>>
           - not: <<parameters.sign>>
           - <<parameters.github-release>>

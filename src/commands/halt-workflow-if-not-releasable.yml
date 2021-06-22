@@ -10,8 +10,10 @@ description: >
 
 steps:
   - run:
-      name: Release validate
+      name: Hale Workflow if not Releasable
       command: |
         NEEDS_RELEASE=$(sf-release npm:release:validate)
-        echo "Release Needed:${NEEDS_RELEASE}"
-        echo 'export NEEDS_RELEASE="${NEEDS_RELEASE}"' >> $BASH_ENV
+        if [ "${NEEDS_RELEASE}" == "false" ]; then
+          echo "A Release is not necessary. Halting this workflow."
+          circleci-agent step halt
+        fi

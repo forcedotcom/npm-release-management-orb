@@ -12,6 +12,6 @@ steps:
   - run:
       name: Release validate
       command: |
-        NEEDS_RELEASE=$(sfdx npm:release:validate)
+        NEEDS_RELEASE=$(sf-release npm:release:validate)
         echo "Release Needed:${NEEDS_RELEASE}"
         echo 'export NEEDS_RELEASE="${NEEDS_RELEASE}"' >> $BASH_ENV

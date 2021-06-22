@@ -1,0 +1,54 @@
+# Copyright (c) 2018, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+description: >
+  Publishes npm package
+  The following environment variables are required:
+    - NPM_TOKEN (publishing token, NOT an automation token)
+
+parameters:
+  target:
+    description: the npm tag that you are promoting to
+    default: latest
+    type: string
+  candidate:
+    description: the npm tag that you want to promote
+    type: string
+  dryrun:
+    description: if true, the job will run but will not execute the promotion
+    default: false
+    type: boolean
+  node_version:
+    description: version of node to use
+    type: string
+    default: "14"
+
+executor: linux
+
+steps:
+  - install-node:
+      version: <<parameters.node_version>>
+      os: linux
+  - checkout
+  - install-sf-release
+
+  # when dryrun is true: promote with --dryrun flag
+  - when:
+      condition: <<parameters.dryrun>>
+      steps:
+        - run:
+            name: Promote Dryrun
+            command: |
+              sf-release npm:package:promote --dryrun --target "<<parameters.target>>" --candidate "<<parameters.candidate>>"
+
+  # when dryrun is false: promote the package
+  - when:
+      condition:
+        not: <<parameters.dryrun>>
+      steps:
+        - run:
+            name: Promote Dryrun
+            command: |
+              sf-release npm:package:promote --target "<<parameters.target>>" --candidate "<<parameters.candidate>>"

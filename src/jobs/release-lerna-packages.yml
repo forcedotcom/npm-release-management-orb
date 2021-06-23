@@ -77,7 +77,7 @@ steps:
         - ~/.cache/yarn
         - ~/.config/yarn
 
-  # - run npm:release:validate to see if a release is necessary - will set env var NEEDS_RELEASE
+  # - run npm:release:validate to see if a release is necessary - will halt workflow if not releasable
   - when:
       condition:
         not: <<parameters.dryrun>>

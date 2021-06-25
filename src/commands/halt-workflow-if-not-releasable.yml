@@ -1,0 +1,19 @@
+# Copyright (c) 2018, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+# How to author commands: https://circleci.com/docs/2.0/reusing-config/#authoring-reusable-commands
+description: >
+  Determine if a release is necessary. Runs sf-release npm:release:validate, which returns a true if a release is needed.
+  Command will halt the workflow if sf-release npm:release:validate return false.
+
+steps:
+  - run:
+      name: Halt Workflow if not Releasable
+      command: |
+        NEEDS_RELEASE=$(sf-release npm:release:validate)
+        if [ "${NEEDS_RELEASE}" == "false" ]; then
+          echo "A Release is not necessary. Halting this workflow."
+          circleci-agent step halt
+        fi

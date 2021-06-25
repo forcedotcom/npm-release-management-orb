@@ -77,6 +77,12 @@ steps:
         - ~/.cache/yarn
         - ~/.config/yarn
 
+  # - run npm:release:validate to see if a release is necessary - will halt workflow if not releasable
+  - when:
+      condition:
+        not: <<parameters.dryrun>>
+      steps:
+        halt-workflow-if-not-releasable
   # - if environment looks like it is prepped to do change cases, and we're on "latest" tag
   - when:
       condition:

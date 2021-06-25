@@ -150,17 +150,13 @@ steps:
   # when dryrun is false: run post-job-steps
   - when:
       condition:
-        and:
-          - equal: [ true, $NEEDS_RELEASE ]
-          - not: <<parameters.dryrun>>
+        not: <<parameters.dryrun>>
       steps: <<parameters.post-job-steps>>
 
   # clean up the CTC cases
   - when:
       condition:
-        and:
-          - equal: [ true, $NEEDS_RELEASE ]
-          - equal: ["latest", <<parameters.tag>>]
+        equal: ["latest", <<parameters.tag>>]
       steps:
         - run:
             when: on_fail

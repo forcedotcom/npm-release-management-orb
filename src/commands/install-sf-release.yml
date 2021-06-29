@@ -8,7 +8,7 @@ description: >
   Installs the latest version of the @salesforce/plugin-release-management
 parameters:
   version:
-    description: By default, the latest version of @salesforce/plugin-release-management (sf-release) will be installed
+    description: By default, the latest version of @salesforce/plugin-release-management (sf-release) will be installed.  You can supply an npm tag or version instead.  Alternatively, set the environment variable PLUGIN_RELEASE_MANAGEMENT_VERSION
     default: latest
     type: string
 
@@ -22,7 +22,7 @@ steps:
           echo "ignoring install request."
           exit 0
         else
-          npm install -g @salesforce/plugin-release-management@<<parameters.version>>
+          npm install -g @salesforce/plugin-release-management@$(${PLUGIN_RELEASE_MANAGEMENT_VERSION}:-<<parameters.version>>)
         fi
   - run:
       name: Verify @salesforce/plugin-release-management installation

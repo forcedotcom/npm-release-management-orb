@@ -22,7 +22,7 @@ steps:
           echo "ignoring install request."
           exit 0
         else
-          npm install -g @salesforce/plugin-release-management@$(${PLUGIN_RELEASE_MANAGEMENT_VERSION}:-<<parameters.version>>)
+          npm install -g @salesforce/plugin-release-management@${PLUGIN_RELEASE_MANAGEMENT_VERSION:-<<parameters.version>>}
         fi
   - run:
       name: Verify @salesforce/plugin-release-management installation

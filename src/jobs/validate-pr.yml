@@ -4,7 +4,7 @@
 # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 
 description: >
-  Validate that PR contains reference to work item id or a reference to a github issue. Job will be skipped if [skip-validate-pr] is found in the commit message or if the PR is from a fork
+  Validate that PR contains reference to work item id or a reference to a github issue. Job will be skipped if [skip-validate-pr] is found in the commit message
 
 executor: linux
 

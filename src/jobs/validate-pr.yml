@@ -10,25 +10,6 @@ executor: linux
 
 steps:
   - jq/install
-  - run:
-      name: Check if PR is a fork
-      command: |
-        PR_NUM="${CIRCLE_PR_NUMBER:-${CIRCLE_PULL_REQUEST##*/}}"
-        IS_FORK=$(curl "https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls/$PR_NUM" | jq .head.repo.fork)
-        if [ "$IS_FORK" == "true" ]; then
-          echo "PR #$PR_NUM is a fork. Skipping job..."
-          exit 0
-        else
-          echo "PR #$PR_NUM is NOT a fork. Continuing job..."
-        fi
-  - run:
-      name: Verify access token set in environment
-      command: |
-        TOKEN=${GH_TOKEN:=$GITHUB_TOKEN}
-        if [ -z "$TOKEN" ]; then
-            echo "neither GH_TOKEN nor GITHUB_TOKEN are set in the environment. Exiting job..."
-            exit 1
-        fi
   - checkout
   - run:
       name: Check for work item id or github issue
@@ -48,11 +29,25 @@ steps:
           exit 0
         fi
 
-        TOKEN=${GH_TOKEN:=$GITHUB_TOKEN}
-        HEADERS=$(printf 'Authorization: token %s' $GH_TOKEN)
+        REPO_HEADERS=$(printf "Accept: application/vnd.github.v3+json")
+        REPO_RESULT=$(curl -H "$REPO_HEADERS" "https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME")
+        IS_PRIVATE=$(echo $REPO_RESULT | jq .private)
+
+        if [ "$IS_PRIVATE" == "null" ] || [ "$IS_PRIVATE" == "true" ]; then
+          echo "$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME is private. Checking for github token in environment..."
+          TOKEN=${GH_TOKEN:=$GITHUB_TOKEN}
+          if [ -z "$TOKEN" ]; then
+            echo "neither GH_TOKEN nor GITHUB_TOKEN are set in the environment. Exiting job..."
+            exit 1
+          else
+            PR_HEADERS=$(printf "Authorization: token %s" $TOKEN)
+          fi
+        else
+          echo "$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME is public. No need to check for github token."
+        fi
 
         PR_NUM="${CIRCLE_PR_NUMBER:-${CIRCLE_PULL_REQUEST##*/}}"
-        RESULT=$(curl -H "$HEADERS" "https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls/$PR_NUM")
+        RESULT=$(curl -H "$PR_HEADERS" "https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls/$PR_NUM")
         BODY=$(echo $RESULT | jq '.body')
         TITLE=$(echo $RESULT | jq '.title')
         echo Title: $TITLE

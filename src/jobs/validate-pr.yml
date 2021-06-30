@@ -4,11 +4,23 @@
 # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 
 description: >
-  Validate that PR contains reference to work item id or a reference to a github issue. Job will be skipped if [skip-validate-pr] is found in the commit message
+  Validate that PR contains reference to work item id or a reference to a github issue. Job will be skipped if [skip-validate-pr] is found in the commit message or if the PR is from a fork
 
 executor: linux
 
 steps:
+  - jq/install
+  - run:
+      name: Check if PR is a fork
+      command: |
+        PR_NUM="${CIRCLE_PR_NUMBER:-${CIRCLE_PULL_REQUEST##*/}}"
+        IS_FORK=$(curl "https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls/$PR_NUM" | jq .head.repo.fork)
+        if [ "$IS_FORK" == "true" ]; then
+          echo "PR #$PR_NUM is a fork. Skipping job..."
+          exit 0
+        else
+          echo "PR #$PR_NUM is NOT a fork. Continuing job..."
+        fi
   - run:
       name: Verify access token set in environment
       command: |
@@ -17,7 +29,6 @@ steps:
             echo "neither GH_TOKEN nor GITHUB_TOKEN are set in the environment. Exiting job..."
             exit 1
         fi
-  - jq/install
   - checkout
   - run:
       name: Check for work item id or github issue

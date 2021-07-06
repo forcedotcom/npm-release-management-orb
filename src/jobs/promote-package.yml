@@ -49,6 +49,6 @@ steps:
         not: <<parameters.dryrun>>
       steps:
         - run:
-            name: Promote Dryrun
+            name: Promote
             command: |
               sf-release npm:package:promote --target "<<parameters.target>>" --candidate "<<parameters.candidate>>"

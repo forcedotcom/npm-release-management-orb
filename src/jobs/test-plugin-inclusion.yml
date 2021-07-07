@@ -1,0 +1,45 @@
+# Copyright (c) 2021, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+description: >
+  Test whether a plugin will successfully be packed into the CLI
+
+parameters:
+  node_version:
+    description: version of node to run tests against
+    type: string
+    default: latest
+  target_cli:
+    description: the cli this plugin will be included in
+    type: enum
+    enum: [sfdx, sf]
+    default: sfdx
+
+executor:
+  name: linux
+
+steps:
+  - install-node:
+      version: <<parameters.node_version>>
+      os: linux
+  - run:
+      name: Testing CLI Inclusion
+      command: |
+        if [[ "<<parameters.target_cli>>" == "sfdx" ]]; then
+          CLI_DIR=sfdx-cli
+        elif [[ "<<parameters.target_cli>>" == "sf" ]]; then
+          CLI_DIR=cli
+        else
+          echo "Unsupported target cli"
+          exit 1
+        fi
+
+        cd $HOME
+        git clone git@github.com:salesforcecli/$CLI_DIR.git
+        cd $CLI_DIR
+        yarn add ssh:$CIRCLE_REPOSITORY_URL#$CIRCLE_BRANCH
+        yarn run pack:tarballs -t linux-x64 --no-xz
+        yarn run pack:verify
+

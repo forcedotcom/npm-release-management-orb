@@ -28,17 +28,17 @@ steps:
       name: Testing CLI Inclusion
       command: |
         if [[ "<<parameters.target_cli>>" == "sfdx" ]]; then
-          CLI_DIR=sfdx-cli
+          CLI_REPO=sfdx-cli
         elif [[ "<<parameters.target_cli>>" == "sf" ]]; then
-          CLI_DIR=cli
+          CLI_REPO=cli
         else
           echo "Unsupported target cli"
           exit 1
         fi
 
         cd $HOME
-        git clone git@github.com:salesforcecli/$CLI_DIR.git
-        cd $CLI_DIR
+        git clone git@github.com:salesforcecli/$CLI_REPO.git
+        cd $CLI_REPO
         yarn add ssh:$CIRCLE_REPOSITORY_URL#$CIRCLE_BRANCH
         yarn run pack:tarballs -t linux-x64 --no-xz
         yarn run pack:verify

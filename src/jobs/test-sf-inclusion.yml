@@ -1,0 +1,39 @@
+# Copyright (c) 2021, salesforce.com, inc.
+# All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+description: >
+  Test whether sf can be packed into sfdx
+
+parameters:
+  node_version:
+    description: version of node to run tests against
+    type: string
+    default: latest
+  sfdx_branch:
+    description: sfdx branch to run tests against
+    type: string
+    default: main
+
+executor:
+  name: linux
+
+steps:
+  - install-node:
+      version: <<parameters.node_version>>
+      os: linux
+  - install-sf-release
+  - run:
+      name: Testing SF Inclusion
+      command: |
+        git clone --branch <<parameters.sfdx_branch>> --single-branch git@github.com:salesforcecli/sfdx-cli.git
+        git clone --branch $CIRCLE_BRANCH --single-branch git@github.com:salesforcecli/cli.git
+        cd cli
+
+        sf-release npm:dependencies:pin --tag latest
+
+        cd ../sfdx-cli
+        yarn add file:/home/circleci/project/cli --network-concurrency 1
+        yarn pack:tarballs -t linux-x64 --no-xz
+        yarn pack:verify

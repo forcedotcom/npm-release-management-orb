@@ -25,7 +25,7 @@ steps:
       version: <<parameters.node_version>>
       os: linux
   - run:
-      name: Testing CLI Inclusion
+      name: Testing Plugin Inclusion
       command: |
         if [[ "<<parameters.target_cli>>" == "sfdx" ]]; then
           CLI_REPO=sfdx-cli
@@ -36,10 +36,9 @@ steps:
           exit 1
         fi
 
-        cd $HOME
         git clone git@github.com:salesforcecli/$CLI_REPO.git
         cd $CLI_REPO
-        yarn add ssh:$CIRCLE_REPOSITORY_URL#$CIRCLE_BRANCH
-        yarn run pack:tarballs -t linux-x64 --no-xz
-        yarn run pack:verify
+        yarn add ssh:$CIRCLE_REPOSITORY_URL#$CIRCLE_BRANCH --network-concurrency 1
+        yarn pack:tarballs -t linux-x64 --no-xz
+        yarn pack:verify
 

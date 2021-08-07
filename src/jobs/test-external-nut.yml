@@ -62,7 +62,7 @@ steps:
   - install-sfdx:
       version: <<parameters.sfdx_version>>
       os: <<parameters.os>>
-  - run: git clone <<parameters.external_project_git_url>>
+  - run: git clone <<parameters.external_project_git_url>> $(pwd)
   # - when:
   #     condition:
   #       and:

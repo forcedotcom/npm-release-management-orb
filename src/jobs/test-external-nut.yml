@@ -92,6 +92,11 @@ steps:
   - run:
       name: swap dependencies
       command: yarn remove <<parameters.dependency_to_replace>> && yarn add $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME#$CIRCLE_SHA1
+  # install and build in the core module
+  - run:
+      name: install/build core
+      command: yarn install && yarn build
+      working_directory: node_modules/<<parameters.dependency_to_replace>>
   - run:
       name: Build
       command: yarn build

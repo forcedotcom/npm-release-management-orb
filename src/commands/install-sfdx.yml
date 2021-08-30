@@ -62,6 +62,7 @@ steps:
           name: Install SFDX - Standalone on linux
           command: |
             mkdir ~/sfdx
+            cd ~/sfdx
             wget https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable-rc/sfdx-linux-x64.tar.xz
             tar xJf sfdx-linux-x64.tar.xz -C ~/sfdx --strip-components 1
             export PATH=~/sfdx/bin:$PATH

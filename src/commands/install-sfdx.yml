@@ -59,14 +59,14 @@ steps:
           - not: <<parameters.version>>
       steps:
         run:
-          # currently there is not ./sfdx/install
           name: Install SFDX - Standalone on linux
           command: |
             cd /tmp
             wget https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable-rc/sfdx-linux-x64.tar.xz
             mkdir sfdx
             tar xJf sfdx-linux-x64.tar.xz -C sfdx --strip-components 1
-            ./sfdx/install
+            export PATH=~/sfdx/bin:$PATH
+            echo "export PATH=~/sfdx/bin:$PATH" >> $BASH_ENV
   - run:
       name: Verify SFDX installation
       command: sfdx --version

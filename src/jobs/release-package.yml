@@ -25,7 +25,7 @@ parameters:
     default: latest
     type: string
   sign:
-    description: signs the package using sfdx-trust if set to true
+    description: signs the package using sf-release if set to true
     default: false
     type: boolean
   dryrun:
@@ -67,7 +67,6 @@ steps:
         not: <<parameters.dryrun>>
       steps:
         halt-workflow-if-not-releasable
-  - install-sfdx-trust
   - install-standard-version
   - configure-github
   - restore_cache:
@@ -144,6 +143,7 @@ steps:
           - not: <<parameters.prerelease>>
           - <<parameters.sign>>
       steps:
+        - install-sfdx
         - run:
             name: Sign and Release
             command: sf-release npm:package:release --sign --no-install --npmtag "<<parameters.tag>>"
@@ -155,6 +155,7 @@ steps:
           - <<parameters.prerelease>>
           - <<parameters.sign>>
       steps:
+        - install-sfdx
         - run:
             name: Sign and Release
             command: sf-release npm:package:release --sign --no-install --npmtag "<<parameters.tag>>" --prerelease $CIRCLE_BRANCH

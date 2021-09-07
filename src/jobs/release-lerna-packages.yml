@@ -47,7 +47,6 @@ steps:
         not: <<parameters.dryrun>>
       steps:
         halt-workflow-if-not-releasable
-  - install-sfdx-trust
   - install-standard-version
   - configure-github
   - restore_cache:

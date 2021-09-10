@@ -143,7 +143,6 @@ steps:
           - not: <<parameters.prerelease>>
           - <<parameters.sign>>
       steps:
-        - install-sfdx
         - run:
             name: Sign and Release
             command: sf-release npm:package:release --sign --no-install --npmtag "<<parameters.tag>>"
@@ -155,7 +154,6 @@ steps:
           - <<parameters.prerelease>>
           - <<parameters.sign>>
       steps:
-        - install-sfdx
         - run:
             name: Sign and Release
             command: sf-release npm:package:release --sign --no-install --npmtag "<<parameters.tag>>" --prerelease $CIRCLE_BRANCH

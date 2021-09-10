@@ -35,6 +35,8 @@ steps:
         yarn install
         yarn compile
 
+        rm -fr node_modules
+
         cd ../sfdx-cli
         yarn add file:/home/circleci/project/cli --network-concurrency 1
         yarn pack:tarballs -t linux-x64 --no-xz

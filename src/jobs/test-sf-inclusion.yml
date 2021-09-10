@@ -32,6 +32,7 @@ steps:
         cd cli
 
         sf-release npm:dependencies:pin --tag latest
+        yarn install
         yarn compile
 
         cd ../sfdx-cli

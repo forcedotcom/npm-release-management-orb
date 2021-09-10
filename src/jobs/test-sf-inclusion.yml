@@ -32,7 +32,10 @@ steps:
         cd cli
 
         sf-release npm:dependencies:pin --tag latest
+        yarn install
         yarn compile
+
+        rm -fr node_modules
 
         cd ../sfdx-cli
         yarn add file:/home/circleci/project/cli --network-concurrency 1

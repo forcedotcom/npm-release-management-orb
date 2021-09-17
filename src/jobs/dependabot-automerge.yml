@@ -12,6 +12,10 @@ parameters:
     type: enum
     enum: ['patch', 'minor', 'major']
     default: 'minor'
+  skip-ci:
+    description: Optionally skip ci builds on merges into main
+    type: boolean
+    default: false
 
 executor:
   name: linux
@@ -23,6 +27,18 @@ steps:
   - run:
       name: Install dependencies
       command: yarn
-  - run:
-      name: Upgrade one dependency
-      command: sf-release dependabot:automerge --max-version-bump "<<parameters.max-version-bump>>"
+
+  - when:
+      condition: <<parameters.skip-ci>>
+      steps:
+        - run:
+            name: Upgrade one dependency
+            command: sf-release dependabot:automerge --max-version-bump "<<parameters.max-version-bump>>" --skip-ci
+
+  - when:
+      condition:
+        not: <<parameters.skip-ci>>
+      steps:
+        - run:
+            name: Upgrade one dependency
+            command: sf-release dependabot:automerge --max-version-bump "<<parameters.max-version-bump>>"

@@ -59,11 +59,27 @@ steps:
         - run:
             name: Install and use node version
             command: |
-              # if("<<parameters.version>>" -eq "latest") {
-              #   choco install nodejs
-              # } else {
-              #   $r = Invoke-WebRequest https://nodejs.org/download/release/index.json | ConvertFrom-Json
-              #   $latest_of_version = ($r | where { $_.version -like "v<<parameters.version>>*" })[0].version.substring(1)
-              #   choco install nodejs --version $latest_of_version --allow-downgrade
-              # }
+              $nodeIndex = "https://nodejs.org/download/release/index.json"
+
+              if ("<<parameters.version>>" -eq "latest") {
+                choco install nodejs
+              } elseif ("<<parameters.version>>" -eq "lts") {
+                $registry =  (Invoke-WebRequest $nodeIndex).content
+                $lts = $registry |
+                    jq -c -r 'first(.[] | select(.lts != false)).version | ltrimstr(\"v\")'
+
+                choco install nodejs --version $lts --allow-downgrade
+              } elseif ("<<parameters.version>>" -eq "maintenance") {
+                $registry =  (Invoke-WebRequest $nodeIndex).content
+
+                $active = $registry | jq -c -r 'first(.[] | select(.lts != false)).lts'
+                $maintenance = $registry |
+                    jq -c -r --arg active $active `
+                    'first(.[] | select(.lts != $active and .lts != false)).version | ltrimstr(\"v\")'
+
+                choco install nodejs --version $maintenance --allow-downgrade
+              } else {
+                choco install nodejs --version "<<parameters.version>>" --alow-downgrade
+              }
+
               echo "Using node: $(node --version)"

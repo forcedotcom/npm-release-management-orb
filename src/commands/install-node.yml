@@ -60,26 +60,35 @@ steps:
             name: Install and use node version
             command: |
               $nodeIndex = "https://nodejs.org/download/release/index.json"
+              $registry = (Invoke-WebRequest $nodeIndex).content
 
               if ("<<parameters.version>>" -eq "latest") {
-                choco install nodejs
+                $latest = $registry | jq -c -r '.[0].version | ltrimstr(\"v\")'
+
+                nvm install $latest
+                nvm use $latest
               } elseif ("<<parameters.version>>" -eq "lts") {
-                $registry =  (Invoke-WebRequest $nodeIndex).content
                 $lts = $registry |
                     jq -c -r 'first(.[] | select(.lts != false)).version | ltrimstr(\"v\")'
 
-                choco install nodejs --version $lts --allow-downgrade
+                nvm install $lts
+                nvm use $lts
               } elseif ("<<parameters.version>>" -eq "maintenance") {
-                $registry =  (Invoke-WebRequest $nodeIndex).content
-
                 $active = $registry | jq -c -r 'first(.[] | select(.lts != false)).lts'
                 $maintenance = $registry |
                     jq -c -r --arg active $active `
                     'first(.[] | select(.lts != $active and .lts != false)).version | ltrimstr(\"v\")'
 
-                choco install nodejs --version $maintenance --allow-downgrade
+                nvm install $maintenance
+                nvm use $maintenance
               } else {
-                choco install nodejs --version "<<parameters.version>>" --alow-downgrade
+                nvm install "<<parameters.version>>"
+                nvm use "<<parameters.version>>"
               }
 
+              Start-Sleep -Seconds 1
+
               echo "Using node: $(node --version)"
+        - run:
+            name: Install Yarn (Windows only)
+            command: npm install --global yarn

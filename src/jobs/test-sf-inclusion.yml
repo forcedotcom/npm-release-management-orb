@@ -27,10 +27,13 @@ steps:
   - run:
       name: Testing SF Inclusion
       command: |
+        set -x
+
         git clone --branch <<parameters.sfdx_branch>> --single-branch git@github.com:salesforcecli/sfdx-cli.git
         git clone --branch $CIRCLE_BRANCH --single-branch git@github.com:salesforcecli/cli.git
-        cd cli
 
+        cd cli
+        echo 'Pinning sf dependencies'
         sf-release npm:dependencies:pin --tag latest
         yarn install
         yarn compile
@@ -38,6 +41,8 @@ steps:
         rm -fr node_modules
 
         cd ../sfdx-cli
-        yarn add file:/home/circleci/project/cli --network-concurrency 1
+        # yarn add file:/home/circleci/project/cli --network-concurrency 1
+        echo 'Packing tarballs for sfdx'
         yarn pack:tarballs -t linux-x64 --no-xz
+        echo 'Verifying tarballs for sfdx'
         yarn pack:verify

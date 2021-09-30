@@ -41,7 +41,7 @@ steps:
         rm -fr node_modules
 
         cd ../sfdx-cli
-        # yarn add file:/home/circleci/project/cli --network-concurrency 1
+        yarn add file:/home/circleci/project/cli --network-concurrency 1
         echo 'Packing tarballs for sfdx'
         yarn pack:tarballs -t linux-x64 --no-xz
         echo 'Verifying tarballs for sfdx'

@@ -3,12 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="29b4078a-0f5f-47d6-a2aa-073fa5f9cf0a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/examples/test-and-release-package-all-branches.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/examples/test-and-release-package-all-branches.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/examples/test-and-release-package-beta-version.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/examples/test-and-release-package-beta-version.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/examples/test-and-release-package-with-merge.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/examples/test-and-release-package-with-merge.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/examples/test-and-release-package.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/examples/test-and-release-package.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/examples/test-and-release-signed-plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/examples/test-and-release-signed-plugin.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jobs/test-nut.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/jobs/test-nut.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jobs/release-lerna-packages.yml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,6 +12,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProjectId" id="1kWZZcMs4IDHTUphaNZeu5VCok9" />
   <component name="ProjectViewState">
@@ -48,6 +51,7 @@
       <workItem from="1607636290018" duration="19102000" />
       <workItem from="1607979373432" duration="5134000" />
       <workItem from="1610574841279" duration="2852000" />
+      <workItem from="1633120573408" duration="1231000" />
     </task>
     <servers />
   </component>

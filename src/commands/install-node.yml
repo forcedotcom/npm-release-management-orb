@@ -86,7 +86,7 @@ steps:
                 nvm use "<<parameters.version>>"
               }
 
-              Start-Sleep -Seconds 1
+              Start-Sleep -Seconds 2
 
               echo "Using node: $(node --version)"
         - run:

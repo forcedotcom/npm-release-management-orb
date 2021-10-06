@@ -59,11 +59,36 @@ steps:
         - run:
             name: Install and use node version
             command: |
-              # if("<<parameters.version>>" -eq "latest") {
-              #   choco install nodejs
-              # } else {
-              #   $r = Invoke-WebRequest https://nodejs.org/download/release/index.json | ConvertFrom-Json
-              #   $latest_of_version = ($r | where { $_.version -like "v<<parameters.version>>*" })[0].version.substring(1)
-              #   choco install nodejs --version $latest_of_version --allow-downgrade
-              # }
+              $nodeIndex = "https://nodejs.org/download/release/index.json"
+              $registry = (Invoke-WebRequest $nodeIndex).content
+
+              if ("<<parameters.version>>" -eq "latest") {
+                $latest = $registry | jq -c -r '.[0].version | ltrimstr(\"v\")'
+
+                nvm install $latest
+                nvm use $latest
+              } elseif ("<<parameters.version>>" -eq "lts") {
+                $lts = $registry |
+                    jq -c -r 'first(.[] | select(.lts != false)).version | ltrimstr(\"v\")'
+
+                nvm install $lts
+                nvm use $lts
+              } elseif ("<<parameters.version>>" -eq "maintenance") {
+                $active = $registry | jq -c -r 'first(.[] | select(.lts != false)).lts'
+                $maintenance = $registry |
+                    jq -c -r --arg active $active `
+                    'first(.[] | select(.lts != $active and .lts != false)).version | ltrimstr(\"v\")'
+
+                nvm install $maintenance
+                nvm use $maintenance
+              } else {
+                nvm install "<<parameters.version>>"
+                nvm use "<<parameters.version>>"
+              }
+
+              Start-Sleep -Seconds 2
+
               echo "Using node: $(node --version)"
+        - run:
+            name: Install Yarn (Windows only)
+            command: npm install --global yarn

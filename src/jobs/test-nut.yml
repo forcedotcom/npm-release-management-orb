@@ -42,6 +42,10 @@ parameters:
       - large
       - xlarge
       - 2xlarge
+  command:
+    description: 'Custom command that runs NUTs.  By default, yarn test:nuts'
+    default: 'yarn test:nuts'
+    type: string
 
 executor:
   name: << parameters.os >>
@@ -142,7 +146,7 @@ steps:
         echo "Using node: $(node --version)"
         echo "Environment Variables:"
         env
-        yarn test:nuts
+        << parameters.command >>
       # this is in the command instead of the circle project environment to prevent it from happening on windows
   - store_artifacts:
       path: artifacts

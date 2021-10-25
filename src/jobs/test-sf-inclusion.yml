@@ -15,6 +15,10 @@ parameters:
     description: sfdx branch to run tests against
     type: string
     default: main
+  tag:
+    description: tag used to pin dependencies
+    default: latest
+    type: string
 
 executor:
   name: linux
@@ -31,7 +35,7 @@ steps:
         git clone --branch $CIRCLE_BRANCH --single-branch git@github.com:salesforcecli/cli.git
         cd cli
 
-        sf-release npm:dependencies:pin --tag latest
+        sf-release npm:dependencies:pin --tag <<parameters.tag>>
         yarn install
         yarn compile
 

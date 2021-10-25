@@ -16,10 +16,6 @@ parameters:
     type: enum
     enum: [sfdx, sf]
     default: sfdx
-  tag:
-    description: tag used to pin dependencies
-    default: latest
-    type: string
 
 executor:
   name: linux
@@ -29,7 +25,7 @@ steps:
       version: <<parameters.node_version>>
       os: linux
   - run:
-      name: Prepare for Testing Plugin Inclusion
+      name: Testing Plugin Inclusion
       command: |
         if [[ "<<parameters.target_cli>>" == "sfdx" ]]; then
           CLI_REPO=sfdx-cli
@@ -42,11 +38,7 @@ steps:
 
         git clone git@github.com:salesforcecli/$CLI_REPO.git
         cd $CLI_REPO
-  - pin-dependencies:
-      tag: <parameters.tag>
-  - run:
-      name: Testing Plugin Inclusion
-      command: |
         yarn add ssh:$CIRCLE_REPOSITORY_URL#$CIRCLE_BRANCH --network-concurrency 1
         yarn pack:tarballs -t linux-x64 --no-xz
         yarn pack:verify
+

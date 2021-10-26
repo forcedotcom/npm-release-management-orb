@@ -48,6 +48,10 @@ parameters:
     description: if true, it will use the version <version>-<branch>.0
     type: boolean
     default: false
+  no-verify:
+    description: if true, it will not verify that the package was signed.
+    type: boolean
+    default: false
   node_version:
     description: version of node to use
     type: string
@@ -141,22 +145,50 @@ steps:
         and:
           - not: <<parameters.dryrun>>
           - not: <<parameters.prerelease>>
+          - not: <<parameters.no-verify>>
           - <<parameters.sign>>
       steps:
         - run:
             name: Sign and Release
             command: sf-release npm:package:release --sign --no-install --npmtag "<<parameters.tag>>"
+  # when dryrun is false, sign is true, and no-verify is true: sign and publish package without verifying signature
+  - when:
+      condition:
+        and:
+          - not: <<parameters.dryrun>>
+          - not: <<parameters.prerelease>>
+          - <<parameters.sign>>
+          - <<parameters.no-verify>>
+      steps:
+        - run:
+            name: Sign and Release (no verify)
+            command: sf-release npm:package:release --sign --no-install --npmtag "<<parameters.tag>>" --no-verify
+
   # when dryrun is false and sign is true and prerelease is true: sign and publish prerelease package
   - when:
       condition:
         and:
           - not: <<parameters.dryrun>>
+          - not: <<parameters.no-verify>>
           - <<parameters.prerelease>>
           - <<parameters.sign>>
       steps:
         - run:
             name: Sign and Release
             command: sf-release npm:package:release --sign --no-install --npmtag "<<parameters.tag>>" --prerelease $CIRCLE_BRANCH
+
+  # when dryrun is false, sign is true, prerelease is true, and no-verify is true: sign and publish prerelease package without verifying signature
+  - when:
+      condition:
+        and:
+          - not: <<parameters.dryrun>>
+          - <<parameters.prerelease>>
+          - <<parameters.sign>>
+          - <<parameters.no-verify>>
+      steps:
+        - run:
+            name: Sign and Release (no verify)
+            command: sf-release npm:package:release --sign --no-install --npmtag "<<parameters.tag>>" --prerelease $CIRCLE_BRANCH --no-verify
 
   # when dryrun is false and sign is false: publish package
   - when:

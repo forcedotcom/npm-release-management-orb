@@ -9,10 +9,11 @@ description: >
   Command will halt the workflow if sf-release npm:release:validate return false.
 
 steps:
+  - jq/install
   - run:
       name: Halt Workflow if not Releasable
       command: |
-        NEEDS_RELEASE=$(sf-release npm:release:validate)
+        NEEDS_RELEASE=$(sf-release npm:release:validate --verbose --json | jq .result.shouldRelease)
         if [ "${NEEDS_RELEASE}" == "false" ]; then
           echo "A Release is not necessary. Halting this workflow."
           circleci-agent step halt

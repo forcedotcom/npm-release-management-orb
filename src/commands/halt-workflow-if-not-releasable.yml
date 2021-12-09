@@ -13,7 +13,7 @@ steps:
   - run:
       name: Halt Workflow if not Releasable
       command: |
-        RESULT=$(~/repos/salesforcecli/plugin-release-management/bin/run npm:release:validate --json)
+        RESULT=$(sf-release npm:release:validate --json)
         echo $RESULT | jq .
 
         STATUS=$(echo $RESULT | jq .status)

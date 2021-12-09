@@ -13,8 +13,17 @@ steps:
   - run:
       name: Halt Workflow if not Releasable
       command: |
-        NEEDS_RELEASE=$(sf-release npm:release:validate --verbose --json | jq .result.shouldRelease)
-        if [ "${NEEDS_RELEASE}" == "false" ]; then
+        RESULT=$(~/repos/salesforcecli/plugin-release-management/bin/run npm:release:validate --json)
+        echo $RESULT | jq .
+
+        STATUS=$(echo $RESULT | jq .status)
+        NEEDS_RELEASE=$(echo $RESULT | jq .result.shouldRelease)
+        if [ "${STATUS}" == "1" ]; then
+          echo "Major version bump detected. Exiting this workflow."
+          exit 1
+        elif [ "${NEEDS_RELEASE}" == "false" ]; then
           echo "A Release is not necessary. Halting this workflow."
           circleci-agent step halt
+        else
+          echo "A Release is necessary."
         fi

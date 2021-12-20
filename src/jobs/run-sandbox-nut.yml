@@ -1,0 +1,43 @@
+description: >
+  Determines whether or not the string '[sb-nut]' is in the commit history to run sandbox NUTs
+
+executor: linux
+
+steps:
+  - jq/install
+  - checkout
+  - run:
+      name: Determine Sandbox NUTs
+      command: |
+        REPO_HEADERS=$(printf "Accept: application/vnd.github.v3+json")
+        REPO_RESULT=$(curl -H "$REPO_HEADERS" "https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME")
+        IS_PRIVATE=$(echo $REPO_RESULT | jq .private)
+
+        if [ "$IS_PRIVATE" == "null" ] || [ "$IS_PRIVATE" == "true" ]; then
+          echo "$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME is private. Checking for github token in environment..."
+          TOKEN=${GH_TOKEN:=$GITHUB_TOKEN}
+          if [ -z "$TOKEN" ]; then
+            echo "neither GH_TOKEN nor GITHUB_TOKEN are set in the environment. Exiting job..."
+            exit 1
+          else
+            PR_HEADERS=$(printf "Authorization: token %s" $TOKEN)
+          fi
+        else
+          echo "$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME is public. No need to check for github token."
+        fi
+
+        PR_NUM="${CIRCLE_PR_NUMBER:-${CIRCLE_PULL_REQUEST##*/}}"
+        RESULT=$(curl -H "$PR_HEADERS" "https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls/$PR_NUM")
+        BODY=$(echo $RESULT | jq '.body')
+        TITLE=$(echo $RESULT | jq '.title')
+        echo Title: $TITLE
+        echo Body: $BODY
+
+        GITMESSAGES=$(git log --pretty=format:"%s" -n 1 $CIRCLE_SHA1)
+        MESSAGE=$(echo $TITLE $BODY $GITMESSAGES)
+        SB_TAG='[sb-nut]'
+        if [[ "$MESSAGE" == *"SB_TAG"* ]]; then
+            yarn test:nuts:sandbox
+        else
+            echo "Sandbox NUTs not run"
+        fi

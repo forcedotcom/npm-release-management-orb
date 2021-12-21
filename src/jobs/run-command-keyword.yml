@@ -1,0 +1,62 @@
+description: >
+  Determines whether or not the string $git_key_word is in the latest commit, body, or title of the PR to run the specified command
+
+executor: linux
+
+parameters:
+  timeout:
+    description: timeout of the CircleCI job
+    type: string
+    default: 10m
+  git_key_word:
+    description: key word to start job from
+    type: string
+  command:
+    description: command to run when git_key_word is present
+    type: string
+
+steps:
+  - checkout
+  - run:
+      name: Determine Sandbox NUTs
+      no_output_timeout: <<parameters.timeout>>
+      command: |
+        REPO_HEADERS=$(printf "Accept: application/vnd.github.v3+json")
+        REPO_RESULT=$(curl -H "$REPO_HEADERS" "https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME")
+        IS_PRIVATE=$(echo $REPO_RESULT | jq .private)
+
+        if [ "$IS_PRIVATE" == "null" ] || [ "$IS_PRIVATE" == "true" ]; then
+          echo "$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME is private. Checking for github token in environment..."
+          TOKEN=${GH_TOKEN:=$GITHUB_TOKEN}
+          if [ -z "$TOKEN" ]; then
+            echo "neither GH_TOKEN nor GITHUB_TOKEN are set in the environment. Exiting job..."
+            exit 1
+          else
+            PR_HEADERS=$(printf "Authorization: token %s" $TOKEN)
+          fi
+        else
+          echo "$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME is public. No need to check for github token."
+        fi
+
+        PR_NUM="${CIRCLE_PR_NUMBER:-${CIRCLE_PULL_REQUEST##*/}}"
+        RESULT=$(curl -H "$PR_HEADERS" "https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls/$PR_NUM")
+        BODY=$(echo $RESULT | jq '.body')
+        TITLE=$(echo $RESULT | jq '.title')
+        GITMESSAGES=$(git log --pretty=format:"%s" -n 1 $CIRCLE_SHA1)
+        MESSAGE=$(echo $TITLE $BODY $GITMESSAGES)
+
+        echo Message: $MESSAGE
+
+        GIT_KEY_WORD='<<parameters.git_key_word>>'
+        echo tag: $GIT_KEY_WORD
+        if [[ "$MESSAGE" == *"$GIT_KEY_WORD"* ]]; then
+            npm install sfdx-cli --global
+            sfdx -v
+            yarn
+            yarn build
+            echo "Environment Variables:"
+            env
+            yarn <<parameters.command>>
+        else
+            echo "keyword not found, "
+        fi

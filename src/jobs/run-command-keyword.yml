@@ -1,13 +1,25 @@
 description: >
-  Determines whether or not the string '[sb-nut]' is in the commit history to run sandbox NUTs
+  Determines whether or not the string $git_key_word is in the latest commit, body, or title of the PR to run the specified command
 
 executor: linux
+
+parameters:
+  timeout:
+    description: timeout of the CircleCI job
+    type: string
+    default: 10m
+  git_key_word:
+    description: key word to start job from
+    type: string
+  command:
+    description: command to run when git_key_word is present
+    type: string
 
 steps:
   - checkout
   - run:
       name: Determine Sandbox NUTs
-      no_output_timeout: 1.5h
+      no_output_timeout: <<parameters.timeout>>
       command: |
         REPO_HEADERS=$(printf "Accept: application/vnd.github.v3+json")
         REPO_RESULT=$(curl -H "$REPO_HEADERS" "https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME")
@@ -35,15 +47,16 @@ steps:
 
         echo Message: $MESSAGE
 
-        SB_TAG='[sb-nut]'
-        if [[ "$MESSAGE" == *"$SB_TAG"* ]]; then
+        GIT_KEY_WORD='<<parameters.get_key_word>>'
+        echo tag: $GIT_KEY_WORD
+        if [[ "$MESSAGE" == *"$GIT_KEY_WORD"* ]]; then
             npm install sfdx-cli --global
             sfdx -v
             yarn
             yarn build
             echo "Environment Variables:"
             env
-            yarn test:nuts:sandbox
+            yarn <<parameter.command>>
         else
-            echo "Sandbox NUTs not run"
+            echo "keyword not found, "
         fi

@@ -4,7 +4,6 @@ description: >
 executor: linux
 
 steps:
-  - jq/install
   - checkout
   - run:
       name: Determine Sandbox NUTs
@@ -30,9 +29,6 @@ steps:
         RESULT=$(curl -H "$PR_HEADERS" "https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls/$PR_NUM")
         BODY=$(echo $RESULT | jq '.body')
         TITLE=$(echo $RESULT | jq '.title')
-        echo Title: $TITLE
-        echo Body: $BODY
-
         GITMESSAGES=$(git log --pretty=format:"%s" -n 1 $CIRCLE_SHA1)
         MESSAGE=$(echo $TITLE $BODY $GITMESSAGES)
 
@@ -40,6 +36,10 @@ steps:
 
         SB_TAG='[sb-nut]'
         if [[ "$MESSAGE" == *"$SB_TAG"* ]]; then
+            yarn
+            yarn build
+            echo "Environment Variables:"
+            env
             yarn test:nuts:sandbox
         else
             echo "Sandbox NUTs not run"

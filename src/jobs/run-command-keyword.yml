@@ -56,7 +56,7 @@ steps:
             yarn build
             echo "Environment Variables:"
             env
-            yarn <<parameter.command>>
+            yarn <<parameters.command>>
         else
             echo "keyword not found, "
         fi

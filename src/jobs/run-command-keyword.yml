@@ -47,7 +47,7 @@ steps:
 
         echo Message: $MESSAGE
 
-        GIT_KEY_WORD='<<parameters.get_key_word>>'
+        GIT_KEY_WORD='<<parameters.git_key_word>>'
         echo tag: $GIT_KEY_WORD
         if [[ "$MESSAGE" == *"$GIT_KEY_WORD"* ]]; then
             npm install sfdx-cli --global

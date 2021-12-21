@@ -3,6 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="29b4078a-0f5f-47d6-a2aa-073fa5f9cf0a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/examples/test-and-release-package-all-branches.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/examples/test-and-release-package-all-branches.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/examples/test-and-release-package-beta-version.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/examples/test-and-release-package-beta-version.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/examples/test-and-release-package-with-merge.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/examples/test-and-release-package-with-merge.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/examples/test-and-release-package.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/examples/test-and-release-package.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/examples/test-and-release-signed-plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/examples/test-and-release-signed-plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jobs/test-nut.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/jobs/test-nut.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

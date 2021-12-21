@@ -36,6 +36,8 @@ steps:
 
         SB_TAG='[sb-nut]'
         if [[ "$MESSAGE" == *"$SB_TAG"* ]]; then
+            npm install sfdx-cli --global
+            sfdx -v
             yarn
             yarn build
             echo "Environment Variables:"

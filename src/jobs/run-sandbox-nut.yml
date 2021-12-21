@@ -35,8 +35,11 @@ steps:
 
         GITMESSAGES=$(git log --pretty=format:"%s" -n 1 $CIRCLE_SHA1)
         MESSAGE=$(echo $TITLE $BODY $GITMESSAGES)
+
+        echo Message: $MESSAGE
+
         SB_TAG='[sb-nut]'
-        if [[ "$MESSAGE" == *"SB_TAG"* ]]; then
+        if [[ "$MESSAGE" == *"$SB_TAG"* ]]; then
             yarn test:nuts:sandbox
         else
             echo "Sandbox NUTs not run"

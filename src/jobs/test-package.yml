@@ -20,6 +20,10 @@ parameters:
     type: enum
     enum: ["linux", "windows"]
     default: "linux"
+  command:
+    description: command that will execute tests
+    type: string
+    default: "yarn test"
 
 executor:
   name: << parameters.os >>
@@ -80,7 +84,7 @@ steps:
       name: Testing
       command: |
         echo "Using node: $(node --version)"
-        yarn test
+        <<parameters.command>>
   - when:
       condition:
         and:

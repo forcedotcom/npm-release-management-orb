@@ -16,10 +16,11 @@ parameters:
     description: Optionally skip ci builds on merges into main
     type: boolean
     default: false
-  squash:
-    description: squash the commits into one commit and merge it into the base branch
-    type: boolean
-    default: false
+  merge-method:
+    description: merge method to use
+    type: enum
+    enum: ['merge', 'squash', 'rebase']
+    default: 'merge' 
 
 executor:
   name: linux
@@ -37,7 +38,10 @@ steps:
       steps:
         - run:
             name: Upgrade one dependency
-            command: sf-release dependabot:automerge --max-version-bump "<<parameters.max-version-bump>>" --skip-ci
+            command: |
+              sf-release dependabot:automerge --skip-ci \
+              --max-version-bump "<<parameters.max-version-bump>>" \
+              --merge-method "<<parameters.merge-method>>"
 
   - when:
       condition:
@@ -45,21 +49,8 @@ steps:
       steps:
         - run:
             name: Upgrade one dependency
-            command: sf-release dependabot:automerge --max-version-bump "<<parameters.max-version-bump>>"
+            command: |
+              sf-release dependabot:automerge \
+              --max-version-bump "<<parameters.max-version-bump>>" \
+              --merge-method "<<parameters.merge-method>>"
 
-  - when:
-      condition: <<parameters.squash>>
-      steps:
-        - run:
-            name: Upgrade one dependency
-            command: sf-release dependabot:automerge --max-version-bump "<<parameters.max-version-bump>>" --squash
-
-  - when:
-      condition:
-        and:
-          - <<parameters.skip-ci>>
-          - <<parameters.squash>>
-      steps:
-        - run:
-            name: Upgrade one dependency
-            command: sf-release dependabot:automerge --max-version-bump "<<parameters.max-version-bump>>" --skip-ci --squash

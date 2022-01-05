@@ -40,18 +40,15 @@ This orb is designed to make releasing npm packages straightforward and with as 
 
 Version bumps and changelogs are generated based on [conventional commit messages](https://www.conventionalcommits.org/en/v1.0.0/) (We use the [standard-version](https://github.com/conventional-changelog/standard-version) library to do this).
 
-Your plugin will enforce this style of commit messages if you created your plugin using the [plugin-template](https://github.com/salesforcecli/plugin-template/). If you did not using plugin-template, you will need to add the following to your `package.json`
+Your plugin will enforce this style of commit messages if you created your plugin using the [plugin-template](https://github.com/salesforcecli/plugin-template-sf/). If you did not using plugin-template, you will need to add the following to your `package.json`
 
 ```json
 "devDependencies": {
- "@salesforce/dev-scripts": "^0.6.1",
-}
-"husky": {
- "hooks": {
-   "commit-msg": "yarn sf-husky-commit-msg"
- }
+ "@salesforce/dev-scripts": "^2",
 }
 ```
+
+And add these .husky files to your project: https://github.com/salesforcecli/plugin-template-sf/tree/main/.husky
 
 And add a `commitlint.config.js` with the following:
 

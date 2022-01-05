@@ -20,7 +20,7 @@ parameters:
     description: merge method to use
     type: enum
     enum: ['merge', 'squash', 'rebase']
-    default: 'merge' 
+    default: 'merge'
 
 executor:
   name: linux

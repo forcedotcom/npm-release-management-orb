@@ -101,9 +101,9 @@ steps:
       steps:
         - restore_cache:
             keys:
-              - v5-npm-{{ .Branch }}-{{checksum "yarn.lock"}}
-              - v5-npm-{{ .Branch }}
-              - v5-npm
+              - v6-npm-{{ .Branch }}-{{checksum "yarn.lock"}}
+              - v6-npm-{{ .Branch }}
+              - v6-npm
         - run:
             name: Install dependencies
             command: yarn
@@ -111,21 +111,21 @@ steps:
             name: Build
             command: yarn build
         - save_cache:
-            key: v5-npm-{{ .Branch }}-{{checksum "yarn.lock"}}
+            key: v6-npm-{{ .Branch }}-{{checksum "yarn.lock"}}
             paths:
               - node_modules
               - ~/node_modules
               - ~/.cache/yarn
               - ~/.config/yarn
         - save_cache:
-            key: v5-npm-{{ .Branch }}
+            key: v6-npm-{{ .Branch }}
             paths:
               - node_modules
               - ~/node_modules
               - ~/.cache/yarn
               - ~/.config/yarn
         - save_cache:
-            key: v5-npm
+            key: v6-npm
             paths:
               - node_modules
               - ~/node_modules

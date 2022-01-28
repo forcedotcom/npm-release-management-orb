@@ -10,7 +10,7 @@ parameters:
   node_version:
     description: version of node to run tests against
     type: string
-    default: "latest"
+    default: 'latest'
   upload-coverage:
     description: if true, the job will submit code coverage report to codecov.io
     default: false
@@ -18,12 +18,12 @@ parameters:
   os:
     description: operating system you want to test against
     type: enum
-    enum: ["linux", "windows"]
-    default: "linux"
+    enum: ['linux', 'windows']
+    default: 'linux'
   command:
     description: command that will execute tests
     type: string
-    default: "yarn test"
+    default: 'yarn test'
 
 executor:
   name: << parameters.os >>
@@ -35,7 +35,7 @@ steps:
   - checkout
   - when:
       condition:
-        equal: ["windows", <<parameters.os>>]
+        equal: ['windows', <<parameters.os>>]
       steps:
         - run:
             name: Install dependencies
@@ -45,13 +45,13 @@ steps:
             command: yarn build
   - when:
       condition:
-        equal: ["linux", <<parameters.os>>]
+        equal: ['linux', <<parameters.os>>]
       steps:
         - restore_cache:
             keys:
-              - v5-npm-{{ .Branch }}-{{checksum "yarn.lock"}}
-              - v5-npm-{{ .Branch }}
-              - v5-npm
+              - v6-npm-{{ .Branch }}-{{checksum "yarn.lock"}}
+              - v6-npm-{{ .Branch }}
+              - v6-npm
         - run:
             name: Install dependencies
             command: yarn
@@ -59,21 +59,21 @@ steps:
             name: Build
             command: yarn build
         - save_cache:
-            key: v5-npm-{{ .Branch }}-{{checksum "yarn.lock"}}
+            key: v6-npm-{{ .Branch }}-{{checksum "yarn.lock"}}
             paths:
               - node_modules
               - ~/node_modules
               - ~/.cache/yarn
               - ~/.config/yarn
         - save_cache:
-            key: v5-npm-{{ .Branch }}
+            key: v6-npm-{{ .Branch }}
             paths:
               - node_modules
               - ~/node_modules
               - ~/.cache/yarn
               - ~/.config/yarn
         - save_cache:
-            key: v5-npm
+            key: v6-npm
             paths:
               - node_modules
               - ~/node_modules
@@ -88,7 +88,7 @@ steps:
   - when:
       condition:
         and:
-          - equal: ["linux", <<parameters.os>>]
+          - equal: ['linux', <<parameters.os>>]
           - equal: [true, <<parameters.upload-coverage>>]
       steps:
         - upload-coverage

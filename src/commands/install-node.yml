@@ -58,26 +58,30 @@ steps:
       steps:
         - run:
             name: Install and use node version
-            # this was the code for "latest".  it's temporarily redirected to use LTS due to an npm cli bug
-            #           $latest = $registry | jq -c -r '.[0].version | ltrimstr(\"v\")'
-
-            #                nvm install $latest
-            #                nvm use $latest
             command: |
               $nodeIndex = "https://nodejs.org/download/release/index.json"
               $registry = (Invoke-WebRequest $nodeIndex).content
 
               if ("<<parameters.version>>" -eq "latest") {
-                $latest = $registry | jq -c -r '.[0].version | ltrimstr(\"v\")'
+                # $latest = $registry | jq -c -r '.[0].version | ltrimstr(\"v\")'
 
-                nvm install $latest
-                nvm use $latest
+                # nvm install $latest
+                # nvm use $latest
+                #
+                # Installing previous LTS v16.13.2 due to an npm cli bug
+                echo "Installing previous LTS v16.13.2 due to an npm cli bug"
+                nvm install 16.13.2
+                nvm use 16.13.2
               } elseif ("<<parameters.version>>" -eq "lts") {
-                $lts = $registry |
-                    jq -c -r 'first(.[] | select(.lts != false)).version | ltrimstr(\"v\")'
+                # $lts = $registry |
+                #     jq -c -r 'first(.[] | select(.lts != false)).version | ltrimstr(\"v\")'
 
-                nvm install $lts
-                nvm use $lts
+                # nvm install $lts
+                #
+                # Installing previous LTS v16.13.2 due to an npm cli bug
+                echo "Installing previous LTS v16.13.2 due to an npm cli bug"
+                nvm install 16.13.2
+                nvm use 16.13.2
               } elseif ("<<parameters.version>>" -eq "maintenance") {
                 $active = $registry | jq -c -r 'first(.[] | select(.lts != false)).lts'
                 $maintenance = $registry |

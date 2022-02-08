@@ -68,10 +68,10 @@ steps:
                 # nvm install $latest
                 # nvm use $latest
                 #
-                # Installing previous LTS v16.13.2 due to an npm cli bug
-                echo "Installing previous LTS v16.13.2 due to an npm cli bug"
-                nvm install 16.13.2
-                nvm use 16.13.2
+                # Installing previous LTS v17.3.1 due to an npm cli bug
+                echo "Installing previous LTS v17.3.1 due to an npm cli bug"
+                nvm install 17.3.1
+                nvm use 17.3.1
               } elseif ("<<parameters.version>>" -eq "lts") {
                 # $lts = $registry |
                 #     jq -c -r 'first(.[] | select(.lts != false)).version | ltrimstr(\"v\")'

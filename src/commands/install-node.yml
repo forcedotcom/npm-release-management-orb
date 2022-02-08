@@ -68,11 +68,10 @@ steps:
               $registry = (Invoke-WebRequest $nodeIndex).content
 
               if ("<<parameters.version>>" -eq "latest") {
-                $lts = $registry |
-                    jq -c -r 'first(.[] | select(.lts != false)).version | ltrimstr(\"v\")'
+                $latest = $registry | jq -c -r '.[0].version | ltrimstr(\"v\")'
 
-                nvm install $lts
-                nvm use $lts
+                nvm install $latest
+                nvm use $latest
               } elseif ("<<parameters.version>>" -eq "lts") {
                 $lts = $registry |
                     jq -c -r 'first(.[] | select(.lts != false)).version | ltrimstr(\"v\")'

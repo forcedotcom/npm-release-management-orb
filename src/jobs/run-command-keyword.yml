@@ -21,8 +21,8 @@ parameters:
 
 steps:
   - install-node:
-    version: <<parameters.node_version>>
-    os: linux
+      version: <<parameters.node_version>>
+      os: linux
   - checkout
   - run:
       name: Determine Sandbox NUTs

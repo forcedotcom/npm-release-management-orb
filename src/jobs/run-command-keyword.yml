@@ -4,6 +4,10 @@ description: >
 executor: linux
 
 parameters:
+  node_version:
+    description: version of node to run tests against
+    type: string
+    default: 'latest'
   timeout:
     description: timeout of the CircleCI job
     type: string
@@ -16,6 +20,9 @@ parameters:
     type: string
 
 steps:
+  - install-node:
+    version: <<parameters.node_version>>
+    os: linux
   - checkout
   - run:
       name: Determine Sandbox NUTs

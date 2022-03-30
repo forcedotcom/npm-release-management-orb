@@ -99,6 +99,9 @@ steps:
             name: Install dependencies
             command: yarn
         - run:
+            name: Dedupe dependencies
+            command: npx -y yarn-deduplicate
+        - run:
             name: Build
             command: yarn build
   - when:
@@ -115,6 +118,9 @@ steps:
         - run:
             name: Install dependencies
             command: yarn
+        - run:
+            name: Dedupe dependencies
+            command: npx -y yarn-deduplicate
         - run:
             name: Build
             command: yarn build

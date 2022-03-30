@@ -32,5 +32,8 @@ steps:
       name: Install dependencies
       command: yarn
   - run:
+      name: Dedupe dependencies
+      command: npx -y yarn-deduplicate
+  - run:
       name: Update typescript version and ES target
       command: sf-release typescript:update -v <<parameters.ts_version>> -t <<parameters.es_target>>

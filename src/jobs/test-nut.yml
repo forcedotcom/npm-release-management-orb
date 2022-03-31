@@ -46,6 +46,10 @@ parameters:
     description: 'Custom command that runs NUTs.  By default, yarn test:nuts'
     default: 'yarn test:nuts'
     type: string
+  use-cache:
+    description: 'Do not load or save cache'
+    type: boolean
+    default: true
 
 executor:
   name: << parameters.os >>
@@ -87,7 +91,9 @@ steps:
             command: git checkout v<<parameters.repo_tag>> || git checkout <<parameters.npm_module_name>>@<<parameters.repo_tag>>
   - when:
       condition:
-        equal: ['windows', <<parameters.os>>]
+        or:
+          - equal: ['windows', <<parameters.os>>]
+          - equal: [false, <<parameters.use-cache>>]
       steps:
         - run:
             name: Install dependencies
@@ -97,7 +103,9 @@ steps:
             command: yarn build
   - when:
       condition:
-        equal: ['linux', <<parameters.os>>]
+        and:
+          - equal: ['linux', <<parameters.os>>]
+          - equal: [true, <<parameters.use-cache>>]
       steps:
         - restore_cache:
             keys:

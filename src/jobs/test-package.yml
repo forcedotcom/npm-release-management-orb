@@ -24,6 +24,10 @@ parameters:
     description: command that will execute tests
     type: string
     default: 'yarn test'
+  use-cache:
+    description: 'Do not load or save cache'
+    type: boolean
+    default: true
 
 executor:
   name: << parameters.os >>
@@ -35,7 +39,9 @@ steps:
   - checkout
   - when:
       condition:
-        equal: ['windows', <<parameters.os>>]
+        or:
+          - equal: ['windows', <<parameters.os>>]
+          - equal: [false, <<parameters.use-cache>>]
       steps:
         - run:
             name: Install dependencies
@@ -45,7 +51,8 @@ steps:
             command: yarn build
   - when:
       condition:
-        equal: ['linux', <<parameters.os>>]
+        and:
+          - equal: ['linux', <<parameters.os>>]
       steps:
         - restore_cache:
             keys:

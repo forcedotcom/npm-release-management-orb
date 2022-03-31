@@ -96,11 +96,11 @@ steps:
           - equal: [false, <<parameters.use-cache>>]
       steps:
         - run:
-            name: Install dependencies
-            command: yarn
-        - run:
             name: Dedupe dependencies
             command: npx -y yarn-deduplicate
+        - run:
+            name: Install dependencies
+            command: yarn
         - run:
             name: Build
             command: yarn build
@@ -116,11 +116,11 @@ steps:
               - v6-npm-{{ .Branch }}
               - v6-npm
         - run:
-            name: Install dependencies
-            command: yarn
-        - run:
             name: Dedupe dependencies
             command: npx -y yarn-deduplicate
+        - run:
+            name: Install dependencies
+            command: yarn
         - run:
             name: Build
             command: yarn build

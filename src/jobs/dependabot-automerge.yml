@@ -30,11 +30,11 @@ steps:
   - checkout
   - install-sf-release
   - run:
-      name: Install dependencies
-      command: yarn
-  - run:
       name: Dedupe dependencies
       command: npx -y yarn-deduplicate
+  - run:
+      name: Install dependencies
+      command: yarn
 
   - when:
       condition: <<parameters.skip-ci>>

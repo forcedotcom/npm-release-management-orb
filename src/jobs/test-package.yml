@@ -24,10 +24,6 @@ parameters:
     description: command that will execute tests
     type: string
     default: 'yarn test'
-  use-cache:
-    description: 'Do not load or save cache'
-    type: boolean
-    default: true
 
 executor:
   name: << parameters.os >>
@@ -37,55 +33,16 @@ steps:
       version: <<parameters.node_version>>
       os: <<parameters.os>>
   - checkout
+  - run:
+      name: Install dependencies
+      command: yarn
+  - run:
+      name: Build
+      command: yarn build
   - when:
       condition:
-        or:
-          - equal: ['windows', <<parameters.os>>]
-          - equal: [false, <<parameters.use-cache>>]
+        equal: ['linux', <<parameters.os>>]
       steps:
-        - run:
-            name: Install dependencies
-            command: yarn
-        - run:
-            name: Build
-            command: yarn build
-  - when:
-      condition:
-        and:
-          - equal: ['linux', <<parameters.os>>]
-      steps:
-        - restore_cache:
-            keys:
-              - v6-npm-{{ .Branch }}-{{checksum "yarn.lock"}}
-              - v6-npm-{{ .Branch }}
-              - v6-npm
-        - run:
-            name: Install dependencies
-            command: yarn
-        - run:
-            name: Build
-            command: yarn build
-        - save_cache:
-            key: v6-npm-{{ .Branch }}-{{checksum "yarn.lock"}}
-            paths:
-              - node_modules
-              - ~/node_modules
-              - ~/.cache/yarn
-              - ~/.config/yarn
-        - save_cache:
-            key: v6-npm-{{ .Branch }}
-            paths:
-              - node_modules
-              - ~/node_modules
-              - ~/.cache/yarn
-              - ~/.config/yarn
-        - save_cache:
-            key: v6-npm
-            paths:
-              - node_modules
-              - ~/node_modules
-              - ~/.cache/yarn
-              - ~/.config/yarn
         - verify-installed-plugin
   - run:
       name: Testing

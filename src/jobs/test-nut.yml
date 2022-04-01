@@ -46,10 +46,6 @@ parameters:
     description: 'Custom command that runs NUTs.  By default, yarn test:nuts'
     default: 'yarn test:nuts'
     type: string
-  use-cache:
-    description: 'Do not load or save cache'
-    type: boolean
-    default: true
 
 executor:
   name: << parameters.os >>
@@ -89,56 +85,16 @@ steps:
         - run:
             name: Switch to tag v<<parameters.repo_tag>> or <<parameters.npm_module_name>>@<<parameters.repo_tag>>
             command: git checkout v<<parameters.repo_tag>> || git checkout <<parameters.npm_module_name>>@<<parameters.repo_tag>>
+  - run:
+      name: Install dependencies
+      command: yarn
+  - run:
+      name: Build
+      command: yarn build
   - when:
       condition:
-        or:
-          - equal: ['windows', <<parameters.os>>]
-          - equal: [false, <<parameters.use-cache>>]
+        equal: ['linux', <<parameters.os>>]
       steps:
-        - run:
-            name: Install dependencies
-            command: yarn
-        - run:
-            name: Build
-            command: yarn build
-  - when:
-      condition:
-        and:
-          - equal: ['linux', <<parameters.os>>]
-          - equal: [true, <<parameters.use-cache>>]
-      steps:
-        - restore_cache:
-            keys:
-              - v6-npm-{{ .Branch }}-{{checksum "yarn.lock"}}
-              - v6-npm-{{ .Branch }}
-              - v6-npm
-        - run:
-            name: Install dependencies
-            command: yarn
-        - run:
-            name: Build
-            command: yarn build
-        - save_cache:
-            key: v6-npm-{{ .Branch }}-{{checksum "yarn.lock"}}
-            paths:
-              - node_modules
-              - ~/node_modules
-              - ~/.cache/yarn
-              - ~/.config/yarn
-        - save_cache:
-            key: v6-npm-{{ .Branch }}
-            paths:
-              - node_modules
-              - ~/node_modules
-              - ~/.cache/yarn
-              - ~/.config/yarn
-        - save_cache:
-            key: v6-npm
-            paths:
-              - node_modules
-              - ~/node_modules
-              - ~/.cache/yarn
-              - ~/.config/yarn
         - verify-installed-plugin
         - run:
             name: set TESTKIT_ENABLE_ZIP for artifacts on linux

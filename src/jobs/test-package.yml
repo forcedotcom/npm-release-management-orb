@@ -41,7 +41,7 @@ steps:
       command: yarn build
   - when:
       condition:
-        - equal: ['linux', <<parameters.os>>]
+        equal: ['linux', <<parameters.os>>]
       steps:
         - verify-installed-plugin
   - run:

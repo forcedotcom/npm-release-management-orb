@@ -85,7 +85,6 @@ steps:
         - run:
             name: Switch to tag v<<parameters.repo_tag>> or <<parameters.npm_module_name>>@<<parameters.repo_tag>>
             command: git checkout v<<parameters.repo_tag>> || git checkout <<parameters.npm_module_name>>@<<parameters.repo_tag>>
-
   - run:
       name: Install dependencies
       command: yarn
@@ -94,7 +93,7 @@ steps:
       command: yarn build
   - when:
       condition:
-        - equal: ['linux', <<parameters.os>>]
+        equal: ['linux', <<parameters.os>>]
       steps:
         - verify-installed-plugin
         - run:

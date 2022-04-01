@@ -68,42 +68,13 @@ steps:
       steps: halt-workflow-if-not-releasable
   - install-standard-version
   - configure-github
-  - restore_cache:
-      keys:
-        - v6-npm-{{ .Branch }}-{{checksum "yarn.lock"}}
-        - v6-npm-{{ .Branch }}
-        - v6-npm
-
   - steps: <<parameters.pre-job-steps>>
-
   - run:
       name: Install dependencies
       command: yarn
   - run:
       name: Build
       command: yarn build
-  - save_cache:
-      key: v6-npm-{{ .Branch }}-{{checksum "yarn.lock"}}
-      paths:
-        - node_modules
-        - ~/node_modules
-        - ~/.cache/yarn
-        - ~/.config/yarn
-  - save_cache:
-      key: v6-npm-{{ .Branch }}
-      paths:
-        - node_modules
-        - ~/node_modules
-        - ~/.cache/yarn
-        - ~/.config/yarn
-  - save_cache:
-      key: v6-npm
-      paths:
-        - node_modules
-        - ~/node_modules
-        - ~/.cache/yarn
-        - ~/.config/yarn
-
   # - if environment looks like it is prepped to do change cases, and we're on "latest" tag
   - when:
       condition:

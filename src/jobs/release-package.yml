@@ -77,9 +77,6 @@ steps:
   - steps: <<parameters.pre-job-steps>>
 
   - run:
-      name: Dedupe dependencies
-      command: npx -y yarn-deduplicate
-  - run:
       name: Install dependencies
       command: yarn
   - run:

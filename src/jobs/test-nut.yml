@@ -96,9 +96,6 @@ steps:
           - equal: [false, <<parameters.use-cache>>]
       steps:
         - run:
-            name: Dedupe dependencies
-            command: npx -y yarn-deduplicate
-        - run:
             name: Install dependencies
             command: yarn
         - run:
@@ -115,9 +112,6 @@ steps:
               - v6-npm-{{ .Branch }}-{{checksum "yarn.lock"}}
               - v6-npm-{{ .Branch }}
               - v6-npm
-        - run:
-            name: Dedupe dependencies
-            command: npx -y yarn-deduplicate
         - run:
             name: Install dependencies
             command: yarn

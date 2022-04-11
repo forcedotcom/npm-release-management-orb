@@ -4,7 +4,7 @@
 # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 
 description: >
-  Test npm package agaisnt node@12 and node@latest then sign and publish the plugin to npm
+  Test npm package agaisnt node@14 and node@latest then sign and publish the plugin to npm
 usage:
   version: 2.1
   orbs:
@@ -23,11 +23,11 @@ usage:
             node_version: latest
             upload-coverage: true
         - release-management/test-package:
-            name: node-12
-            node_version: '12'
+            name: node-14
+            node_version: '14'
         - release-management/test-package:
-            name: win-node-12
-            node_version: '12'
+            name: win-node-14
+            node_version: '14'
             os: windows
         - release-management/release-package:
             sign: true

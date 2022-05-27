@@ -29,7 +29,7 @@ parameters:
     type: boolean
     default: false
 
-circleci_ip_ranges: <<parameters.ip_ranges>> # opts the job into the IP ranges feature
+circleci_ip_ranges: <<parameters.ip_ranges>>
 
 executor:
   name: << parameters.os >>

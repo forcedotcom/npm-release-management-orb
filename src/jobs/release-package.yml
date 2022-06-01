@@ -51,7 +51,7 @@ parameters:
   node_version:
     description: version of node to use
     type: string
-    default: '12'
+    default: '14'
 
 executor: linux
 

@@ -115,7 +115,7 @@ steps:
         echo "Environment Variables:"
         env
         << parameters.command >>
-      no_output_timeout: <<parameters.timeout>>
+      no_output_timeout: <<parameters.no_output_timeout>>
       # this is in the command instead of the circle project environment to prevent it from happening on windows
   - store_artifacts:
       path: artifacts

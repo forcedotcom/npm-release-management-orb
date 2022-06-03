@@ -46,6 +46,10 @@ parameters:
     description: 'Custom command that runs NUTs.  By default, yarn test:nuts'
     default: 'yarn test:nuts'
     type: string
+  no_output_timeout:
+    description: 'change the timeout when no output happens.  See circle docs for options https://circleci.com/docs/2.0/configuration-reference/#run'
+    default: '10m'
+    type: string
 
 executor:
   name: << parameters.os >>
@@ -111,6 +115,7 @@ steps:
         echo "Environment Variables:"
         env
         << parameters.command >>
+      no_output_timeout: <<parameters.no_output_timeout>>
       # this is in the command instead of the circle project environment to prevent it from happening on windows
   - store_artifacts:
       path: artifacts

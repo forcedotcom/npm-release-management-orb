@@ -13,4 +13,3 @@ orbs:
 display:
   home_url: "https://circleci.com/orbs/registry/orb/salesforce/npm-release-management"
   source_url: "https://github.com/forcedotcom/npm-release-management-orb"
-

@@ -52,7 +52,6 @@ workflows:
           orb-name: salesforce/npm-release-management
           requires:
             - orb-tools/pack
-          context: orb-token
 
       # trigger an integration workflow to test the
       # dev:${CIRCLE_SHA1:0:7} version of your orb
@@ -60,7 +59,6 @@ workflows:
           name: trigger-integration-dev
           requires:
             - orb-tools/publish-dev
-          context: orb-token
 
   # This `integration-tests_prod-release` workflow will only run
   # when the run-integration-tests pipeline parameter is set to true.
@@ -93,4 +91,3 @@ workflows:
           filters:
             branches:
               only: main
-          context: orb-token

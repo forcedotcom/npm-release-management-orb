@@ -10,7 +10,7 @@ parameters:
   node_version:
     description: version of node to run tests against
     type: string
-    default: 'latest'
+    default: "latest"
   upload-coverage:
     description: if true, the job will submit code coverage report to codecov.io
     default: false
@@ -18,12 +18,12 @@ parameters:
   os:
     description: operating system you want to test against
     type: enum
-    enum: ['linux', 'windows']
-    default: 'linux'
+    enum: ["linux", "windows"]
+    default: "linux"
   command:
     description: command that will execute tests
     type: string
-    default: 'yarn test'
+    default: "yarn test"
 
 executor:
   name: << parameters.os >>
@@ -41,7 +41,7 @@ steps:
       command: yarn build
   - when:
       condition:
-        equal: ['linux', <<parameters.os>>]
+        equal: ["linux", <<parameters.os>>]
       steps:
         - verify-installed-plugin
   - run:
@@ -49,10 +49,14 @@ steps:
       command: |
         echo "Using node: $(node --version)"
         <<parameters.command>>
+      environment:
+        MOCHA_FILE: reports/unit/test-results.xml
+  - store_test_results:
+      path: reports/unit
   - when:
       condition:
         and:
-          - equal: ['linux', <<parameters.os>>]
+          - equal: ["linux", <<parameters.os>>]
           - equal: [true, <<parameters.upload-coverage>>]
       steps:
         - upload-coverage

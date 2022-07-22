@@ -24,12 +24,6 @@ parameters:
     description: command that will execute tests
     type: string
     default: 'yarn test'
-  ip_ranges:
-    description: opts the job into the circleci IP ranges feature
-    type: boolean
-    default: false
-
-circleci_ip_ranges: <<parameters.ip_ranges>>
 
 executor:
   name: << parameters.os >>

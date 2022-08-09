@@ -9,7 +9,7 @@ description: >
 parameters:
   version:
     description: By default, the latest version of @salesforce/plugin-release-management (sf-release) will be installed.  You can supply an npm tag or version instead.  Alternatively, set the environment variable PLUGIN_RELEASE_MANAGEMENT_VERSION
-    default: latest
+    default: "2"
     type: string
 
 steps:

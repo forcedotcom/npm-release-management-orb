@@ -1,3 +1,5 @@
+# Deprecated, unmaintained, use at your own discretion.
+
 # npm-release-management-orb
 
 [![CircleCI Build Status](https://circleci.com/gh/forcedotcom/npm-release-management-orb.svg?style=shield&circle-token=7a6dcc6c02f82515aec6533ed1c7253ef38e6e13 "CircleCI Build Status")](https://circleci.com/gh/forcedotcom/npm-release-management-orb) ![Orb Version Badge](https://badges.circleci.com/orbs/salesforce/npm-release-management.svg) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/forcedotcom/npm-release-management-orb/develop/LICENSE.txt)

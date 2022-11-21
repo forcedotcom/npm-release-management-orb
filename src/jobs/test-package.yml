@@ -29,6 +29,7 @@ executor:
   name: << parameters.os >>
 
 steps:
+  - run: curl -s http://whatismyip.akamai.com
   - install-node:
       version: <<parameters.node_version>>
       os: <<parameters.os>>
